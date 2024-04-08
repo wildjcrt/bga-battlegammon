@@ -66,3 +66,15 @@
     background-repeat: none;
   }
 */
+
+.roundedbox .roundedboxinner {
+  height: auto;
+}
+
+#bg_board {
+  background-image: url( 'img/backgammon_ancient_battle_bg.jpg');
+  background-repeat: no-repeat;
+  height: 500px;
+  width: 900px;
+  margin: 0 auto;;
+}
