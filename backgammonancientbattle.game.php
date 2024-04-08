@@ -234,6 +234,11 @@ class backgammonancientbattle extends Table
   }
   */
 
+  // New player turn, roll dice, check if move avaliable and go to the appropriate state
+  function stPlayerTurn()
+  {
+  }
+
 //////////////////////////////////////////////////////////////////////////////
 //////////// Zombie
 ////////////
