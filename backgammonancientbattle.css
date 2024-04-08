@@ -78,3 +78,86 @@
   width: 900px;
   margin: 0 auto;;
 }
+
+/* dices */
+.dice_area, .dice {
+  height: 40px;
+  width: 40px;
+  position : absolute;
+}
+
+.dice_1 {
+  background-image : url('img/sprite_dice1.png');
+  background-repeat : no-repeat;
+}
+
+.dice_2 {
+  background-image : url('img/sprite_dice2.png');
+  background-repeat : no-repeat;
+}
+
+.dice_1_0 {
+  visibility: hidden;
+}
+
+.dice_1_1 {
+  background-position : 0px -6px;
+}
+
+.dice_1_2 {
+  background-position : 0px -52px;
+}
+
+.dice_1_3 {
+  background-position : 0px -100px;
+}
+
+.dice_1_4 {
+  background-position : 0px -147px;
+}
+
+.dice_1_5 {
+  background-position : 0px -194px;
+}
+
+.dice_1_6 {
+  background-position : 0px -242px;
+}
+
+.dice_2_0 {
+  visibility: hidden;
+}
+
+.dice_2_1 {
+  background-position : 0px -6px;
+}
+
+.dice_2_2 {
+  background-position : 0px -58px;
+}
+
+.dice_2_3 {
+  background-position : 0px -111px;
+}
+
+.dice_2_4 {
+  background-position : 0px -165px;
+}
+
+.dice_2_5 {
+  background-position : 0px -216px;
+}
+
+.dice_2_6 {
+  background-position : 0px -267px;
+}
+
+.dice_usable_0 {
+  opacity:0.5;
+}
+
+.lighton_dice {
+  border: 1px solid #DDDDDD;
+  border-radius: 20px;
+  background-color: #DDDDDD;
+}
