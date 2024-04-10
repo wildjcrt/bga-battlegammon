@@ -20,7 +20,7 @@
 require_once( APP_GAMEMODULE_PATH.'module/table/table.game.php' );
 
 
-class backgammonancientbattle extends Table
+class Battlegammon extends Table
 {
   function __construct( )
   {

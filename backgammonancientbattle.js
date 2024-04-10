@@ -9,7 +9,7 @@
  *
  * backgammonancientbattle.js
  *
- * backgammonancientbattle user interface script
+ * Battlegammon user interface script
  *
  * In this file, you are describing the logic of your user interface, in Javascript language.
  *

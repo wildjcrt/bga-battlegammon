@@ -10,7 +10,7 @@
  *
  * material.inc.php
  *
- * backgammonancientbattle game material description
+ * Battlegammon game material description
  *
  * Here, you can describe the material of your game with PHP variables.
  *

@@ -10,7 +10,7 @@
  *
  * states.inc.php
  *
- * backgammonancientbattle game states description
+ * Battlegammon game states description
  *
  */
 

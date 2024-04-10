@@ -10,7 +10,7 @@
  *
  * backgammonancientbattle.action.php
  *
- * backgammonancientbattle main action entry point
+ * Battlegammon main action entry point
  *
  *
  * In this file, you are describing all the methods that can be called from your
