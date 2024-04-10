@@ -13,19 +13,19 @@
 $gameinfos = array(
 
   // Name of the game in English (will serve as the basis for translation)
-  'game_name' => "Backgammon: Ancient Battle",
+  'game_name' => "Battlegammon",
 
   // Game publisher (use empty string if there is no publisher)
-  'publisher' => 'Jog Kung',
+  'publisher' => 'TWOPLUS Games',
 
   // Url of game publisher website
-  'publisher_website' => '',
+  'publisher_website' => 'https://2plus.com.tw/english/',
 
   // Board Game Geek ID of the publisher
   'publisher_bgg_id' => 4896,
 
   // Board game geek ID of the game
-  'bgg_id' => 0,
+  'bgg_id' => 419109,
 
   // Players configuration that can be played (ex: 2 to 4 players)
   'players' => array( 2 ),
