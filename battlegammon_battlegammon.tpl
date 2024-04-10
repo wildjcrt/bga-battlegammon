@@ -10,24 +10,26 @@
 
 {OVERALL_GAME_HEADER}
 
+<!-- BEGIN dice -->
+<div id="dice_area">
+  <div id="dice_1" class="dice dice_1_0 dice_usable_0"></div>
+  <div id="dice_2" class="dice dice_2_0 dice_usable_0"></div>
+</div>
+<!-- END dice -->
+
 <div id="bg_board">
   <!-- BEGIN steps -->
   <!-- White start: 1, White end: 12; Black end: 13, Black start: 24 -->
   <div id="steps_{step_id}" class="steps" style="left:{LEFT}px; top:{TOP}px;"></div>
   <!-- END steps -->
 
-  <!-- BEGIN dice -->
-  <div id="dicearea_{dicearea_id}" class="dice_area" style="left:{LEFT}px; top :{TOP}px;"></div>
-  <!-- END dice -->
-
   <div id="tokens"></div>
-  <div id="dices"></div>
 </div>
 
 <script type="text/javascript">
   // Javascript HTML templates
   var jstpl_token='<div class="token tokencolor_${color} tokennb_${token_nb}_${vertpos}" id="token_${token_step_id}"></div>';
-  var jstpl_dice='<div class="dice dice_${dice_id} dice_${dice_id}_${dice_value} dice_usable_${dice_usable}" id="dice_${dice_id}"></div>';
+  var js_dice_class="dice dice_${dice_id}_${dice_value} dice_usable_${dice_usable}";
 </script>
 
 {OVERALL_GAME_FOOTER}

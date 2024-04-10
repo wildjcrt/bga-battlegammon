@@ -75,23 +75,31 @@
   background-image: url( 'img/battlegammon_bg.jpg');
   background-repeat: no-repeat;
   height: 500px;
+}
+
+#bg_board, #dice_area {
   width: 900px;
   margin: 0 auto;;
 }
 
 /* dices */
-.dice_area, .dice {
-  height: 40px;
-  width: 40px;
-  position : absolute;
+#dice_area {
+  height: 50px;
 }
 
-.dice_1 {
+.dice {
+  height: 40px;
+  width: 40px;
+  padding: 2px;
+  float: left;
+}
+
+#dice_1 {
   background-image : url('img/sprite_dice1.png');
   background-repeat : no-repeat;
 }
 
-.dice_2 {
+#dice_2 {
   background-image : url('img/sprite_dice2.png');
   background-repeat : no-repeat;
 }
@@ -101,27 +109,27 @@
 }
 
 .dice_1_1 {
-  background-position : 0px -6px;
+  background-position : 2px -4px;
 }
 
 .dice_1_2 {
-  background-position : 0px -52px;
+  background-position : 2px -50px;
 }
 
 .dice_1_3 {
-  background-position : 0px -100px;
+  background-position : 2px -98px;
 }
 
 .dice_1_4 {
-  background-position : 0px -147px;
+  background-position : 2px -145px;
 }
 
 .dice_1_5 {
-  background-position : 0px -194px;
+  background-position : 2px -192px;
 }
 
 .dice_1_6 {
-  background-position : 0px -242px;
+  background-position : 2px -240px;
 }
 
 .dice_2_0 {
@@ -129,31 +137,31 @@
 }
 
 .dice_2_1 {
-  background-position : 0px -6px;
+  background-position : 1px -5px;
 }
 
 .dice_2_2 {
-  background-position : 0px -58px;
+  background-position : 1px -57px;
 }
 
 .dice_2_3 {
-  background-position : 0px -111px;
+  background-position : 1px -110px;
 }
 
 .dice_2_4 {
-  background-position : 0px -165px;
+  background-position : 1px -164px;
 }
 
 .dice_2_5 {
-  background-position : 0px -216px;
+  background-position : 1px -215px;
 }
 
 .dice_2_6 {
-  background-position : 0px -267px;
+  background-position : 1px -266px;
 }
 
 .dice_usable_0 {
-  opacity:0.5;
+  opacity: 0.2;
 }
 
 .lighton_dice {
@@ -161,3 +169,5 @@
   border-radius: 20px;
   background-color: #DDDDDD;
 }
+
+/* dices end */
