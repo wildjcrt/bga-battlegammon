@@ -1,15 +1,15 @@
 /**
  *------
  * BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
- * backgammonancientbattle implementation : © <Your name here> <Your email address here>
+ * Battlegammon implementation : © <Your name here> <Your email address here>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
  * -----
  *
- * backgammonancientbattle.css
+ * battlegammon.css
  *
- * backgammonancientbattle stylesheet
+ * Battlegammon stylesheet
  *
  */
 
@@ -17,8 +17,8 @@
   This is the CSS stylesheet of your game User Interface.
 
   Styles defined on this file will be applied to the HTML elements you define in your
-  HTML template (backgammonancientbattle_backgammonancientbattle.tpl), and to HTML elements you create dynamically
-  (in backgammonancientbattle.js).
+  HTML template (battlegammon_battlegammon.tpl), and to HTML elements you create dynamically
+  (in battlegammon.js).
 
   Usually, you are using CSS to:
 
@@ -72,7 +72,7 @@
 }
 
 #bg_board {
-  background-image: url( 'img/backgammon_ancient_battle_bg.jpg');
+  background-image: url( 'img/battlegammon_bg.jpg');
   background-repeat: no-repeat;
   height: 500px;
   width: 900px;

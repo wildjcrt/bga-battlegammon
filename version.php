@@ -1,3 +1,3 @@
 <?php
 // Please do not modify this file.
-$game_version_backgammonancientbattle ="999999-9999";
+$game_version_battlegammon ="999999-9999";
