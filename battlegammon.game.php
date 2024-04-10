@@ -8,7 +8,7 @@
   * See http://en.boardgamearena.com/#!doc/Studio for more information.
   * -----
   *
-  * backgammonancientbattle.game.php
+  * battlegammon.game.php
   *
   * This is the main file for your game logic.
   *
@@ -45,7 +45,7 @@ class Battlegammon extends Table
   protected function getGameName( )
   {
     // Used for translations and stuff. Please do not modify.
-    return "backgammonancientbattle";
+    return "battlegammon";
   }
 
   /*
@@ -155,7 +155,7 @@ class Battlegammon extends Table
 
   /*
   Each time a player is doing some game action, one of the methods below is called.
-  (note: each method below must match an input method in backgammonancientbattle.action.php)
+  (note: each method below must match an input method in battlegammon.action.php)
   */
 
   /*

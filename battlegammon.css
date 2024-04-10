@@ -7,7 +7,7 @@
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
  * -----
  *
- * backgammonancientbattle.css
+ * battlegammon.css
  *
  * Battlegammon stylesheet
  *
@@ -17,8 +17,8 @@
   This is the CSS stylesheet of your game User Interface.
 
   Styles defined on this file will be applied to the HTML elements you define in your
-  HTML template (backgammonancientbattle_backgammonancientbattle.tpl), and to HTML elements you create dynamically
-  (in backgammonancientbattle.js).
+  HTML template (battlegammon_battlegammon.tpl), and to HTML elements you create dynamically
+  (in battlegammon.js).
 
   Usually, you are using CSS to:
 

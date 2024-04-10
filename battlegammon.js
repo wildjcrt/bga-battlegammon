@@ -7,7 +7,7 @@
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
  * -----
  *
- * backgammonancientbattle.js
+ * battlegammon.js
  *
  * Battlegammon user interface script
  *
@@ -21,9 +21,9 @@ define([
   "ebg/counter"
 ],
 function (dojo, declare) {
-  return declare("bgagame.backgammonancientbattle", ebg.core.gamegui, {
+  return declare("bgagame.battlegammon", ebg.core.gamegui, {
     constructor: function(){
-      console.log('backgammonancientbattle constructor');
+      console.log('battlegammon constructor');
 
       // Here, you can init the global variables of your user interface
       // Example:
@@ -184,7 +184,7 @@ function (dojo, declare) {
       if( ! this.checkAction( 'myAction' ) )
       {   return; }
 
-      this.ajaxcall( "/backgammonancientbattle/backgammonancientbattle/myAction.html", {
+      this.ajaxcall( "/battlegammon/battlegammon/myAction.html", {
                     lock: true,
                     myArgument1: arg1,
                     myArgument2: arg2,
@@ -215,7 +215,7 @@ function (dojo, declare) {
       In this method, you associate each of your game notifications with your local method to handle it.
 
       Note: game notification names correspond to "notifyAllPlayers" and "notifyPlayer" calls in
-        your backgammonancientbattle.game.php file.
+        your battlegammon.game.php file.
 
     */
     setupNotifications: function()

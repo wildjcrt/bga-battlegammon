@@ -8,7 +8,7 @@
  * See http://en.doc.boardgamearena.com/Studio for more information.
  * -----
  *
- * backgammonancientbattle.action.php
+ * battlegammon.action.php
  *
  * Battlegammon main action entry point
  *
@@ -17,12 +17,12 @@
  * user interface logic (javascript).
  *
  * If you define a method "myAction" here, then you can call it from your javascript code with:
- * this.ajaxcall( "/backgammonancientbattle/backgammonancientbattle/myAction.html", ...)
+ * this.ajaxcall( "/battlegammon/battlegammon/myAction.html", ...)
  *
  */
 
 
-class action_backgammonancientbattle extends APP_GameAction
+class action_battlegammon extends APP_GameAction
 {
   // Constructor: please do not modify
   public function __default()
@@ -34,7 +34,7 @@ class action_backgammonancientbattle extends APP_GameAction
     }
     else
     {
-      $this->view = "backgammonancientbattle_backgammonancientbattle";
+      $this->view = "battlegammon_battlegammon";
       self::trace( "Complete reinitialization of board game" );
     }
   }
