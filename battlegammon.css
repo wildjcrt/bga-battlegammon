@@ -67,10 +67,6 @@
   }
 */
 
-.roundedbox .roundedboxinner {
-  height: auto;
-}
-
 #bg_board {
   background-image: url( 'img/battlegammon_bg.jpeg');
   background-repeat: no-repeat;
@@ -79,7 +75,6 @@
 
 #bg_board, #dice_area {
   width: 900px;
-  margin: 0 auto;;
 }
 
 /* dices */
@@ -171,3 +166,20 @@
 }
 
 /* dices end */
+
+.steps {
+  position: absolute;
+  border: 5px solid red;
+  cursor: pointer;
+}
+
+.hint-square {
+  width: 203px;
+  height: 127px;
+}
+
+.hint-circle {
+  border-radius: 70px;
+  width: 70px;
+  height: 70px;
+}
