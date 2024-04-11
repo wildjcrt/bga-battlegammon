@@ -93,6 +93,8 @@ function (dojo, declare) {
         case 'dummmy':
         break;
       }
+
+      dojo.query('.dice.dice_usable_1').connect('onclick', this, 'onSelectDice');
     },
 
     // onLeavingState: this method is called each time we are leaving a game state.
@@ -205,6 +207,11 @@ function (dojo, declare) {
 
     */
 
+    onSelectDice: function (e)
+    {
+      dojo.stopEvent(e);
+      e.currentTarget.classList.toggle('lighton_dice');
+    },
 
     ///////////////////////////////////////////////////
     //// Reaction to cometD notifications
