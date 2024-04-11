@@ -51,9 +51,9 @@ function (dojo, declare) {
       // Setting up player boards
       for( var player_id in gamedatas.players )
       {
-      var player = gamedatas.players[player_id];
+        var player = gamedatas.players[player_id];
 
-      // TODO: Setting up players boards if needed
+        // TODO: Setting up players boards if needed
       }
 
       // TODO: Set up your game interface here, according to "gamedatas"
@@ -79,19 +79,19 @@ function (dojo, declare) {
       switch( stateName )
       {
 
-      /* Example:
+        /* Example:
 
-      case 'myGameState':
+        case 'myGameState':
 
-      // Show some HTML block at this game state
-      dojo.style( 'my_html_block_id', 'display', 'block' );
+        // Show some HTML block at this game state
+        dojo.style( 'my_html_block_id', 'display', 'block' );
 
-      break;
-       */
+        break;
+         */
 
 
-      case 'dummmy':
-      break;
+        case 'dummmy':
+        break;
       }
     },
 
@@ -105,19 +105,19 @@ function (dojo, declare) {
       switch( stateName )
       {
 
-      /* Example:
+        /* Example:
 
-      case 'myGameState':
+        case 'myGameState':
 
-      // Hide the HTML block we are displaying only during this game state
-      dojo.style( 'my_html_block_id', 'display', 'none' );
+        // Hide the HTML block we are displaying only during this game state
+        dojo.style( 'my_html_block_id', 'display', 'none' );
 
-      break;
-       */
+        break;
+         */
 
 
-      case 'dummmy':
-      break;
+        case 'dummmy':
+        break;
       }
     },
 
