@@ -46,12 +46,14 @@
   <div id="steps_white_11" class="steps hint-circle" style="left:341px; bottom:191px;"></div>
   <!-- END steps -->
 
+  <!--BEGIN tokens -->
   <div id="tokens"></div>
+  <!--END tokens -->
 </div>
 
 <script type="text/javascript">
   // Javascript HTML templates
-  var jstpl_token='<div class="token tokencolor_${color} tokennb_${token_nb}_${vertpos}" id="token_${token_step_id}"></div>';
+  var jstpl_token='<div class="token token_${token_number} ${token_color_and_number}_to_${direction}" id="token_${token_step_id}"></div>';
   var js_dice_class="dice dice_${dice_id}_${dice_value} dice_usable_${dice_usable}";
 </script>
 
