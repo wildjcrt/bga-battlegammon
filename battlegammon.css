@@ -161,7 +161,7 @@
 
 .lighton_dice {
   border: 1px solid #DDDDDD;
-  border-radius: 20px;
+  border-radius: 50%;
   background-color: #DDDDDD;
 }
 
@@ -169,8 +169,12 @@
 
 .steps {
   position: absolute;
-  border: 5px solid red;
+}
+
+.hint {
   cursor: pointer;
+  border: 5px solid red;
+  z-index: 99;
 }
 
 .hint-square {
@@ -179,7 +183,7 @@
 }
 
 .hint-circle {
-  border-radius: 35px;
+  border-radius: 50%;
   width: 70px;
   height: 70px;
 }
