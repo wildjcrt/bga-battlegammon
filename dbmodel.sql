@@ -40,12 +40,12 @@ CREATE TABLE IF NOT EXISTS steps (
   `prev_token_nb` int(2) unsigned NOT NULL DEFAULT 0,
   `prev_player_id` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`step_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS dice_result (
   `dice1` int(2) unsigned NOT NULL DEFAULT 0,
-  `dice1_usable` SMALLINT(1) unsigned NOT NULL DEFAULT 0,
+  `dice1_usable` BIT(1) NOT NULL DEFAULT 0,
   `dice2` int(2) unsigned NOT NULL DEFAULT 0,
-  `dice2_usable` SMALLINT(1) unsigned NOT NULL DEFAULT 0,
+  `dice2_usable` BIT(1) NOT NULL DEFAULT 0,
  PRIMARY KEY (`dice1`, `dice2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
