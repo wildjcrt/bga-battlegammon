@@ -82,6 +82,10 @@ class Battlegammon extends Table
     // Init global values with their initial values
     //self::setGameStateInitialValue( 'my_first_global_variable', 0 );
 
+    // Insert dice record in DB
+    $sql = "INSERT INTO dice_result (dice1, dice2) VALUES (0, 0) ";
+    self::DbQuery( $sql );
+
     // Init game statistics
     // (note: statistics used in this file must be defined in your stats.inc.php file)
     //self::initStat( 'table', 'table_teststat1', 0 );  // Init a table statistics
