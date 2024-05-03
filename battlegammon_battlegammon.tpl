@@ -50,16 +50,14 @@
 
   <!--BEGIN tokens -->
   <div id="tokens">
-    <div class="token token-three black-three" style="left:10px; bottom:12px;"></div>
-    <div class="token token-two black-two-to-right" style="left:100px; bottom:12px;"></div>
-    <div class="token token-two black-two-to-right" style="left:516px; bottom:12px;"></div>
-    <div class="token token-two black-two-to-right" style="left:613px; bottom:15px;"></div>
-    <div class="token token-one black-one-to-left" style="left:714px; bottom:119px;"></div>
-    <div class="token token-three white-three" style="left:804px; bottom:390px;"></div>
-    <div class="token token-two white-two-to-left" style="left:714px; bottom:390px;"></div>
-    <div class="token token-one white-one-to-left" style="left:292px; bottom:390px;"></div>
-    <div class="token token-two white-two-to-left" style="left:20px; bottom:333px;"></div>
-    <div class="token token-two white-two-to-right" style="left:36px; bottom:233px;"></div>
+    <div class="token token token-five black-five" style="left:110px; bottom:12px;"></div>
+    <div class="token token black-two-to-right" style="left:516px; bottom:12px;"></div>
+    <div class="token token black-two-to-right" style="left:613px; bottom:15px;"></div>
+    <div class="token token black-one-to-left" style="left:714px; bottom:119px;"></div>
+    <div class="token token token-five white-five" style="left:704px; bottom:390px;"></div>
+    <div class="token token white-one-to-left" style="left:292px; bottom:390px;"></div>
+    <div class="token token white-two-to-left" style="left:20px; bottom:333px;"></div>
+    <div class="token token white-two-to-right" style="left:36px; bottom:233px;"></div>
   </div>
   <!--END tokens -->
 </div>
