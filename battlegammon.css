@@ -191,48 +191,48 @@
 /* tokens start */
 
 .token {
-  width: 94px;
+  width: 90px;
+  height: 90px;
   background-image: url('img/tokens.png');
-  background-size: 376px 385px;
+  background-size: 376px 574px;
   background-repeat: no-repeat;
   position: absolute;
 }
 
-.token-one {
-  height: 84px;
-}
-
-.token-two {
-  height: 94px;
-}
-
-.token-three {
-  height: 103px;
+.token-five {
+  height: 100px;
 }
 
 .white-one-to-left {
-  background-position: -2px -4px;
+  background-position: -2px -2px;
 }
 
 .white-one-to-right {
-  background-position: -95px -4px;
+  background-position: -96px -2px;
 }
 
 .white-two-to-left {
-  background-position: -2px -86px;
+  background-position: -2px -96px;
 }
 
 .white-two-to-right {
-  background-position: -95px -86px;
-
+  background-position: -96px -96px;
 }
 
 .white-three {
-  background-position: -2px -279px;
+  background-position: -2px -284px;
+}
+
+.white-four {
+  background-position: -2px -378px;
+}
+
+.white-five {
+  background-position: -2px -472px;
 }
 
 .black-one-to-left {
-  background-position: -189px -2px;
+  background-position: -190px -2px;
 }
 
 .black-one-to-right {
@@ -240,31 +240,39 @@
 }
 
 .black-two-to-left {
-  background-position: -189px -180px;
+  background-position: -190px -96px;
 }
 
 .black-two-to-right {
-  background-position: -284px -180px;
+  background-position: -284px -96px;
 }
 
 .black-three {
-  background-position: -284px -279px;
+  background-position: -284px -284px;
+}
+
+.black-four {
+  background-position: -284px -378px;
+}
+
+.black-five {
+  background-position: -284px -472px;
 }
 
 .white-black-to-left {
-  background-position: -2px -180px;
+  background-position: -2px -190px;
 }
 
 .white-black-to-right {
-  background-position: -95px -180px;
+  background-position: -96px -190px;
 }
 
 .black-white-to-left {
-  background-position: -189px -86px;
+  background-position: -190px -190px;
 }
 
 .black-white-to-right {
-  background-position: -284px -86px;
+  background-position: -284px -190px;
 }
 
 /* tokens end */
