@@ -150,7 +150,38 @@ class Battlegammon extends Table
   /*
   In this space, you can put any utility methods useful for your game logic
   */
+  /**
+   * Roll new dice and notify players that dice has been rolled
+   */
+  private function rollDice()
+  {
+    // Roll dices
+    $dice1_value = bga_rand(1, 6);
+    $dice2_value = bga_rand(1, 6);
 
+    // Notify all players about dice rolling
+    self::notifyAllPlayers(
+      "rollDiceDone",
+      clienttranslate( '${player_name} roll dice and get ${dice1_value} and ${dice2_value}' ),
+      [
+        'i18n' => array( 'additional' ),
+        'player_name' => self::getActivePlayerName(),
+        'dice1_value' => $dice1_value,
+        'dice2_value' => $dice2_value
+      ]
+    );
+
+    // save dice roll in database
+    $sql = "UPDATE dice_result
+            SET dice1 = $dice1_value,
+                dice2 = $dice2_value,
+                dice1_usable=1,
+                dice2_usable=1";
+    self::DbQuery( $sql );
+    self::reloadPlayersBasicInfos();
+
+    return array($dice1_value, $dice2_value);
+  }
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -241,6 +272,8 @@ class Battlegammon extends Table
   // New player turn, roll dice, check if move avaliable and go to the appropriate state
   function stPlayerTurn()
   {
+    // Roll dices
+    list($dice1, $dice2) = self::rollDice();
   }
 
 //////////////////////////////////////////////////////////////////////////////
