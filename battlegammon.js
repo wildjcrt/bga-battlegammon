@@ -46,7 +46,7 @@ function (dojo, declare) {
 
     setup: function( gamedatas )
     {
-      console.log( "Starting game setup" );
+      console.log( 'Starting game setup' );
 
       // Setting up player boards
       for( var player_id in gamedatas.players )
@@ -62,7 +62,7 @@ function (dojo, declare) {
       // Setup game notifications to handle (see "setupNotifications" method below)
       this.setupNotifications();
 
-      console.log( "Ending game setup" );
+      console.log( 'Ending game setup' );
     },
 
 
