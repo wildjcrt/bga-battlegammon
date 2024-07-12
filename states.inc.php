@@ -64,10 +64,15 @@ $machinestates = array(
   // playerTurn state: for transition
   10 => array(
     "name" => "playerTurn",
-    "type" => "game",
+    "description" => clienttranslate('${actplayer} turn.'),
+    "descriptionmyturn" => clienttranslate('Your turn.'),
+    "type" => "activeplayer",
+    "args" => "argPlayerTurn",
     "action" => "stPlayerTurn",
-    "updateGameProgression" => true,
-    "transitions" => array( "selectTokenByDiceA" => 21, "noDiceToMove" => 29)
+    "transitions" => [
+      "selectTokenByDiceA" => 21,
+      "noDiceToMove" => 29
+    ])
   ),
 
   /*
@@ -99,8 +104,8 @@ $machinestates = array(
     "name" => "gameEnd",
     "description" => "End of game",
     "type" => "manager",
-    "action" => "stGameEnd",
-    "args" => "argGameEnd"
+    "args" => "argGameEnd",
+    "action" => "stGameEnd"
   )
 
 );
