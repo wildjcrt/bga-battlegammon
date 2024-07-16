@@ -56,8 +56,27 @@ function (dojo, declare) {
         // TODO: Setting up players boards if needed
       }
 
-      // TODO: Set up your game interface here, according to "gamedatas"
-
+      var dice_result = gamedatas.dice_result;
+      dojo.attr(
+        'dice_1',
+        'class',
+          this.format_block( 'js_dice_class', {
+            dice_id: 1,
+            dice_value: dice_result.dice1,
+            dice_usable: dice_result.dice1_usable
+          }
+        )
+      );
+      dojo.attr(
+        'dice_2',
+        'class',
+          this.format_block( 'js_dice_class', {
+            dice_id: 2,
+            dice_value: dice_result.dice2,
+            dice_usable: dice_result.dice2_usable
+          }
+        )
+      );
 
       // Setup game notifications to handle (see "setupNotifications" method below)
       this.setupNotifications();

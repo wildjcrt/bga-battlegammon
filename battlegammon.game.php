@@ -139,7 +139,7 @@ class Battlegammon extends Table
     // Get information about the dice roll
     $sql = "SELECT dice1, dice1_usable, dice2, dice2_usable
             FROM dice_result";
-    $result['dice_result'] = self::getObjectListFromDB($sql);
+    $result['dice_result'] = self::getObjectFromDB($sql);
 
     return $result;
   }
