@@ -19,6 +19,20 @@
 
 require_once( APP_GAMEMODULE_PATH.'module/table/table.game.php' );
 
+function print_msg($txt, $color = 'black')
+{
+
+  if (is_array($txt)) {
+    echo "<textarea style='color: $color; width:50%; height:100px;background-color: #f3f3f3 '>";
+    print_r($txt);
+    echo "</textarea><br>";
+  } else {
+    echo "<pre style='color: $color'>";
+    print_r($txt);
+    echo "</pre>";
+  }
+}
+
 
 class Battlegammon extends Table
 {
