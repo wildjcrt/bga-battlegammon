@@ -19,6 +19,20 @@
 
 require_once( APP_GAMEMODULE_PATH.'module/table/table.game.php' );
 
+function print_msg($txt, $color = 'black')
+{
+
+  if (is_array($txt)) {
+    echo "<textarea style='color: $color; width:50%; height:100px;background-color: #f3f3f3 '>";
+    print_r($txt);
+    echo "</textarea><br>";
+  } else {
+    echo "<pre style='color: $color'>";
+    print_r($txt);
+    echo "</pre>";
+  }
+}
+
 
 class Battlegammon extends Table
 {
@@ -82,6 +96,10 @@ class Battlegammon extends Table
     // Init global values with their initial values
     //self::setGameStateInitialValue( 'my_first_global_variable', 0 );
 
+    // Insert dice record in DB
+    $sql = "INSERT INTO dice_result (dice1, dice2) VALUES (0, 0) ";
+    self::DbQuery( $sql );
+
     // Init game statistics
     // (note: statistics used in this file must be defined in your stats.inc.php file)
     //self::initStat( 'table', 'table_teststat1', 0 );  // Init a table statistics
@@ -113,10 +131,15 @@ class Battlegammon extends Table
 
     // Get information about players
     // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
-    $sql = "SELECT player_id id, player_score score FROM player ";
+    $sql = "SELECT player_id id, player_score score FROM player";
     $result['players'] = self::getCollectionFromDb( $sql );
 
     // TODO: Gather all information about current game situation (visible by player $current_player_id).
+
+    // Get information about the dice roll
+    $sql = "SELECT dice1, dice1_usable, dice2, dice2_usable
+            FROM dice_result";
+    $result['dice_result'] = self::getObjectFromDB($sql);
 
     return $result;
   }
@@ -146,7 +169,38 @@ class Battlegammon extends Table
   /*
   In this space, you can put any utility methods useful for your game logic
   */
+  /**
+   * Roll new dice and notify players that dice has been rolled
+   */
+  private function rollDice()
+  {
+    // Roll dices
+    $dice1_value = bga_rand(1, 6);
+    $dice2_value = bga_rand(1, 6);
 
+    // Notify all players about dice rolling
+    self::notifyAllPlayers(
+      "rollDiceDone",
+      clienttranslate( '${player_name} roll dice and get ${dice1_value} and ${dice2_value}' ),
+      [
+        'i18n' => array( 'additional' ),
+        'player_name' => self::getActivePlayerName(),
+        'dice1_value' => $dice1_value,
+        'dice2_value' => $dice2_value
+      ]
+    );
+
+    // save dice roll in database
+    $sql = "UPDATE dice_result
+            SET dice1 = $dice1_value,
+                dice2 = $dice2_value,
+                dice1_usable=1,
+                dice2_usable=1";
+    self::DbQuery( $sql );
+    self::reloadPlayersBasicInfos();
+
+    return array($dice1_value, $dice2_value);
+  }
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -212,6 +266,11 @@ class Battlegammon extends Table
   }
   */
 
+  function argPlayerTurn()
+  {
+    return [];
+  }
+
 //////////////////////////////////////////////////////////////////////////////
 //////////// Game state actions
 ////////////
@@ -237,6 +296,8 @@ class Battlegammon extends Table
   // New player turn, roll dice, check if move avaliable and go to the appropriate state
   function stPlayerTurn()
   {
+    // Roll dices
+    list($dice1, $dice2) = self::rollDice();
   }
 
 //////////////////////////////////////////////////////////////////////////////

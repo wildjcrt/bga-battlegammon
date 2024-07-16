@@ -58,18 +58,69 @@ $machinestates = array(
     "description" => "Game setup",
     "type" => "manager",
     "action" => "stGameSetup",
-    "transitions" => array( "playerTurn" => 10 )
+    "transitions" => [
+      "playerTurn" => 10
+    ]
   ),
 
   // playerTurn state: for transition
   10 => array(
     "name" => "playerTurn",
-    "type" => "game",
+    "description" => clienttranslate('${actplayer} turn.'),
+    "descriptionmyturn" => clienttranslate('Your turn.'),
+    "type" => "activeplayer",
+    "args" => "argPlayerTurn",
     "action" => "stPlayerTurn",
-    "updateGameProgression" => true,
-    "transitions" => array( "selectTokenByDiceA" => 21, "noDiceToMove" => 29)
+    "possibleactions" => [
+      "actSelectToken",
+      "actPass"
+    ],
+    "transitions" => [
+      "selectTokenA" => 21,
+      "pass" => 29
+    ]
   ),
 
+  21 => array(
+    "name" => "selectTokenByDiceA",
+    "description" => clienttranslate('${actplayer} choose first token.'),
+    "descriptionmyturn" => clienttranslate('Choose first token.'),
+    "type" => "activeplayer",
+    "possibleactions" => [
+      "actSelectToken",
+      "actPass"
+    ],
+    "transitions" => [
+      "selectTokenB" => 22,
+      "pass" => 29,
+      "end" => 99
+    ]
+  ),
+
+  22 => array(
+    "name" => "selectTokenByDiceB",
+    "description" => clienttranslate('${actplayer} choose second token.'),
+    "descriptionmyturn" => clienttranslate('Choose second token.'),
+    "type" => "activeplayer",
+    "possibleactions" => [
+      "actSelectToken",
+      "actPass"
+    ],
+    "transitions" => [
+      "next" => 10,
+      "pass" => 29,
+      "end" => 99
+    ]
+  ),
+
+  29 => array(
+    "name" => "noDiceToMove",
+    "description" => clienttranslate('No more token to move.'),
+    "type" => "game",
+    "transitions" => [
+      "next" => 10
+    ]
+  ),
   /*
     Examples:
 
@@ -99,8 +150,8 @@ $machinestates = array(
     "name" => "gameEnd",
     "description" => "End of game",
     "type" => "manager",
-    "action" => "stGameEnd",
-    "args" => "argGameEnd"
+    "args" => "argGameEnd",
+    "action" => "stGameEnd"
   )
 
 );

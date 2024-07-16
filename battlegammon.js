@@ -23,7 +23,7 @@ define([
 function (dojo, declare) {
   return declare("bgagame.battlegammon", ebg.core.gamegui, {
     constructor: function(){
-      console.log('battlegammon constructor');
+      console.log( 'battlegammon.js >> battlegammon constructor' );
 
       // Here, you can init the global variables of your user interface
       // Example:
@@ -46,7 +46,7 @@ function (dojo, declare) {
 
     setup: function( gamedatas )
     {
-      console.log( "Starting game setup" );
+      console.log( 'battlegammon.js >> Starting game setup' );
 
       // Setting up player boards
       for( var player_id in gamedatas.players )
@@ -56,13 +56,32 @@ function (dojo, declare) {
         // TODO: Setting up players boards if needed
       }
 
-      // TODO: Set up your game interface here, according to "gamedatas"
-
+      var dice_result = gamedatas.dice_result;
+      dojo.attr(
+        'dice_1',
+        'class',
+          this.format_block( 'js_dice_class', {
+            dice_id: 1,
+            dice_value: dice_result.dice1,
+            dice_usable: dice_result.dice1_usable
+          }
+        )
+      );
+      dojo.attr(
+        'dice_2',
+        'class',
+          this.format_block( 'js_dice_class', {
+            dice_id: 2,
+            dice_value: dice_result.dice2,
+            dice_usable: dice_result.dice2_usable
+          }
+        )
+      );
 
       // Setup game notifications to handle (see "setupNotifications" method below)
       this.setupNotifications();
 
-      console.log( "Ending game setup" );
+      console.log( 'battlegammon.js >> Ending game setup' );
     },
 
 
@@ -74,7 +93,7 @@ function (dojo, declare) {
     //
     onEnteringState: function( stateName, args )
     {
-      console.log( 'Entering state: '+stateName );
+      console.log( 'battlegammon.js >> Entering state: '+stateName );
 
       switch( stateName )
       {
@@ -102,7 +121,7 @@ function (dojo, declare) {
     //
     onLeavingState: function( stateName )
     {
-      console.log( 'Leaving state: '+stateName );
+      console.log( 'battlegammon.js >> Leaving state: '+stateName );
 
       switch( stateName )
       {
@@ -128,12 +147,18 @@ function (dojo, declare) {
     //
     onUpdateActionButtons: function( stateName, args )
     {
-      console.log( 'onUpdateActionButtons: '+stateName );
+      console.log( 'battlegammon.js >> onUpdateActionButtons: '+stateName );
 
       if( this.isCurrentPlayerActive() )
       {
         switch( stateName )
         {
+          case 'playerTurn':
+            console.log( 'battlegammon.js >> onUpdateActionButtons >> '+stateName );
+            console.log(args)
+            this.addActionButton( 'pass-btn', _('Pass'), 'onPass' );
+            this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
+            break;
           // Example:
           //
           // case 'myGameState':
@@ -177,7 +202,7 @@ function (dojo, declare) {
 
     onMyMethodToCall1: function( evt )
     {
-      console.log( 'onMyMethodToCall1' );
+      console.log( 'battlegammon.js >> onMyMethodToCall1' );
 
       // Preventing default browser reaction
       dojo.stopEvent( evt );
@@ -213,6 +238,16 @@ function (dojo, declare) {
       e.currentTarget.classList.toggle('lighton_dice');
     },
 
+    onPass: function (e)
+    {
+
+    },
+
+    onCancel: function (e)
+    {
+
+    },
+
     ///////////////////////////////////////////////////
     //// Reaction to cometD notifications
 
@@ -227,7 +262,7 @@ function (dojo, declare) {
     */
     setupNotifications: function()
     {
-      console.log( 'notifications subscriptions setup' );
+      console.log( 'battlegammon.js >> notifications subscriptions setup' );
 
       // TODO: here, associate your game notifications with local methods
 
@@ -249,7 +284,7 @@ function (dojo, declare) {
 
     notif_cardPlayed: function( notif )
     {
-      console.log( 'notif_cardPlayed' );
+      console.log( 'battlegammon.js >> notif_cardPlayed' );
       console.log( notif );
 
       // Note: notif.args contains the arguments specified during you "notifyAllPlayers" / "notifyPlayer" PHP call
