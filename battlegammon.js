@@ -134,6 +134,12 @@ function (dojo, declare) {
       {
         switch( stateName )
         {
+          case 'playerTurn':
+            console.log( 'battlegammon.js >> onUpdateActionButtons >> '+stateName );
+            console.log(args)
+            this.addActionButton( 'pass-btn', _('Pass'), 'onPass' );
+            this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
+            break;
           // Example:
           //
           // case 'myGameState':
@@ -211,6 +217,16 @@ function (dojo, declare) {
     {
       dojo.stopEvent(e);
       e.currentTarget.classList.toggle('lighton_dice');
+    },
+
+    onPass: function (e)
+    {
+
+    },
+
+    onCancel: function (e)
+    {
+
     },
 
     ///////////////////////////////////////////////////
