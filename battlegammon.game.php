@@ -202,6 +202,29 @@ class Battlegammon extends Table
     return array($dice1_value, $dice2_value);
   }
 
+  /**
+   * Insert steps table with $step_id, $tokens, $top_player_id
+   * @param $step_id, 1-24.
+   * @param $tokens, 0-5 and 20. 20 means 2 tokens but lower is another color.
+   * @param $top_player_id
+   */
+  function createStepsRecord($step_id, $tokens, $top_player_id)
+  {
+    $sql = "INSERT INTO steps (step_id, tokens, top_player_id) VALUES ($step_id, $tokens, $top_player_id);";
+    self::DbQuery($sql);
+  }
+
+  /**
+   * Update steps table with $step_id, $tokens, $top_player_id
+   * @param $step_id, 1-24.
+   * @param $tokens, 0-5 and 20. 20 means 2 tokens but lower is another color.
+   * @param $top_player_id
+   */
+  function updateStepsRecord($step_id, $tokens, $top_player_id)
+  {
+    $sql = "UPDATE steps SET tokens=$tokens, top_player_id=$top_player_id WHERE step_id=$step_id;";
+    self::DbQuery($sql);
+  }
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
