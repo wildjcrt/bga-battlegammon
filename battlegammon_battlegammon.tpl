@@ -51,12 +51,28 @@
   <!--BEGIN tokens -->
   <div id="tokens">
     <div id="token-1"  class="token" style="left:704px; bottom:390px;"></div>
+    <div id="token-2"  class="token" style="left:591px; bottom:403px;"></div>
+    <div id="token-3"  class="token" style="left:488px; bottom:391px;"></div>
+    <div id="token-4"  class="token" style="left:393px; bottom:398px;"></div>
     <div id="token-5"  class="token" style="left:292px; bottom:390px;"></div>
+    <div id="token-6"  class="token" style="left: 199px;bottom: 396px;"></div>
+    <div id="token-7"  class="token" style="left: 105px;bottom: 386px;"></div>
     <div id="token-8"  class="token" style="left:20px; bottom:336px;"></div>
     <div id="token-9"  class="token" style="left:36px; bottom:235px;"></div>
+    <div id="token-10" class="token" style="left: 137px;bottom: 220px;"></div>
+    <div id="token-11" class="token" style="left: 235px;bottom: 197px;"></div>
+    <div id="token-12" class="token" style="left: 337px;bottom: 190px;"></div>
+    <div id="token-13" class="token" style="left:442px; bottom:171px;"></div>
+    <div id="token-14" class="token" style="left:442px; bottom:171px;"></div>
+    <div id="token-15" class="token" style="left:630px; bottom:144px;"></div>
     <div id="token-16" class="token" style="left:714px; bottom:118px;"></div>
+    <div id="token-17" class="token" style="left:792px; bottom:62px;"></div>
+    <div id="token-18" class="token" style="left:709px; bottom:14px;"></div>
     <div id="token-19" class="token" style="left:613px; bottom:16px;"></div>
     <div id="token-20" class="token" style="left:516px; bottom:13px;"></div>
+    <div id="token-21" class="token" style="left:419px; bottom:15px;"></div>
+    <div id="token-22" class="token" style="left:321px; bottom:16px;"></div>
+    <div id="token-23" class="token" style="left:223px; bottom:14px;"></div>
     <div id="token-24" class="token" style="left:110px; bottom:13px;"></div>
   </div>
   <!--END tokens -->
