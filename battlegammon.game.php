@@ -170,6 +170,11 @@ class Battlegammon extends Table
             FROM dice_result";
     $result['dice_result'] = self::getObjectFromDB($sql);
 
+    // Get information about steps and tokens
+    $sql = "SELECT step_id, tokens, top_player_id FROM steps
+            WHERE tokens != 0";
+    $result['steps'] = self::getObjectListFromDB($sql);
+
     return $result;
   }
 
