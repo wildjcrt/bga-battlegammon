@@ -116,6 +116,7 @@ function (dojo, declare) {
         var colorName = this.colorMapping[player.color];
         var directionMappingByColor = this.directionMapping[colorName];
 
+        // place tokens
         playerSteps = gamedatas.steps.filter( function(el) {
                         return el.top_player_id === playerId;
                       } );
@@ -146,6 +147,7 @@ function (dojo, declare) {
         }
       }
 
+      // place dice 1 and dice 2
       var dice_result = gamedatas.dice_result;
       dojo.attr(
         'dice_1',
@@ -245,12 +247,6 @@ function (dojo, declare) {
       {
         switch( stateName )
         {
-          case 'playerTurn':
-            console.log( 'battlegammon.js >> onUpdateActionButtons >> '+stateName );
-            console.log(args)
-            this.addActionButton( 'pass-btn', _('Pass'), 'onPass' );
-            this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
-            break;
           // Example:
           //
           // case 'myGameState':
@@ -261,6 +257,12 @@ function (dojo, declare) {
           // this.addActionButton( 'button_2_id', _('Button 2 label'), 'onMyMethodToCall2' );
           // this.addActionButton( 'button_3_id', _('Button 3 label'), 'onMyMethodToCall3' );
           // break;
+          case 'playerTurn':
+            console.log( 'battlegammon.js >> onUpdateActionButtons >> '+stateName );
+            console.log(args)
+            this.addActionButton( 'pass-btn', _('Pass'), 'onPass' );
+            this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
+            break;
         }
       }
     },
