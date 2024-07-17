@@ -28,7 +28,68 @@ function (dojo, declare) {
       // Here, you can init the global variables of your user interface
       // Example:
       // this.myGlobalValue = 0;
-
+      this.colorMapping = {'ffffff': 'white', '333333': 'black'};
+      this.numberMapping = {
+        1:  'one',
+        2:  'two',
+        3:  'three',
+        4:  'four',
+        5:  'five'
+      };
+      this.directionMapping = {
+        'white': {
+          1:  'left',
+          2:  'left',
+          3:  'left',
+          4:  'left',
+          5:  'left',
+          6:  'left',
+          7:  'left',
+          8:  'left',
+          9:  'right',
+          10: 'right',
+          11: 'right',
+          12: 'right',
+          13: 'right',
+          14: 'right',
+          15: 'right',
+          16: 'right',
+          17: 'left',
+          18: 'left',
+          19: 'left',
+          20: 'left',
+          21: 'left',
+          22: 'left',
+          23: 'left',
+          24: 'left'
+        },
+        'black': {
+          1:  'right',
+          2:  'right',
+          3:  'right',
+          4:  'right',
+          5:  'right',
+          6:  'right',
+          7:  'right',
+          8:  'right',
+          9:  'left',
+          10: 'left',
+          11: 'left',
+          12: 'left',
+          13: 'left',
+          14: 'left',
+          15: 'left',
+          16: 'left',
+          17: 'right',
+          18: 'right',
+          19: 'right',
+          20: 'right',
+          21: 'right',
+          22: 'right',
+          23: 'right',
+          24: 'right'
+        }
+      };
     },
 
     /*
@@ -49,11 +110,40 @@ function (dojo, declare) {
       console.log( 'battlegammon.js >> Starting game setup' );
 
       // Setting up player boards
-      for( var player_id in gamedatas.players )
+      for ( var playerId in gamedatas.players )
       {
-        var player = gamedatas.players[player_id];
+        var player = gamedatas.players[playerId];
+        var colorName = this.colorMapping[player.color];
+        var directionMappingByColor = this.directionMapping[colorName];
 
-        // TODO: Setting up players boards if needed
+        playerSteps = gamedatas.steps.filter( function(el) {
+                        return el.top_player_id === playerId;
+                      } );
+        for (var i = 0; i < playerSteps.length; i++)
+        {
+          var step = playerSteps[i],
+              directionName = directionMappingByColor[step.step_id],
+              tokenNumber, tokenColorAndNumber;
+
+          if (step.tokens !== '20') {
+            tokenNumber = this.numberMapping[step.tokens];
+            tokenColorAndNumber = `${colorName}-${tokenNumber}`;
+          } else {
+            tokenNumber = 'two';
+            tokenColorAndNumber = (colorName === 'white') ? 'white-and-black' : 'black-and-white';
+          }
+
+          dojo.attr(
+            `token-${step.step_id}`,
+            'class',
+              this.format_block( 'js_token_class', {
+                token_number: tokenNumber,
+                token_color_and_number: tokenColorAndNumber,
+                direction: directionName
+              }
+            )
+          );
+        }
       }
 
       var dice_result = gamedatas.dice_result;

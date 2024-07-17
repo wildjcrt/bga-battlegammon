@@ -85,6 +85,12 @@ class Battlegammon extends Table
     {
       $color = array_shift( $default_colors );
       $values[] = "('".$player_id."','$color','".$player['player_canal']."','".addslashes( $player['player_name'] )."','".addslashes( $player['player_avatar'] )."')";
+
+      if ($color == 'ffffff') {
+        $white_player_id = $player_id;
+      } else {
+        $black_player_id = $player_id;
+      }
     }
     $sql .= implode( ',', $values );
     self::DbQuery( $sql );
@@ -96,7 +102,7 @@ class Battlegammon extends Table
     // Init global values with their initial values
     //self::setGameStateInitialValue( 'my_first_global_variable', 0 );
 
-    // Insert dice record in DB
+    // Insert dice record in dice_result table
     $sql = "INSERT INTO dice_result (dice1, dice2) VALUES (0, 0) ";
     self::DbQuery( $sql );
 
@@ -105,8 +111,31 @@ class Battlegammon extends Table
     //self::initStat( 'table', 'table_teststat1', 0 );  // Init a table statistics
     //self::initStat( 'player', 'player_teststat1', 0 );  // Init a player statistics (for all players)
 
-    // TODO: setup the initial game situation here
-
+    // Insert tokens record in steps table
+    self::createStepsRecord( 1, 5, $white_player_id);
+    self::createStepsRecord( 2, 0, 0);
+    self::createStepsRecord( 3, 0, 0);
+    self::createStepsRecord( 4, 0, 0);
+    self::createStepsRecord( 5, 1, $white_player_id);
+    self::createStepsRecord( 6, 0, 0);
+    self::createStepsRecord( 7, 0, 0);
+    self::createStepsRecord( 8, 2, $white_player_id);
+    self::createStepsRecord( 9, 2, $white_player_id);
+    self::createStepsRecord(10, 0, 0);
+    self::createStepsRecord(11, 0, 0);
+    self::createStepsRecord(12, 0, 0);
+    self::createStepsRecord(13, 0, 0);
+    self::createStepsRecord(14, 0, 0);
+    self::createStepsRecord(15, 0, 0);
+    self::createStepsRecord(16, 1, $black_player_id);
+    self::createStepsRecord(17, 0, 0);
+    self::createStepsRecord(18, 0, 0);
+    self::createStepsRecord(19, 2, $black_player_id);
+    self::createStepsRecord(20, 2, $black_player_id);
+    self::createStepsRecord(21, 0, 0);
+    self::createStepsRecord(22, 0, 0);
+    self::createStepsRecord(23, 0, 0);
+    self::createStepsRecord(24, 5, $black_player_id);
 
     // Activate first player (which is in general a good idea :) )
     $this->activeNextPlayer();
@@ -140,6 +169,11 @@ class Battlegammon extends Table
     $sql = "SELECT dice1, dice1_usable, dice2, dice2_usable
             FROM dice_result";
     $result['dice_result'] = self::getObjectFromDB($sql);
+
+    // Get information about steps and tokens
+    $sql = "SELECT step_id, tokens, top_player_id FROM steps
+            WHERE tokens != 0";
+    $result['steps'] = self::getObjectListFromDB($sql);
 
     return $result;
   }
@@ -202,6 +236,29 @@ class Battlegammon extends Table
     return array($dice1_value, $dice2_value);
   }
 
+  /**
+   * Insert steps table with $step_id, $tokens, $top_player_id
+   * @param $step_id, 1-24.
+   * @param $tokens, 0-5 and 20. 20 means 2 tokens but lower is another color.
+   * @param $top_player_id
+   */
+  function createStepsRecord($step_id, $tokens, $top_player_id)
+  {
+    $sql = "INSERT INTO steps (step_id, tokens, top_player_id) VALUES ($step_id, $tokens, $top_player_id);";
+    self::DbQuery($sql);
+  }
+
+  /**
+   * Update steps table with $step_id, $tokens, $top_player_id
+   * @param $step_id, 1-24.
+   * @param $tokens, 0-5 and 20. 20 means 2 tokens but lower is another color.
+   * @param $top_player_id
+   */
+  function updateStepsRecord($step_id, $tokens, $top_player_id)
+  {
+    $sql = "UPDATE steps SET tokens=$tokens, top_player_id=$top_player_id WHERE step_id=$step_id;";
+    self::DbQuery($sql);
+  }
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions

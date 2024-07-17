@@ -167,7 +167,7 @@
 
 /* dices end */
 
-.steps {
+.step {
   position: absolute;
 }
 
@@ -219,15 +219,15 @@
   background-position: -96px -96px;
 }
 
-.white-three {
+.white-three-to-left {
   background-position: -2px -284px;
 }
 
-.white-four {
+.white-four-to-left {
   background-position: -2px -378px;
 }
 
-.white-five {
+.white-five-to-left {
   background-position: -2px -472px;
 }
 
@@ -247,15 +247,15 @@
   background-position: -284px -96px;
 }
 
-.black-three {
+.black-three-to-right {
   background-position: -284px -284px;
 }
 
-.black-four {
+.black-four-to-right {
   background-position: -284px -378px;
 }
 
-.black-five {
+.black-five-to-right {
   background-position: -284px -472px;
 }
 
