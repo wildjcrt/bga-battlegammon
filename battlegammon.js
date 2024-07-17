@@ -110,11 +110,40 @@ function (dojo, declare) {
       console.log( 'battlegammon.js >> Starting game setup' );
 
       // Setting up player boards
-      for( var player_id in gamedatas.players )
+      for ( var playerId in gamedatas.players )
       {
-        var player = gamedatas.players[player_id];
+        var player = gamedatas.players[playerId];
+        var colorName = this.colorMapping[player.color];
+        var directionMappingByColor = this.directionMapping[colorName];
 
-        // TODO: Setting up players boards if needed
+        playerSteps = gamedatas.steps.filter( function(el) {
+                        return el.top_player_id === playerId;
+                      } );
+        for (var i = 0; i < playerSteps.length; i++)
+        {
+          var step = playerSteps[i],
+              directionName = directionMappingByColor[step.step_id],
+              tokenNumber, tokenColorAndNumber;
+
+          if (step.tokens !== '20') {
+            tokenNumber = this.numberMapping[step.tokens];
+            tokenColorAndNumber = `${colorName}-${tokenNumber}`;
+          } else {
+            tokenNumber = 'two';
+            tokenColorAndNumber = (colorName === 'white') ? 'white-and-black' : 'black-and-white';
+          }
+
+          dojo.place(
+            this.format_block( 'jstpl_token', {
+                token_step_id: step.step_id,
+                token_number: tokenNumber,
+                token_color_and_number: tokenColorAndNumber,
+                direction: directionName
+              }
+            ),
+            'tokens'
+          );
+        }
       }
 
       var dice_result = gamedatas.dice_result;

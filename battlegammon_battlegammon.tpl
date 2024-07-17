@@ -56,7 +56,7 @@
 
 <script type="text/javascript">
   // Javascript HTML templates
-  var jstpl_token='<div class="token token_${token_number} ${token_color_and_number}_to_${direction}" id="token_${token_step_id}"></div>';
+  var jstpl_token='<div class="token token-${token_number} ${token_color_and_number}-to-${direction}" id="token-${token_step_id}" style="${token_position}"></div>';
   var js_dice_class="dice dice_${dice_id}_${dice_value} dice_usable_${dice_usable}";
   var jstpl_step='<div id="steps_white_${step_id}" class="steps hint-${hint_type}"></div>';
 </script>
