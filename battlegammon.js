@@ -143,16 +143,17 @@ function (dojo, declare) {
             tokenColorAndNumber = (colorName === 'white') ? 'white-and-black' : 'black-and-white';
           }
 
-          dojo.place(
-            this.format_block( 'jstpl_token', {
+          dojo.attr(
+            `token-${step.step_id}`,
+            'class',
+              this.format_block( 'js_token_class', {
                 token_step_id: step.step_id,
                 token_number: tokenNumber,
                 token_color_and_number: tokenColorAndNumber,
                 direction: directionName,
                 token_position: this.tokenPosition[step.step_id]
               }
-            ),
-            'tokens'
+            )
           );
         }
       }

@@ -50,15 +50,23 @@
 
   <!--BEGIN tokens -->
   <div id="tokens">
+    <div id="token-1"  class="token" style="left:704px; bottom:390px;"></div>
+    <div id="token-5"  class="token" style="left:292px; bottom:390px;"></div>
+    <div id="token-8"  class="token" style="left:20px; bottom:336px;"></div>
+    <div id="token-9"  class="token" style="left:36px; bottom:235px;"></div>
+    <div id="token-16" class="token" style="left:714px; bottom:118px;"></div>
+    <div id="token-19" class="token" style="left:613px; bottom:16px;"></div>
+    <div id="token-20" class="token" style="left:516px; bottom:13px;"></div>
+    <div id="token-24" class="token" style="left:110px; bottom:13px;"></div>
   </div>
   <!--END tokens -->
 </div>
 
 <script type="text/javascript">
   // Javascript HTML templates
-  var jstpl_token='<div class="token token-${token_number} ${token_color_and_number}-to-${direction}" id="token-${token_step_id}" style="${token_position}"></div>';
+  var js_token_class="token token-${token_number} ${token_color_and_number}-to-${direction}";
   var js_dice_class="dice dice_${dice_id}_${dice_value} dice_usable_${dice_usable}";
-  var jstpl_step='<div id="steps_white_${step_id}" class="steps hint-${hint_type}"></div>';
+  var js_step_class="step hint-${hint_type}";
 </script>
 
 {OVERALL_GAME_FOOTER}
