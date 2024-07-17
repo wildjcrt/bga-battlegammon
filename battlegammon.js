@@ -198,12 +198,14 @@ function (dojo, declare) {
         break;
          */
 
-
+        case 'playerTurn':
+          if( this.isCurrentPlayerActive() )
+          {
+            dojo.query('.dice.dice_usable_1').connect('onclick', this, 'onSelectDice');
+          }
         case 'dummmy':
         break;
       }
-
-      dojo.query('.dice.dice_usable_1').connect('onclick', this, 'onSelectDice');
     },
 
     // onLeavingState: this method is called each time we are leaving a game state.
