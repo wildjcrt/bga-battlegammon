@@ -90,16 +90,6 @@ function (dojo, declare) {
           24: 'right'
         }
       };
-      this.tokenPosition = {
-         1: 'left:704px; bottom:390px;',
-         5: 'left:292px; bottom:390px;',
-         8: 'left:20px; bottom:336px;',
-         9: 'left:36px; bottom:235px;',
-        16: 'left:714px; bottom:118px;',
-        19: 'left:613px; bottom:16px;',
-        20: 'left:516px; bottom:13px;',
-        24: 'left:110px; bottom:13px;'
-      }
     },
 
     /*
@@ -147,11 +137,9 @@ function (dojo, declare) {
             `token-${step.step_id}`,
             'class',
               this.format_block( 'js_token_class', {
-                token_step_id: step.step_id,
                 token_number: tokenNumber,
                 token_color_and_number: tokenColorAndNumber,
-                direction: directionName,
-                token_position: this.tokenPosition[step.step_id]
+                direction: directionName
               }
             )
           );
