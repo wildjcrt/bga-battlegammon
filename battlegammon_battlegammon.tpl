@@ -21,30 +21,30 @@
   <!-- BEGIN steps -->
   <!-- White start: 1, White end: 12; Black end: 13, Black start: 24 -->
   <div id="steps">
-    <div id="step1"  class="step" style="left:687px; bottom:363px;"></div>
-    <div id="step2"  class="step" style="left:591px; bottom:403px;"></div>
-    <div id="step3"  class="step" style="left:488px; bottom:391px;"></div>
-    <div id="step4"  class="step" style="left:393px; bottom:398px;"></div>
-    <div id="step5"  class="step" style="left:297px; bottom:391px;"></div>
-    <div id="step6"  class="step" style="left:203px; bottom:399px;"></div>
-    <div id="step7"  class="step" style="left:110px; bottom:389px;"></div>
-    <div id="step8"  class="step" style="left:21px;  bottom:338px;"></div>
-    <div id="step9"  class="step" style="left:38px;  bottom:237px;"></div>
-    <div id="step10" class="step" style="left:142px; bottom:222px;"></div>
-    <div id="step11" class="step" style="left:241px; bottom:198px;"></div>
-    <div id="step12" class="step" style="left:341px; bottom:191px;"></div>
-    <div id="step13" class="step" style="left:442px; bottom:171px;"></div>
-    <div id="step14" class="step" style="left:535px; bottom:151px;"></div>
-    <div id="step15" class="step" style="left:630px; bottom:144px;"></div>
-    <div id="step16" class="step" style="left:719px; bottom:119px;"></div>
-    <div id="step17" class="step" style="left:792px; bottom:62px;"></div>
-    <div id="step18" class="step" style="left:709px; bottom:14px;"></div>
-    <div id="step19" class="step" style="left:613px; bottom:18px;"></div>
-    <div id="step20" class="step" style="left:516px; bottom:14px;"></div>
-    <div id="step21" class="step" style="left:419px; bottom:15px;"></div>
-    <div id="step22" class="step" style="left:321px; bottom:16px;"></div>
-    <div id="step23" class="step" style="left:223px; bottom:14px;"></div>
-    <div id="step24" class="step" style="left:0px;   bottom:0px;"></div>
+    <div id="step1"  class="step hint-square" style="left:687px; bottom:363px;"></div>
+    <div id="step2"  class="step hint-circle" style="left:591px; bottom:403px;"></div>
+    <div id="step3"  class="step hint-circle" style="left:488px; bottom:391px;"></div>
+    <div id="step4"  class="step hint-circle" style="left:393px; bottom:398px;"></div>
+    <div id="step5"  class="step hint-circle" style="left:297px; bottom:391px;"></div>
+    <div id="step6"  class="step hint-circle" style="left:203px; bottom:399px;"></div>
+    <div id="step7"  class="step hint-circle" style="left:110px; bottom:389px;"></div>
+    <div id="step8"  class="step hint-circle" style="left:21px;  bottom:338px;"></div>
+    <div id="step9"  class="step hint-circle" style="left:38px;  bottom:237px;"></div>
+    <div id="step10" class="step hint-circle" style="left:142px; bottom:222px;"></div>
+    <div id="step11" class="step hint-circle" style="left:241px; bottom:198px;"></div>
+    <div id="step12" class="step hint-circle" style="left:341px; bottom:191px;"></div>
+    <div id="step13" class="step hint-circle" style="left:442px; bottom:171px;"></div>
+    <div id="step14" class="step hint-circle" style="left:535px; bottom:151px;"></div>
+    <div id="step15" class="step hint-circle" style="left:630px; bottom:144px;"></div>
+    <div id="step16" class="step hint-circle" style="left:719px; bottom:119px;"></div>
+    <div id="step17" class="step hint-circle" style="left:792px; bottom:62px;"></div>
+    <div id="step18" class="step hint-circle" style="left:709px; bottom:14px;"></div>
+    <div id="step19" class="step hint-circle" style="left:613px; bottom:18px;"></div>
+    <div id="step20" class="step hint-circle" style="left:516px; bottom:14px;"></div>
+    <div id="step21" class="step hint-circle" style="left:419px; bottom:15px;"></div>
+    <div id="step22" class="step hint-circle" style="left:321px; bottom:16px;"></div>
+    <div id="step23" class="step hint-circle" style="left:223px; bottom:14px;"></div>
+    <div id="step24" class="step hint-square" style="left:0px;   bottom:0px;"></div>
   </div>
   <!-- END steps -->
 

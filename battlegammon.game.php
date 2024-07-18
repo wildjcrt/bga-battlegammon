@@ -175,6 +175,32 @@ class Battlegammon extends Table
             WHERE tokens != 0";
     $result['steps'] = self::getObjectListFromDB($sql);
 
+    // List all available steps
+    $sql = "SELECT step_id FROM steps
+            WHERE tokens < 2";
+    $steps_list = self::getObjectListFromDB($sql);
+    $result['availableSteps'] = array();
+    foreach ($steps_list as $item) {
+      $result['availableSteps'][] = $item['step_id'];
+    }
+    if (!in_array('1', $result['availableSteps'])) {
+        $result['availableSteps'][] = '1';
+    }
+    if (!in_array('24', $result['availableSteps'])) {
+        $result['availableSteps'][] = '24';
+    }
+    sort($result['availableSteps'], SORT_NUMERIC);
+
+    // List all available tokens
+    $active_player_id = $this->getActivePlayerId();
+    $sql = "SELECT step_id FROM steps
+            WHERE top_player_id = $active_player_id";
+    $steps_list = self::getObjectListFromDB($sql);
+    $result['availableTokens'] = array();
+    foreach ($steps_list as $item) {
+      $result['availableTokens'][] = $item['step_id'];
+    }
+
     return $result;
   }
 
@@ -325,7 +351,55 @@ class Battlegammon extends Table
 
   function argPlayerTurn()
   {
-    return [];
+    // List all available dice
+    $sql = "SELECT dice1, dice1_usable, dice2, dice2_usable
+            FROM dice_result";
+    $dice_result = self::getObjectFromDB($sql);
+    $availableDice = array();
+    if ($dice_result['dice1_usable'] == 1) {
+      $availableDice[] = $dice_result['dice1'];
+    }
+    if ($dice_result['dice2_usable'] == 1) {
+      $availableDice[] = $dice_result['dice2'];
+    }
+
+    // List all available steps
+    $sql = "SELECT step_id FROM steps
+            WHERE tokens < 2";
+    $steps_list = self::getObjectListFromDB($sql);
+    $availableSteps = array();
+    foreach ($steps_list as $item) {
+      $availableSteps[] = $item['step_id'];
+    }
+    if (!in_array('1', $availableSteps)) {
+        $availableSteps[] = '1';
+    }
+    if (!in_array('24', $availableSteps)) {
+        $availableSteps[] = '24';
+    }
+    sort($availableSteps, SORT_NUMERIC);
+
+    // List all available tokens
+    $active_player_id = $this->getActivePlayerId();
+    $sql = "SELECT player_color FROM player
+            WHERE player_id=$active_player_id";
+    $color_code = self::getUniqueValueFromDB($sql);
+    $active_player_color = ($color_code == 'ffffff') ? 'white' : 'black';
+
+    $sql = "SELECT step_id FROM steps
+            WHERE top_player_id = $active_player_id";
+    $steps_list = self::getObjectListFromDB($sql);
+    $availableTokens = array();
+    foreach ($steps_list as $item) {
+      $availableTokens[] = $item['step_id'];
+    }
+
+    return [
+      'color'           => $active_player_color,
+      'availableSteps'  => $availableSteps,
+      'availableTokens' => $availableTokens,
+      'availableDice'   => $availableDice
+    ];
   }
 
 //////////////////////////////////////////////////////////////////////////////

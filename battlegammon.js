@@ -23,7 +23,7 @@ define([
 function (dojo, declare) {
   return declare("bgagame.battlegammon", ebg.core.gamegui, {
     constructor: function(){
-      console.log( 'battlegammon.js >> battlegammon constructor' );
+      // console.log( 'battlegammon.js >> battlegammon constructor' );
 
       // Here, you can init the global variables of your user interface
       // Example:
@@ -107,7 +107,7 @@ function (dojo, declare) {
 
     setup: function( gamedatas )
     {
-      console.log( 'battlegammon.js >> Starting game setup' );
+      // console.log( 'battlegammon.js >> Starting game setup' );
 
       // Setting up player boards
       for ( var playerId in gamedatas.players )
@@ -116,6 +116,7 @@ function (dojo, declare) {
         var colorName = this.colorMapping[player.color];
         var directionMappingByColor = this.directionMapping[colorName];
 
+        // place tokens
         playerSteps = gamedatas.steps.filter( function(el) {
                         return el.top_player_id === playerId;
                       } );
@@ -146,6 +147,7 @@ function (dojo, declare) {
         }
       }
 
+      // place dice 1 and dice 2
       var dice_result = gamedatas.dice_result;
       dojo.attr(
         'dice_1',
@@ -168,10 +170,26 @@ function (dojo, declare) {
         )
       );
 
+      if( this.isCurrentPlayerActive() )
+      {
+        var activePlayerId = this.getActivePlayerId();
+        this.activePlayer = this.gamedatas.players[activePlayerId];
+
+        dojo.query('.dice.dice_usable_1').connect('onclick', this, 'onSelectDice');
+        console.log(gamedatas.availableSteps);
+
+        for (var i = 0; i < gamedatas.availableTokens.length; i++)
+        {
+          var tokenStep = gamedatas.availableTokens[i];
+          dojo.addClass(`token-${tokenStep}`, 'available');
+          dojo.query(`#token-${tokenStep}`).connect('onclick', this, 'onSelectToken');
+        }
+      }
+
       // Setup game notifications to handle (see "setupNotifications" method below)
       this.setupNotifications();
 
-      console.log( 'battlegammon.js >> Ending game setup' );
+      // console.log( 'battlegammon.js >> Ending game setup' );
     },
 
 
@@ -183,7 +201,8 @@ function (dojo, declare) {
     //
     onEnteringState: function( stateName, args )
     {
-      console.log( 'battlegammon.js >> Entering state: '+stateName );
+      // console.log( 'battlegammon.js >> Entering state: '+stateName );
+      // console.log(args)
 
       switch( stateName )
       {
@@ -198,12 +217,10 @@ function (dojo, declare) {
         break;
          */
 
-
+        case 'playerTurn':
         case 'dummmy':
         break;
       }
-
-      dojo.query('.dice.dice_usable_1').connect('onclick', this, 'onSelectDice');
     },
 
     // onLeavingState: this method is called each time we are leaving a game state.
@@ -211,7 +228,7 @@ function (dojo, declare) {
     //
     onLeavingState: function( stateName )
     {
-      console.log( 'battlegammon.js >> Leaving state: '+stateName );
+      // console.log( 'battlegammon.js >> Leaving state: '+stateName );
 
       switch( stateName )
       {
@@ -237,18 +254,12 @@ function (dojo, declare) {
     //
     onUpdateActionButtons: function( stateName, args )
     {
-      console.log( 'battlegammon.js >> onUpdateActionButtons: '+stateName );
+      // console.log( 'battlegammon.js >> onUpdateActionButtons: '+stateName );
 
       if( this.isCurrentPlayerActive() )
       {
         switch( stateName )
         {
-          case 'playerTurn':
-            console.log( 'battlegammon.js >> onUpdateActionButtons >> '+stateName );
-            console.log(args)
-            this.addActionButton( 'pass-btn', _('Pass'), 'onPass' );
-            this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
-            break;
           // Example:
           //
           // case 'myGameState':
@@ -259,6 +270,14 @@ function (dojo, declare) {
           // this.addActionButton( 'button_2_id', _('Button 2 label'), 'onMyMethodToCall2' );
           // this.addActionButton( 'button_3_id', _('Button 3 label'), 'onMyMethodToCall3' );
           // break;
+          case 'playerTurn':
+            // console.log( 'battlegammon.js >> onUpdateActionButtons >> '+stateName );
+            // console.log(args)
+            this.addActionButton( 'pass-btn', _('Pass'), 'onPass' );
+            dojo.addClass('pass-btn', 'disabled');
+            this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
+            dojo.addClass('cancel-btn', 'disabled');
+            break;
         }
       }
     },
@@ -328,6 +347,46 @@ function (dojo, declare) {
       e.currentTarget.classList.toggle('lighton_dice');
     },
 
+    onSelectToken: function(e)
+    {
+      dojo.stopEvent(e);
+      dojo.query('.step').removeClass('hint');
+      dojo.removeClass('cancel-btn', 'disabled');
+
+      // List availableDice
+      var dice_result = this.gamedatas.dice_result,
+          availableDice = [];
+      if (dice_result.dice1_usable === '1') {
+        availableDice.push(parseInt(this.gamedatas.dice_result.dice1));
+      }
+      if (dice_result.dice2_usable === '1') {
+        availableDice.push(parseInt(this.gamedatas.dice_result.dice2));
+      }
+
+      var availableTokens = this.gamedatas.availableTokens;
+      if (this.activePlayer.color === 'ffffff') {
+        var tokenStep = parseInt(e.currentTarget.id.split('-')[1]);
+        for (var j = 0; j < availableDice.length; j++) {
+          var dice   = availableDice[j],
+              toStep = tokenStep + dice;
+
+          if (this.gamedatas.availableSteps.includes(`${toStep}`)) {
+            dojo.addClass(`step${toStep}`, 'hint');
+          }
+        }
+      } else {
+        var tokenStep = parseInt(e.currentTarget.id.split('-')[1]);
+        for (var j = 0; j < availableDice.length; j++) {
+          var dice   = availableDice[j],
+              toStep = tokenStep - dice;
+
+          if (this.gamedatas.availableSteps.includes(`${toStep}`)) {
+            dojo.addClass(`step${toStep}`, 'hint');
+          }
+        }
+      }
+    },
+
     onPass: function (e)
     {
 
@@ -335,7 +394,8 @@ function (dojo, declare) {
 
     onCancel: function (e)
     {
-
+      dojo.query('.step').removeClass('hint');
+      dojo.addClass('cancel-btn', 'disabled');
     },
 
     ///////////////////////////////////////////////////
@@ -352,7 +412,7 @@ function (dojo, declare) {
     */
     setupNotifications: function()
     {
-      console.log( 'battlegammon.js >> notifications subscriptions setup' );
+      // console.log( 'battlegammon.js >> notifications subscriptions setup' );
 
       // TODO: here, associate your game notifications with local methods
 

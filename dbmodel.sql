@@ -37,9 +37,18 @@ CREATE TABLE IF NOT EXISTS steps (
   `step_id` int(2) unsigned NOT NULL AUTO_INCREMENT,
   `tokens` int(2) unsigned NOT NULL DEFAULT 0,
   `top_player_id` int(10) unsigned NOT NULL DEFAULT 0,
-  `prev_tokens` int(2) unsigned NOT NULL DEFAULT 0,
-  `prev_top_player_id` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`step_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS token_history (
+  `id` int(2) unsigned NOT NULL AUTO_INCREMENT,
+  `turn` int(2) unsigned NOT NULL DEFAULT 0,
+  `dice_value` int(2) unsigned NOT NULL DEFAULT 0,
+  `token_id` int(2) unsigned NOT NULL DEFAULT 0,
+  `player_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `from_step_id` int(2) unsigned NOT NULL DEFAULT 0,
+  `to_step_id` int(2) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS dice_result (
