@@ -381,6 +381,11 @@ class Battlegammon extends Table
 
     // List all available tokens
     $active_player_id = $this->getActivePlayerId();
+    $sql = "SELECT player_color FROM player
+            WHERE player_id=$active_player_id";
+    $color_code = self::getUniqueValueFromDB($sql);
+    $active_player_color = ($color_code == 'ffffff') ? 'white' : 'black';
+
     $sql = "SELECT step_id FROM steps
             WHERE top_player_id = $active_player_id";
     $steps_list = self::getObjectListFromDB($sql);
@@ -390,6 +395,7 @@ class Battlegammon extends Table
     }
 
     return [
+      'color'           => $active_player_color,
       'availableSteps'  => $availableSteps,
       'availableTokens' => $availableTokens,
       'availableDice'   => $availableDice
