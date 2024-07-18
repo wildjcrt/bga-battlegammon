@@ -175,6 +175,32 @@ class Battlegammon extends Table
             WHERE tokens != 0";
     $result['steps'] = self::getObjectListFromDB($sql);
 
+    // List all available steps
+    $sql = "SELECT step_id FROM steps
+            WHERE tokens < 2";
+    $steps_list = self::getObjectListFromDB($sql);
+    $result['availableSteps'] = array();
+    foreach ($steps_list as $item) {
+      $result['availableSteps'][] = $item['step_id'];
+    }
+    if (!in_array('1', $result['availableSteps'])) {
+        $result['availableSteps'][] = '1';
+    }
+    if (!in_array('24', $result['availableSteps'])) {
+        $result['availableSteps'][] = '24';
+    }
+    sort($result['availableSteps'], SORT_NUMERIC);
+
+    // List all available tokens
+    $active_player_id = $this->getActivePlayerId();
+    $sql = "SELECT step_id FROM steps
+            WHERE top_player_id = $active_player_id";
+    $steps_list = self::getObjectListFromDB($sql);
+    $result['availableTokens'] = array();
+    foreach ($steps_list as $item) {
+      $result['availableTokens'][] = $item['step_id'];
+    }
+
     return $result;
   }
 

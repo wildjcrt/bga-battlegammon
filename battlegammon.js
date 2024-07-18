@@ -170,6 +170,13 @@ function (dojo, declare) {
         )
       );
 
+      if( this.isCurrentPlayerActive() )
+      {
+        dojo.query('.dice.dice_usable_1').connect('onclick', this, 'onSelectDice');
+        console.log(gamedatas.availableSteps);
+        console.log(gamedatas.availableTokens);
+      }
+
       // Setup game notifications to handle (see "setupNotifications" method below)
       this.setupNotifications();
 
@@ -202,10 +209,6 @@ function (dojo, declare) {
          */
 
         case 'playerTurn':
-          if( this.isCurrentPlayerActive() )
-          {
-            dojo.query('.dice.dice_usable_1').connect('onclick', this, 'onSelectDice');
-          }
         case 'dummmy':
         break;
       }
