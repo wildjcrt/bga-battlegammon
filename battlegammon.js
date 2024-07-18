@@ -172,9 +172,18 @@ function (dojo, declare) {
 
       if( this.isCurrentPlayerActive() )
       {
+        var activePlayerId = this.getActivePlayerId();
+        this.activePlayer = this.gamedatas.players[activePlayerId];
+
         dojo.query('.dice.dice_usable_1').connect('onclick', this, 'onSelectDice');
         console.log(gamedatas.availableSteps);
-        console.log(gamedatas.availableTokens);
+
+        for (var i = 0; i < gamedatas.availableTokens.length; i++)
+        {
+          var tokenStep = gamedatas.availableTokens[i];
+          dojo.addClass(`token-${tokenStep}`, 'available');
+          dojo.query(`#token-${tokenStep}`).connect('onclick', this, 'onSelectToken');
+        }
       }
 
       // Setup game notifications to handle (see "setupNotifications" method below)
@@ -334,6 +343,45 @@ function (dojo, declare) {
     {
       dojo.stopEvent(e);
       e.currentTarget.classList.toggle('lighton_dice');
+    },
+
+    onSelectToken: function(e)
+    {
+      dojo.stopEvent(e);
+      dojo.query('.step').removeClass('hint');
+
+      // List availableDice
+      var dice_result = this.gamedatas.dice_result,
+          availableDice = [];
+      if (dice_result.dice1_usable === '1') {
+        availableDice.push(parseInt(this.gamedatas.dice_result.dice1));
+      }
+      if (dice_result.dice2_usable === '1') {
+        availableDice.push(parseInt(this.gamedatas.dice_result.dice2));
+      }
+
+      var availableTokens = this.gamedatas.availableTokens;
+      if (this.activePlayer.color === 'ffffff') {
+        var tokenStep = parseInt(e.currentTarget.id.split('-')[1]);
+        for (var j = 0; j < availableDice.length; j++) {
+          var dice   = availableDice[j],
+              toStep = tokenStep + dice;
+
+          if (this.gamedatas.availableSteps.includes(`${toStep}`)) {
+            dojo.addClass(`step${toStep}`, 'hint');
+          }
+        }
+      } else {
+        var tokenStep = parseInt(e.currentTarget.id.split('-')[1]);
+        for (var j = 0; j < availableDice.length; j++) {
+          var dice   = availableDice[j],
+              toStep = tokenStep - dice;
+
+          if (this.gamedatas.availableSteps.includes(`${toStep}`)) {
+            dojo.addClass(`step${toStep}`, 'hint');
+          }
+        }
+      }
     },
 
     onPass: function (e)
