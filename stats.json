@@ -1,1 +1,51 @@
-{}
+{
+  "table": {
+    "turns_number": {
+      "id": 10,
+      "name": "Number of turns",
+      "type": "int"
+    }
+  },
+  "player": {
+    "turns_number": {
+      "id": 10,
+      "name": "Number of turns",
+      "type": "int"
+    },
+    "dice1": {
+      "id": 11,
+      "name": "Roll 1",
+      "type": "int"
+    },
+    "dice2": {
+      "id": 12,
+      "name": "Roll 2",
+      "type": "int"
+    },
+    "dice3": {
+      "id": 13,
+      "name": "Roll 3",
+      "type": "int"
+    },
+    "dice4": {
+      "id": 14,
+      "name": "Roll 4",
+      "type": "int"
+    },
+    "dice5": {
+      "id": 15,
+      "name": "Roll 5",
+      "type": "int"
+    },
+    "dice6": {
+      "id": 16,
+      "name": "Roll 6",
+      "type": "int"
+    },
+    "number_of_pass": {
+      "id": 17,
+      "name": "Number of times you had to pass",
+      "type": "int"
+    }
+  }
+}
