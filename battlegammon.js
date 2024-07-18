@@ -274,7 +274,9 @@ function (dojo, declare) {
             // console.log( 'battlegammon.js >> onUpdateActionButtons >> '+stateName );
             // console.log(args)
             this.addActionButton( 'pass-btn', _('Pass'), 'onPass' );
+            dojo.addClass('pass-btn', 'disabled');
             this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
+            dojo.addClass('cancel-btn', 'disabled');
             break;
         }
       }
@@ -349,6 +351,7 @@ function (dojo, declare) {
     {
       dojo.stopEvent(e);
       dojo.query('.step').removeClass('hint');
+      dojo.removeClass('cancel-btn', 'disabled');
 
       // List availableDice
       var dice_result = this.gamedatas.dice_result,
@@ -391,7 +394,8 @@ function (dojo, declare) {
 
     onCancel: function (e)
     {
-
+      dojo.query('.step').removeClass('hint');
+      dojo.addClass('cancel-btn', 'disabled');
     },
 
     ///////////////////////////////////////////////////
