@@ -176,7 +176,6 @@ function (dojo, declare) {
         this.activePlayer = this.gamedatas.players[activePlayerId];
 
         dojo.query('.dice.dice_usable_1').connect('onclick', this, 'onSelectDice');
-        console.log(gamedatas.availableSteps);
 
         for (var i = 0; i < gamedatas.availableTokens.length; i++)
         {
@@ -364,27 +363,49 @@ function (dojo, declare) {
       }
 
       var availableTokens = this.gamedatas.availableTokens;
+      this.tokenStep = parseInt(e.currentTarget.id.split('-')[1]);
       if (this.activePlayer.color === 'ffffff') {
-        var tokenStep = parseInt(e.currentTarget.id.split('-')[1]);
         for (var j = 0; j < availableDice.length; j++) {
-          var dice   = availableDice[j],
-              toStep = tokenStep + dice;
+          this.dice_value = availableDice[j];
+          this.toStep = this.tokenStep + this.dice_value;
 
-          if (this.gamedatas.availableSteps.includes(`${toStep}`)) {
-            dojo.addClass(`step${toStep}`, 'hint');
+          if (this.gamedatas.availableSteps.includes(`${this.toStep}`)) {
+            dojo.addClass(`step${this.toStep}`, 'hint');
+            dojo.query(`#step${this.toStep}`).connect('onclick', this, 'onSelectStep');
           }
         }
       } else {
-        var tokenStep = parseInt(e.currentTarget.id.split('-')[1]);
         for (var j = 0; j < availableDice.length; j++) {
-          var dice   = availableDice[j],
-              toStep = tokenStep - dice;
+          this.dice_value = availableDice[j];
+          var toStep = this.tokenStep - this.dice_value;
 
           if (this.gamedatas.availableSteps.includes(`${toStep}`)) {
             dojo.addClass(`step${toStep}`, 'hint');
+            dojo.query(`#step${toStep}`).connect('onclick', this, 'onSelectStep');
           }
         }
       }
+    },
+
+    onSelectStep: function (e)
+    {
+      dojo.stopEvent(e);
+      this.updateTitle(_('Sending your move to server'));
+
+      var toStep = e.currentTarget.id.split('-')[1];
+
+      this.ajaxcall(
+          "/battlegammon/battlegammon/sendMoveToServer.html",
+          {
+              token_id: this.tokenStep,
+              from_step: this.tokenStep,
+              to_step: toStep,
+              dice_value: this.dice_value
+          },
+          this,
+          function( result ) {},
+          function( is_error) {}
+      );
     },
 
     onPass: function (e)

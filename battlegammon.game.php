@@ -321,6 +321,113 @@ class Battlegammon extends Table
 
   */
 
+  /**
+   * save move from client
+   * check if this move is valid and change board and go to next state
+   * @param $argJS [$token_id, $from_step, $to_step, $dice_value]
+   */
+  public function saveMoveFromClient($argJS)
+  {
+    // Record in token_history
+    // $turn
+    $active_player_id = $this->getActivePlayerId();
+    $token_id   = $argJS[0];
+    $from_step  = $argJS[1];
+    $to_step    = $argJS[2];
+    $dice_value = $argJS[3];
+    //
+    // $sql = "INSERT INTO token_history (dice_value, token_id, player_id, from_step_id, to_step_id) VALUES ($dice_value, $token_id, $active_player_id, $from_step, $to_step);";
+    // self::DbQuery($sql);
+
+    // Record in "from steps"
+    $sql = "SELECT tokens FROM steps
+            WHERE step_id=$from_step AND top_player_id=$active_player_id";
+    $from_tokens = self::getUniqueValueFromDB($sql);
+    if ($from_tokens > 0)
+    {
+      if ($from_tokens != 20) {
+        $from_tokens -= 1;
+        $from_top_player_id = $active_player_id;
+      } else {
+        $from_tokens = 1;
+        $sql = "SELECT player_id FROM player
+                WHERE player_id!=$active_player_id";
+        $from_top_player_id = self::getUniqueValueFromDB($sql);
+      }
+    }
+
+    $sql = "UPDATE steps SET tokens=$from_tokens, top_player_id=$from_top_player_id
+            WHERE step_id=$from_step";
+    self::DbQuery($sql);
+
+    // Record in "to steps"
+    $sql = "SELECT player_color FROM player
+            WHERE player_id=$active_player_id";
+    $color_code = self::getUniqueValueFromDB($sql);
+
+    $sql = "SELECT tokens, top_player_id FROM steps
+            WHERE step_id=$to_step";
+    $to_step_result = self::getObjectFromDB($sql);
+    $to_tokens = $to_step_result['tokens'];
+    $to_top_player_id = $to_step_result['top_player_id'];
+
+    if ($to_step == 1 && $color_code == 'ffffff') {
+      # code...
+    }
+
+    if ($to_step == 24 && $color_code == '333333') {
+      # code...
+    }
+
+    if ($to_step >= 2 && $to_step <= 23)
+    {
+      switch ($to_tokens) {
+        case 0:
+          $to_tokens = 1;
+          break;
+        case 1:
+          if ($to_top_player_id == $active_player_id) {
+            $to_tokens = 2;
+          } else {
+            $to_tokens = 20;
+          }
+          break;
+        case 2:
+          if ($to_top_player_id == $active_player_id) {
+            $to_tokens = 3;
+          }
+          break;
+        case 3:
+          if ($to_top_player_id == $active_player_id) {
+            $to_tokens = 4;
+          }
+          break;
+        case 4:
+          if ($to_top_player_id == $active_player_id) {
+            $to_tokens = 5;
+          }
+          break;
+      }
+    }
+
+    $sql = "UPDATE steps SET tokens=$to_tokens, top_player_id=$to_top_player_id
+            WHERE step_id=$to_step";
+    self::DbQuery($sql);
+
+    // Make dice usable to 0
+    $sql = "SELECT dice1, dice1_usable, dice2, dice2_usable
+            FROM dice_result";
+    $dice_result = self::getObjectFromDB($sql);
+
+    if ($dice_result['dice1'] == $dice_value) {
+      $sql = "UPDATE dice_result SET dice1_usable=0";
+    } else {
+      $sql = "UPDATE dice_result SET dice2_usable=0";
+    }
+    self::DbQuery($sql);
+
+    $this->gamestate->nextState( 'selectTokenB' );
+  }
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Game state arguments
