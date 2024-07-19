@@ -110,6 +110,16 @@ class Battlegammon extends Table
     // (note: statistics used in this file must be defined in your stats.inc.php file)
     //self::initStat( 'table', 'table_teststat1', 0 );  // Init a table statistics
     //self::initStat( 'player', 'player_teststat1', 0 );  // Init a player statistics (for all players)
+    // init statistics
+    self::initStat("table", "turns_number", 0);
+    self::initStat("player", "turns_number", 0);
+    self::initStat("player", "dice1", 0);
+    self::initStat("player", "dice2", 0);
+    self::initStat("player", "dice3", 0);
+    self::initStat("player", "dice4", 0);
+    self::initStat("player", "dice5", 0);
+    self::initStat("player", "dice6", 0);
+    self::initStat("player", "number_of_pass", 0);
 
     // Insert tokens record in steps table
     self::createStepsRecord( 1, 5, $white_player_id);
