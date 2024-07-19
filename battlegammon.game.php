@@ -244,6 +244,11 @@ class Battlegammon extends Table
    */
   private function rollDice()
   {
+    self::incStat(1, "turns_number");
+
+    $active_player_id = self::getActivePlayerId();
+    self::incStat(1, "turns_number", $active_player_id);
+
     // Roll dices
     $dice1_value = bga_rand(1, 6);
     $dice2_value = bga_rand(1, 6);
@@ -268,6 +273,9 @@ class Battlegammon extends Table
                 dice2_usable=1";
     self::DbQuery( $sql );
     self::reloadPlayersBasicInfos();
+
+    self::incStat(1, "dice" . $dice1_value, $active_player_id);
+    self::incStat(1, "dice" . $dice2_value, $active_player_id);
 
     return array($dice1_value, $dice2_value);
   }
