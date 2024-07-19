@@ -110,6 +110,16 @@ class Battlegammon extends Table
     // (note: statistics used in this file must be defined in your stats.inc.php file)
     //self::initStat( 'table', 'table_teststat1', 0 );  // Init a table statistics
     //self::initStat( 'player', 'player_teststat1', 0 );  // Init a player statistics (for all players)
+    // init statistics
+    self::initStat("table", "turns_number", 0);
+    self::initStat("player", "turns_number", 0);
+    self::initStat("player", "dice1", 0);
+    self::initStat("player", "dice2", 0);
+    self::initStat("player", "dice3", 0);
+    self::initStat("player", "dice4", 0);
+    self::initStat("player", "dice5", 0);
+    self::initStat("player", "dice6", 0);
+    self::initStat("player", "number_of_pass", 0);
 
     // Insert tokens record in steps table
     self::createStepsRecord( 1, 5, $white_player_id);
@@ -234,6 +244,11 @@ class Battlegammon extends Table
    */
   private function rollDice()
   {
+    self::incStat(1, "turns_number");
+
+    $active_player_id = self::getActivePlayerId();
+    self::incStat(1, "turns_number", $active_player_id);
+
     // Roll dices
     $dice1_value = bga_rand(1, 6);
     $dice2_value = bga_rand(1, 6);
@@ -258,6 +273,9 @@ class Battlegammon extends Table
                 dice2_usable=1";
     self::DbQuery( $sql );
     self::reloadPlayersBasicInfos();
+
+    self::incStat(1, "dice" . $dice1_value, $active_player_id);
+    self::incStat(1, "dice" . $dice2_value, $active_player_id);
 
     return array($dice1_value, $dice2_value);
   }
@@ -328,8 +346,9 @@ class Battlegammon extends Table
    */
   public function saveMoveFromClient($argJS)
   {
+
     // Record in token_history
-    // $turn
+    $turn_number = self::getStat("turns_number");
     $active_player_id = $this->getActivePlayerId();
     $token_id   = $argJS[0];
     $from_step  = $argJS[1];
