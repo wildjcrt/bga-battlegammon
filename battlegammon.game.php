@@ -85,12 +85,6 @@ class Battlegammon extends Table
     {
       $color = array_shift( $default_colors );
       $values[] = "('".$player_id."','$color','".$player['player_canal']."','".addslashes( $player['player_name'] )."','".addslashes( $player['player_avatar'] )."')";
-
-      if ($color == 'ffffff') {
-        $white_player_id = $player_id;
-      } else {
-        $black_player_id = $player_id;
-      }
     }
     $sql .= implode( ',', $values );
     self::DbQuery( $sql );
@@ -124,61 +118,61 @@ class Battlegammon extends Table
     self::createStepRecord(13);
     self::createStepRecord(14);
     self::createStepRecord(15);
-    self::createStepRecord(16, 0, 1, 10, 0);
+    self::createStepRecord(16, 0, 1, 20, 0);
     self::createStepRecord(17);
     self::createStepRecord(18);
-    self::createStepRecord(19, 0, 2, 8, 9);
-    self::createStepRecord(20, 0, 2, 6, 7);
+    self::createStepRecord(19, 0, 2, 18, 19);
+    self::createStepRecord(20, 0, 2, 16, 17);
     self::createStepRecord(21);
     self::createStepRecord(22);
     self::createStepRecord(23);
-    self::createStepRecord(24, 0, 5, 1, 0);
+    self::createStepRecord(24, 0, 5, 11, 0);
 
     // Insert token record in tokens table
-    // @params: $token_id, $player_id, $step_id
-    self::createTokenRecord( 1, $white_player_id,  1);
-    self::createTokenRecord( 2, $white_player_id,  1);
-    self::createTokenRecord( 3, $white_player_id,  1);
-    self::createTokenRecord( 4, $white_player_id,  1);
-    self::createTokenRecord( 5, $white_player_id,  1);
-    self::createTokenRecord( 6, $white_player_id,  5);
-    self::createTokenRecord( 7, $white_player_id,  8);
-    self::createTokenRecord( 8, $white_player_id,  8);
-    self::createTokenRecord( 9, $white_player_id,  9);
-    self::createTokenRecord(10, $white_player_id,  9);
-    self::createTokenRecord( 1, $black_player_id, 24);
-    self::createTokenRecord( 2, $black_player_id, 24);
-    self::createTokenRecord( 3, $black_player_id, 24);
-    self::createTokenRecord( 4, $black_player_id, 24);
-    self::createTokenRecord( 5, $black_player_id, 24);
-    self::createTokenRecord( 6, $black_player_id, 20);
-    self::createTokenRecord( 7, $black_player_id, 20);
-    self::createTokenRecord( 8, $black_player_id, 19);
-    self::createTokenRecord( 9, $black_player_id, 19);
-    self::createTokenRecord(10, $black_player_id, 16);
+    // @params: $token_id, $step_id
+    self::createTokenRecord( 1,  1);
+    self::createTokenRecord( 2,  1);
+    self::createTokenRecord( 3,  1);
+    self::createTokenRecord( 4,  1);
+    self::createTokenRecord( 5,  1);
+    self::createTokenRecord( 6,  5);
+    self::createTokenRecord( 7,  8);
+    self::createTokenRecord( 8,  8);
+    self::createTokenRecord( 9,  9);
+    self::createTokenRecord(10,  9);
+    self::createTokenRecord(11, 24);
+    self::createTokenRecord(12, 24);
+    self::createTokenRecord(13, 24);
+    self::createTokenRecord(14, 24);
+    self::createTokenRecord(15, 24);
+    self::createTokenRecord(16, 20);
+    self::createTokenRecord(17, 20);
+    self::createTokenRecord(18, 19);
+    self::createTokenRecord(19, 19);
+    self::createTokenRecord(20, 16);
 
     // Insert history record in histories table
-    // @params: $turn, $dice_number, $token_id, $player_id, $from_step_id, $to_step_id
-    self::createHistoryRecord(0, 0,  1, $white_player_id, 0,  1);
-    self::createHistoryRecord(0, 0,  2, $white_player_id, 0,  1);
-    self::createHistoryRecord(0, 0,  3, $white_player_id, 0,  1);
-    self::createHistoryRecord(0, 0,  4, $white_player_id, 0,  1);
-    self::createHistoryRecord(0, 0,  5, $white_player_id, 0,  1);
-    self::createHistoryRecord(0, 0,  6, $white_player_id, 0,  5);
-    self::createHistoryRecord(0, 0,  7, $white_player_id, 0,  8);
-    self::createHistoryRecord(0, 0,  8, $white_player_id, 0,  8);
-    self::createHistoryRecord(0, 0,  9, $white_player_id, 0,  9);
-    self::createHistoryRecord(0, 0, 10, $white_player_id, 0,  9);
-    self::createHistoryRecord(0, 0,  1, $black_player_id, 0, 24);
-    self::createHistoryRecord(0, 0,  2, $black_player_id, 0, 24);
-    self::createHistoryRecord(0, 0,  3, $black_player_id, 0, 24);
-    self::createHistoryRecord(0, 0,  4, $black_player_id, 0, 24);
-    self::createHistoryRecord(0, 0,  5, $black_player_id, 0, 24);
-    self::createHistoryRecord(0, 0,  6, $black_player_id, 0, 20);
-    self::createHistoryRecord(0, 0,  7, $black_player_id, 0, 20);
-    self::createHistoryRecord(0, 0,  8, $black_player_id, 0, 19);
-    self::createHistoryRecord(0, 0,  9, $black_player_id, 0, 19);
-    self::createHistoryRecord(0, 0, 10, $black_player_id, 0, 16);
+    // @params: $turn, $dice_number, $token_id, $from_step_id, $to_step_id
+    self::createHistoryRecord(0, 0,  1, 0,  1);
+    self::createHistoryRecord(0, 0,  2, 0,  1);
+    self::createHistoryRecord(0, 0,  3, 0,  1);
+    self::createHistoryRecord(0, 0,  4, 0,  1);
+    self::createHistoryRecord(0, 0,  5, 0,  1);
+    self::createHistoryRecord(0, 0,  6, 0,  5);
+    self::createHistoryRecord(0, 0,  7, 0,  8);
+    self::createHistoryRecord(0, 0,  8, 0,  8);
+    self::createHistoryRecord(0, 0,  9, 0,  9);
+    self::createHistoryRecord(0, 0, 10, 0,  9);
+    self::createHistoryRecord(0, 0, 11, 0, 24);
+    self::createHistoryRecord(0, 0, 12, 0, 24);
+    self::createHistoryRecord(0, 0, 13, 0, 24);
+    self::createHistoryRecord(0, 0, 14, 0, 24);
+    self::createHistoryRecord(0, 0, 15, 0, 24);
+    self::createHistoryRecord(0, 0, 16, 0, 20);
+    self::createHistoryRecord(0, 0, 17, 0, 20);
+    self::createHistoryRecord(0, 0, 18, 0, 19);
+    self::createHistoryRecord(0, 0, 19, 0, 19);
+    self::createHistoryRecord(0, 0, 20, 0, 16);
 
     // Init game statistics
     // (note: statistics used in this file must be defined in your stats.inc.php file)
@@ -214,14 +208,10 @@ class Battlegammon extends Table
   {
     $result = array();
 
-    $current_player_id = self::getCurrentPlayerId();  // !! We must only return informations visible by this player !!
-
     // Get information about players
     // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
     $sql = "SELECT player_id id, player_score score FROM player";
     $result['players'] = self::getCollectionFromDb( $sql );
-
-    // TODO: Gather all information about current game situation (visible by player $current_player_id).
 
     // Get information about the dice roll
     $sql = "SELECT dice1, dice1_available, dice2, dice2_available
@@ -378,28 +368,26 @@ class Battlegammon extends Table
 
   /**
    * Insert tokens table
-   * @param $token_id, 1-24 each for both player.
-   * @param $player_id
+   * @param $token_id, 1-10 for white player and 11-20 for black player.
    * @param $step_id, token position.
    */
-  function createTokenRecord($token_id, $player_id, $step_id)
+  function createTokenRecord($token_id, $step_id)
   {
-    $sql = "INSERT INTO tokens (token_id, player_id, step_id)
-            VALUES ($token_id, $player_id, $step_id);";
+    $sql = "INSERT INTO tokens (token_id, step_id)
+            VALUES ($token_id, $step_id);";
     self::DbQuery($sql);
   }
 
   /**
    * Update tokens table
-   * @param $token_id, 1-24 each for both player.
-   * @param $player_id
+   * @param $token_id, 1-10 for white player and 11-20 for black player.
    * @param $step_id, token position.
    * @param $available
    */
-  function updateTokenRecord($token_id, $player_id, $step_id, $available = 0)
+  function updateTokenRecord($token_id, $step_id, $available = 0)
   {
     $sql = "UPDATE tokens SET step_id=$step_id, available=$available
-            WHERE token_id=$token_id AND player_id=$player_id;";
+            WHERE token_id=$token_id;";
     self::DbQuery($sql);
   }
 
@@ -407,15 +395,14 @@ class Battlegammon extends Table
    * Insert histories table
    * @param $turn
    * @param $dice_number
-   * @param $token_id, 1-24 each for both player.
-   * @param $player_id
+   * @param $token_id, 1-10 for white player and 11-20 for black player.
    * @param $from_step_id
    * @param $to_step_id
    */
-  function createHistoryRecord($turn, $dice_number, $token_id, $player_id, $from_step_id, $to_step_id)
+  function createHistoryRecord($turn, $dice_number, $token_id, $from_step_id, $to_step_id)
   {
-    $sql = "INSERT INTO histories (turn, dice_number, token_id, player_id, from_step_id, to_step_id)
-            VALUES ($turn, $dice_number, $token_id, $player_id, $from_step_id, $to_step_id);";
+    $sql = "INSERT INTO histories (turn, dice_number, token_id, from_step_id, to_step_id)
+            VALUES ($turn, $dice_number, $token_id, $from_step_id, $to_step_id);";
     self::DbQuery($sql);
   }
 

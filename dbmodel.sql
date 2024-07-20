@@ -44,10 +44,9 @@ CREATE TABLE IF NOT EXISTS steps (
 
 CREATE TABLE IF NOT EXISTS tokens (
   `token_id` int(2) unsigned NOT NULL DEFAULT 0,
-  `player_id` int(10) unsigned NOT NULL DEFAULT 0,
   `step_id` int(10) unsigned NOT NULL DEFAULT 0,
   `available` int(10) unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`token_id`, `player_id`)
+  PRIMARY KEY (`token_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS histories (
@@ -55,7 +54,6 @@ CREATE TABLE IF NOT EXISTS histories (
   `turn` int(2) unsigned NOT NULL DEFAULT 0,
   `dice_number` int(2) unsigned NOT NULL DEFAULT 0,
   `token_id` int(2) unsigned NOT NULL DEFAULT 0,
-  `player_id` int(10) unsigned NOT NULL DEFAULT 0,
   `from_step_id` int(2) unsigned NOT NULL DEFAULT 0,
   `to_step_id` int(2) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`history_id`)
