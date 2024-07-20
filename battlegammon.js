@@ -29,6 +29,28 @@ function (dojo, declare) {
       // Example:
       // this.myGlobalValue = 0;
       this.colorMapping = {'ffffff': 'white', '333333': 'black'};
+      this.tokenColorMapping = {
+          1:  'white',
+          2:  'white',
+          3:  'white',
+          4:  'white',
+          5:  'white',
+          6:  'white',
+          7:  'white',
+          8:  'white',
+          9:  'white',
+          10: 'white',
+          11: 'black',
+          12: 'black',
+          13: 'black',
+          14: 'black',
+          15: 'black',
+          16: 'black',
+          17: 'black',
+          18: 'black',
+          19: 'black',
+          20: 'black'
+      };
       this.numberMapping = {
         1:  'one',
         2:  'two',
@@ -109,41 +131,76 @@ function (dojo, declare) {
     {
       // console.log( 'battlegammon.js >> Starting game setup' );
 
-      // Setting up player boards
-      for ( var playerId in gamedatas.players )
+      // Setting up steps
+      var steps = gamedatas.steps;
+      for (var i = 0; i < steps.length; i++)
       {
-        var player = gamedatas.players[playerId];
-        var colorName = this.colorMapping[player.color];
-        var directionMappingByColor = this.directionMapping[colorName];
+        var step = steps[i],
+            tokens = parseInt(step.white_tokens) + parseInt(step.black_tokens),
+            directionName, tokenNumber, tokenColorAndNumber;
 
-        // place tokens
-        playerSteps = gamedatas.steps.filter( function(el) {
-                        return el.top_player_id === playerId;
-                      } );
-        for (var i = 0; i < playerSteps.length; i++)
-        {
-          var step = playerSteps[i],
-              directionName = directionMappingByColor[step.step_id],
-              tokenNumber, tokenColorAndNumber;
+        if (tokens > 0) {
+          switch (step.step_id) {
+          case '1': // white home
+            directionName = this.directionMapping['white'][step.step_id];
+            tokenNumber = this.numberMapping[step.white_tokens];
+            tokenColorAndNumber = `white-${tokenNumber}`;
+            dojo.attr(
+              `token-${step.step_id}`,
+              'class',
+                this.format_block( 'js_token_class', {
+                  token_number: tokenNumber,
+                  token_color_and_number: tokenColorAndNumber,
+                  direction: directionName
+                }
+              )
+            );
+            break;
+          case '24': // black home
+            directionName = this.directionMapping['black'][step.step_id];
+            tokenNumber = this.numberMapping[step.black_tokens];
+            tokenColorAndNumber = `black-${tokenNumber}`;
+            dojo.attr(
+              `token-${step.step_id}`,
+              'class',
+                this.format_block( 'js_token_class', {
+                  token_number: tokenNumber,
+                  token_color_and_number: tokenColorAndNumber,
+                  direction: directionName
+                }
+              )
+            );
+            break;
+          default:
+            tokenNumber = this.numberMapping[tokens];
+            var topTokenColor = this.tokenColorMapping[step.top_token_id],
+                bottomTokenColor = this.tokenColorMapping[step.bottom_token_id];
+            directionName = this.directionMapping[topTokenColor][step.step_id];
 
-          if (step.tokens !== '20') {
-            tokenNumber = this.numberMapping[step.tokens];
-            tokenColorAndNumber = `${colorName}-${tokenNumber}`;
-          } else {
-            tokenNumber = 'two';
-            tokenColorAndNumber = (colorName === 'white') ? 'white-and-black' : 'black-and-white';
-          }
-
-          dojo.attr(
-            `token-${step.step_id}`,
-            'class',
-              this.format_block( 'js_token_class', {
-                token_number: tokenNumber,
-                token_color_and_number: tokenColorAndNumber,
-                direction: directionName
+            switch (tokens) {
+            case 1:
+              tokenColorAndNumber = `${topTokenColor}-${tokenNumber}`;
+              break;
+            case 2:
+              if (step.white_tokens == '2' || step.black_tokens == '2') {
+                tokenColorAndNumber = `${topTokenColor}-${tokenNumber}`;
+              } else {
+                tokenColorAndNumber = `${topTokenColor}-${bottomTokenColor}`;
               }
-            )
-          );
+              break;
+            }
+
+            dojo.attr(
+              `token-${step.step_id}`,
+              'class',
+                this.format_block( 'js_token_class', {
+                  token_number: tokenNumber,
+                  token_color_and_number: tokenColorAndNumber,
+                  direction: directionName
+                }
+              )
+            );
+          }
         }
       }
 
