@@ -157,6 +157,29 @@ class Battlegammon extends Table
     self::createTokenRecord( 9, $black_player_id, 19);
     self::createTokenRecord(10, $black_player_id, 16);
 
+    // Insert history record in histories table
+    // @params: $turn, $dice_number, $token_id, $player_id, $from_step_id, $to_step_id
+    self::createHistoryRecord(0, 0,  1, $white_player_id, 0,  1);
+    self::createHistoryRecord(0, 0,  2, $white_player_id, 0,  1);
+    self::createHistoryRecord(0, 0,  3, $white_player_id, 0,  1);
+    self::createHistoryRecord(0, 0,  4, $white_player_id, 0,  1);
+    self::createHistoryRecord(0, 0,  5, $white_player_id, 0,  1);
+    self::createHistoryRecord(0, 0,  6, $white_player_id, 0,  5);
+    self::createHistoryRecord(0, 0,  7, $white_player_id, 0,  8);
+    self::createHistoryRecord(0, 0,  8, $white_player_id, 0,  8);
+    self::createHistoryRecord(0, 0,  9, $white_player_id, 0,  9);
+    self::createHistoryRecord(0, 0, 10, $white_player_id, 0,  9);
+    self::createHistoryRecord(0, 0,  1, $black_player_id, 0, 24);
+    self::createHistoryRecord(0, 0,  2, $black_player_id, 0, 24);
+    self::createHistoryRecord(0, 0,  3, $black_player_id, 0, 24);
+    self::createHistoryRecord(0, 0,  4, $black_player_id, 0, 24);
+    self::createHistoryRecord(0, 0,  5, $black_player_id, 0, 24);
+    self::createHistoryRecord(0, 0,  6, $black_player_id, 0, 20);
+    self::createHistoryRecord(0, 0,  7, $black_player_id, 0, 20);
+    self::createHistoryRecord(0, 0,  8, $black_player_id, 0, 19);
+    self::createHistoryRecord(0, 0,  9, $black_player_id, 0, 19);
+    self::createHistoryRecord(0, 0, 10, $black_player_id, 0, 16);
+
     // Init game statistics
     // (note: statistics used in this file must be defined in your stats.inc.php file)
     //self::initStat( 'table', 'table_teststat1', 0 );  // Init a table statistics
