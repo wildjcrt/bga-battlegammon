@@ -121,7 +121,7 @@ class Battlegammon extends Table
     self::initStat("player", "dice6", 0);
     self::initStat("player", "number_of_pass", 0);
 
-    // Insert tokens record in steps table
+    // Insert steps record in steps table
     self::createStepsRecord( 1, 5, $white_player_id);
     self::createStepsRecord( 2, 0, 0);
     self::createStepsRecord( 3, 0, 0);
@@ -475,7 +475,7 @@ class Battlegammon extends Table
   }
   */
 
-  function argPlayerTurn()
+  function argSelectToken()
   {
     // List all available dice
     $sql = "SELECT dice1, dice1_usable, dice2, dice2_usable
@@ -549,13 +549,6 @@ class Battlegammon extends Table
     $this->gamestate->nextState( 'some_gamestate_transition' );
   }
   */
-
-  // New player turn, roll dice, check if move avaliable and go to the appropriate state
-  function stPlayerTurn()
-  {
-    // Roll dices
-    list($dice1, $dice2) = self::rollDice();
-  }
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Zombie

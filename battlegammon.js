@@ -216,7 +216,6 @@ function (dojo, declare) {
         break;
          */
 
-        case 'playerTurn':
         case 'dummmy':
         break;
       }
@@ -269,7 +268,15 @@ function (dojo, declare) {
           // this.addActionButton( 'button_2_id', _('Button 2 label'), 'onMyMethodToCall2' );
           // this.addActionButton( 'button_3_id', _('Button 3 label'), 'onMyMethodToCall3' );
           // break;
-          case 'playerTurn':
+          case 'selectTokenByDice1':
+            // console.log( 'battlegammon.js >> onUpdateActionButtons >> '+stateName );
+            // console.log(args)
+            this.addActionButton( 'pass-btn', _('Pass'), 'onPass' );
+            dojo.addClass('pass-btn', 'disabled');
+            this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
+            dojo.addClass('cancel-btn', 'disabled');
+            break;
+          case 'selectTokenByDice2':
             // console.log( 'battlegammon.js >> onUpdateActionButtons >> '+stateName );
             // console.log(args)
             this.addActionButton( 'pass-btn', _('Pass'), 'onPass' );
