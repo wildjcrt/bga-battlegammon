@@ -63,8 +63,8 @@ CREATE TABLE IF NOT EXISTS histories (
 
 CREATE TABLE IF NOT EXISTS dice_result (
   `dice1` int(2) unsigned NOT NULL DEFAULT 0,
-  `dice1_usable` BIT(1) NOT NULL DEFAULT 0,
+  `dice1_available` BIT(1) NOT NULL DEFAULT 0,
   `dice2` int(2) unsigned NOT NULL DEFAULT 0,
-  `dice2_usable` BIT(1) NOT NULL DEFAULT 0,
+  `dice2_available` BIT(1) NOT NULL DEFAULT 0,
  PRIMARY KEY (`dice1`, `dice2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -155,7 +155,7 @@ function (dojo, declare) {
           this.format_block( 'js_dice_class', {
             dice_id: 1,
             dice_value: dice_result.dice1,
-            dice_usable: dice_result.dice1_usable
+            dice_available: dice_result.dice1_available
           }
         )
       );
@@ -165,7 +165,7 @@ function (dojo, declare) {
           this.format_block( 'js_dice_class', {
             dice_id: 2,
             dice_value: dice_result.dice2,
-            dice_usable: dice_result.dice2_usable
+            dice_available: dice_result.dice2_available
           }
         )
       );
@@ -175,7 +175,7 @@ function (dojo, declare) {
         var activePlayerId = this.getActivePlayerId();
         this.activePlayer = this.gamedatas.players[activePlayerId];
 
-        dojo.query('.dice.dice_usable_1').connect('onclick', this, 'onSelectDice');
+        dojo.query('.dice.dice_available_1').connect('onclick', this, 'onSelectDice');
 
         for (var i = 0; i < gamedatas.availableTokens.length; i++)
         {
@@ -362,10 +362,10 @@ function (dojo, declare) {
       // List availableDice
       var dice_result = this.gamedatas.dice_result,
           availableDice = [];
-      if (dice_result.dice1_usable === '1') {
+      if (dice_result.dice1_available === '1') {
         availableDice.push(parseInt(this.gamedatas.dice_result.dice1));
       }
-      if (dice_result.dice2_usable === '1') {
+      if (dice_result.dice2_available === '1') {
         availableDice.push(parseInt(this.gamedatas.dice_result.dice2));
       }
 

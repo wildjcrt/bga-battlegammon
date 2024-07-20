@@ -176,7 +176,7 @@ class Battlegammon extends Table
     // TODO: Gather all information about current game situation (visible by player $current_player_id).
 
     // Get information about the dice roll
-    $sql = "SELECT dice1, dice1_usable, dice2, dice2_usable
+    $sql = "SELECT dice1, dice1_available, dice2, dice2_available
             FROM dice_result";
     $result['dice_result'] = self::getObjectFromDB($sql);
 
@@ -269,8 +269,8 @@ class Battlegammon extends Table
     $sql = "UPDATE dice_result
             SET dice1 = $dice1_value,
                 dice2 = $dice2_value,
-                dice1_usable=1,
-                dice2_usable=1";
+                dice1_available=1,
+                dice2_available=1";
     self::DbQuery( $sql );
     self::reloadPlayersBasicInfos();
 
@@ -278,6 +278,24 @@ class Battlegammon extends Table
     self::incStat(1, "dice" . $dice2_value, $active_player_id);
 
     return array($dice1_value, $dice2_value);
+  }
+
+  /**
+   * Update used dice number to dice_available: 0
+   * @param $dice_number
+   */
+  function updateDiceNotAvailable($dice_number)
+  {
+    $sql = "SELECT dice1, dice1_available, dice2, dice2_available
+            FROM dice_result";
+    $dice_result = self::getObjectFromDB($sql);
+
+    if ($dice_result['dice1'] == $dice_number) {
+      $sql = "UPDATE dice_result SET dice1_available=0";
+    } else {
+      $sql = "UPDATE dice_result SET dice2_available=0";
+    }
+    self::DbQuery($sql);
   }
 
   /**
@@ -433,17 +451,7 @@ class Battlegammon extends Table
             WHERE step_id=$to_step";
     self::DbQuery($sql);
 
-    // Make dice usable to 0
-    $sql = "SELECT dice1, dice1_usable, dice2, dice2_usable
-            FROM dice_result";
-    $dice_result = self::getObjectFromDB($sql);
-
-    if ($dice_result['dice1'] == $dice_value) {
-      $sql = "UPDATE dice_result SET dice1_usable=0";
-    } else {
-      $sql = "UPDATE dice_result SET dice2_usable=0";
-    }
-    self::DbQuery($sql);
+    self::updateDiceNotAvailable($dice_value);
 
     $this->gamestate->nextState( 'selectTokenB' );
   }
@@ -478,14 +486,14 @@ class Battlegammon extends Table
   function argSelectToken()
   {
     // List all available dice
-    $sql = "SELECT dice1, dice1_usable, dice2, dice2_usable
+    $sql = "SELECT dice1, dice1_available, dice2, dice2_available
             FROM dice_result";
     $dice_result = self::getObjectFromDB($sql);
     $availableDice = array();
-    if ($dice_result['dice1_usable'] == 1) {
+    if ($dice_result['dice1_available'] == 1) {
       $availableDice[] = $dice_result['dice1'];
     }
-    if ($dice_result['dice2_usable'] == 1) {
+    if ($dice_result['dice2_available'] == 1) {
       $availableDice[] = $dice_result['dice2'];
     }
 
