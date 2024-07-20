@@ -81,7 +81,7 @@
 <script type="text/javascript">
   // Javascript HTML templates
   var js_token_class="token token-${token_number} ${token_color_and_number}-to-${direction}";
-  var js_dice_class="dice dice_${dice_id}_${dice_value} dice_available_${dice_available}";
+  var js_dice_class="dice dice_${dice_id}_${dice_number} dice_available_${dice_available}";
   var js_step_class="step hint-${hint_type}";
 </script>
 

@@ -360,7 +360,7 @@ class Battlegammon extends Table
   /**
    * save move from client
    * check if this move is valid and change board and go to next state
-   * @param $argJS [$token_id, $from_step, $to_step, $dice_value]
+   * @param $argJS [$token_id, $from_step, $to_step, $dice_number]
    */
   public function saveMoveFromClient($argJS)
   {
@@ -368,12 +368,12 @@ class Battlegammon extends Table
     // Record in token_history
     $turn_number = self::getStat("turns_number");
     $active_player_id = $this->getActivePlayerId();
-    $token_id   = $argJS[0];
-    $from_step  = $argJS[1];
-    $to_step    = $argJS[2];
-    $dice_value = $argJS[3];
+    $token_id    = $argJS[0];
+    $from_step   = $argJS[1];
+    $to_step     = $argJS[2];
+    $dice_number = $argJS[3];
     //
-    // $sql = "INSERT INTO token_history (dice_value, token_id, player_id, from_step_id, to_step_id) VALUES ($dice_value, $token_id, $active_player_id, $from_step, $to_step);";
+    // $sql = "INSERT INTO token_history (dice_number, token_id, player_id, from_step_id, to_step_id) VALUES ($dice_number, $token_id, $active_player_id, $from_step, $to_step);";
     // self::DbQuery($sql);
 
     // Record in "from steps"
@@ -451,7 +451,7 @@ class Battlegammon extends Table
             WHERE step_id=$to_step";
     self::DbQuery($sql);
 
-    self::updateDiceNotAvailable($dice_value);
+    self::updateDiceNotAvailable($dice_number);
 
     $this->gamestate->nextState( 'selectTokenB' );
   }

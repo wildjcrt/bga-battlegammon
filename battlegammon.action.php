@@ -42,11 +42,11 @@ class action_battlegammon extends APP_GameAction
   public function sendMoveToServer()
   {
       self::setAjaxMode();
-      $token_id   = self::getArg( "token_id", AT_alphanum, true );
-      $from_step  = self::getArg( "from_step", AT_alphanum, true );
-      $to_step    = self::getArg( "to_step", AT_alphanum, true );
-      $dice_value = self::getArg( "dice_value", AT_alphanum, true );
-      $this->game->saveMoveFromClient([$token_id, $from_step, $to_step, $dice_value]);
+      $token_id    = self::getArg( "token_id", AT_alphanum, true );
+      $from_step   = self::getArg( "from_step", AT_alphanum, true );
+      $to_step     = self::getArg( "to_step", AT_alphanum, true );
+      $dice_number = self::getArg( "dice_number", AT_alphanum, true );
+      $this->game->saveMoveFromClient([$token_id, $from_step, $to_step, $dice_number]);
       self::ajaxResponse( );
   }
 

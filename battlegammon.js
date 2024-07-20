@@ -154,7 +154,7 @@ function (dojo, declare) {
         'class',
           this.format_block( 'js_dice_class', {
             dice_id: 1,
-            dice_value: dice_result.dice1,
+            dice_number: dice_result.dice1,
             dice_available: dice_result.dice1_available
           }
         )
@@ -164,7 +164,7 @@ function (dojo, declare) {
         'class',
           this.format_block( 'js_dice_class', {
             dice_id: 2,
-            dice_value: dice_result.dice2,
+            dice_number: dice_result.dice2,
             dice_available: dice_result.dice2_available
           }
         )
@@ -373,8 +373,8 @@ function (dojo, declare) {
       this.tokenStep = parseInt(e.currentTarget.id.split('-')[1]);
       if (this.activePlayer.color === 'ffffff') {
         for (var j = 0; j < availableDice.length; j++) {
-          this.dice_value = availableDice[j];
-          this.toStep = this.tokenStep + this.dice_value;
+          this.dice_number = availableDice[j];
+          this.toStep = this.tokenStep + this.dice_number;
 
           if (this.gamedatas.availableSteps.includes(`${this.toStep}`)) {
             dojo.addClass(`step${this.toStep}`, 'hint');
@@ -383,8 +383,8 @@ function (dojo, declare) {
         }
       } else {
         for (var j = 0; j < availableDice.length; j++) {
-          this.dice_value = availableDice[j];
-          var toStep = this.tokenStep - this.dice_value;
+          this.dice_number = availableDice[j];
+          var toStep = this.tokenStep - this.dice_number;
 
           if (this.gamedatas.availableSteps.includes(`${toStep}`)) {
             dojo.addClass(`step${toStep}`, 'hint');
@@ -404,10 +404,10 @@ function (dojo, declare) {
       this.ajaxcall(
           "/battlegammon/battlegammon/sendMoveToServer.html",
           {
-              token_id: this.tokenStep,
-              from_step: this.tokenStep,
-              to_step: toStep,
-              dice_value: this.dice_value
+              token_id:    this.tokenStep,
+              from_step:   this.tokenStep,
+              to_step:     toStep,
+              dice_number: this.dice_number
           },
           this,
           function( result ) {},
