@@ -319,7 +319,7 @@ class Battlegammon extends Table
     self::incStat(1, "dice" . $dice1_value, $active_player_id);
     self::incStat(1, "dice" . $dice2_value, $active_player_id);
 
-    return array($dice1_value, $dice2_value);
+    $this->gamestate->nextState('selectDice1');
   }
 
   /**
