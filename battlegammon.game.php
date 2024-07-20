@@ -103,8 +103,36 @@ class Battlegammon extends Table
     //self::setGameStateInitialValue( 'my_first_global_variable', 0 );
 
     // Insert dice record in dice_result table
-    $sql = "INSERT INTO dice_result (dice1, dice2) VALUES (0, 0) ";
+    $sql = "INSERT INTO dice_result (dice1, dice2)
+            VALUES (0, 0)";
     self::DbQuery( $sql );
+
+    // Insert step record in steps table
+    // @params: $step_id, $white_tokens, $black_tokens, $top_token_id, $bottom_token_id
+    self::createStepRecord( 1, 5, 0, 1, 0);
+    self::createStepRecord( 2);
+    self::createStepRecord( 3);
+    self::createStepRecord( 4);
+    self::createStepRecord( 5, 1, 0, 6, 0);
+    self::createStepRecord( 6);
+    self::createStepRecord( 7);
+    self::createStepRecord( 8, 2, 0, 7, 8);
+    self::createStepRecord( 9, 2, 0, 9, 10);
+    self::createStepRecord(10);
+    self::createStepRecord(11);
+    self::createStepRecord(12);
+    self::createStepRecord(13);
+    self::createStepRecord(14);
+    self::createStepRecord(15);
+    self::createStepRecord(16, 0, 1, 10, 0);
+    self::createStepRecord(17);
+    self::createStepRecord(18);
+    self::createStepRecord(19, 0, 2, 8, 9);
+    self::createStepRecord(20, 0, 2, 6, 7);
+    self::createStepRecord(21);
+    self::createStepRecord(22);
+    self::createStepRecord(23);
+    self::createStepRecord(24, 0, 5, 1, 0);
 
     // Init game statistics
     // (note: statistics used in this file must be defined in your stats.inc.php file)
@@ -120,32 +148,6 @@ class Battlegammon extends Table
     self::initStat("player", "dice5", 0);
     self::initStat("player", "dice6", 0);
     self::initStat("player", "number_of_pass", 0);
-
-    // Insert step record in steps table
-    self::createStepsRecord( 1, 5, $white_player_id);
-    self::createStepsRecord( 2, 0, 0);
-    self::createStepsRecord( 3, 0, 0);
-    self::createStepsRecord( 4, 0, 0);
-    self::createStepsRecord( 5, 1, $white_player_id);
-    self::createStepsRecord( 6, 0, 0);
-    self::createStepsRecord( 7, 0, 0);
-    self::createStepsRecord( 8, 2, $white_player_id);
-    self::createStepsRecord( 9, 2, $white_player_id);
-    self::createStepsRecord(10, 0, 0);
-    self::createStepsRecord(11, 0, 0);
-    self::createStepsRecord(12, 0, 0);
-    self::createStepsRecord(13, 0, 0);
-    self::createStepsRecord(14, 0, 0);
-    self::createStepsRecord(15, 0, 0);
-    self::createStepsRecord(16, 1, $black_player_id);
-    self::createStepsRecord(17, 0, 0);
-    self::createStepsRecord(18, 0, 0);
-    self::createStepsRecord(19, 2, $black_player_id);
-    self::createStepsRecord(20, 2, $black_player_id);
-    self::createStepsRecord(21, 0, 0);
-    self::createStepsRecord(22, 0, 0);
-    self::createStepsRecord(23, 0, 0);
-    self::createStepsRecord(24, 5, $black_player_id);
 
     // Activate first player (which is in general a good idea :) )
     $this->activeNextPlayer();
