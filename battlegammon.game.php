@@ -597,17 +597,7 @@ class Battlegammon extends Table
     $active_color_code = self::getUniqueValueFromDB($sql);
     $active_color = ($active_color_code == 'ffffff') ? 'white' : 'black';
 
-    // List all available dice
-    $sql = "SELECT dice1, dice1_available, dice2, dice2_available
-            FROM dice_result";
-    $dice_result = self::getObjectFromDB($sql);
-    $availableDice = array();
-    if ($dice_result['dice1_available'] == 1) {
-      $availableDice[] = $dice_result['dice1'];
-    }
-    if ($dice_result['dice2_available'] == 1) {
-      $availableDice[] = $dice_result['dice2'];
-    }
+    $result = array();
 
     // List all available steps
     $sql = "SELECT step_id FROM steps
@@ -637,9 +627,8 @@ class Battlegammon extends Table
 
     return [
       'color'           => $active_color,
-      'availableSteps'  => $availableSteps,
-      'availableTokens' => $availableTokens,
-      'availableDice'   => $availableDice
+      'availableSteps'  => $result['availableSteps'],
+      'availableTokens' => $result['availableTokens']
     ];
   }
 
