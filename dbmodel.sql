@@ -34,11 +34,13 @@
 -- ALTER TABLE `player` ADD `player_my_custom_field` INT UNSIGNED NOT NULL DEFAULT '0';
 
 CREATE TABLE IF NOT EXISTS steps (
-  `step_id` int(2) unsigned NOT NULL AUTO_INCREMENT,
-  `tokens` int(2) unsigned NOT NULL DEFAULT 0,
-  `top_player_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `step_id` int(2) unsigned NOT NULL DEFAULT 0,
+  `white_tokens` int(2) unsigned NOT NULL DEFAULT 0,
+  `black_tokens` int(2) unsigned NOT NULL DEFAULT 0,
+  `top_token_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `bottom_token_id` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`step_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS histories (
   `history_id` int(2) unsigned NOT NULL AUTO_INCREMENT,
