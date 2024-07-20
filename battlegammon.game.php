@@ -290,7 +290,7 @@ class Battlegammon extends Table
   /**
    * Roll new dice and notify players that dice has been rolled
    */
-  private function rollDice()
+  function rollDice()
   {
     self::incStat(1, "turns_number");
 
