@@ -42,6 +42,14 @@ CREATE TABLE IF NOT EXISTS steps (
   PRIMARY KEY (`step_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS tokens (
+  `token_id` int(2) unsigned NOT NULL DEFAULT 0,
+  `player_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `step_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `available` int(10) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`token_id`, `player_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS histories (
   `history_id` int(2) unsigned NOT NULL AUTO_INCREMENT,
   `turn` int(2) unsigned NOT NULL DEFAULT 0,
