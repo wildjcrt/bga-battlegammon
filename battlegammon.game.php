@@ -121,7 +121,7 @@ class Battlegammon extends Table
     self::initStat("player", "dice6", 0);
     self::initStat("player", "number_of_pass", 0);
 
-    // Insert steps record in steps table
+    // Insert step record in steps table
     self::createStepsRecord( 1, 5, $white_player_id);
     self::createStepsRecord( 2, 0, 0);
     self::createStepsRecord( 3, 0, 0);
@@ -299,26 +299,32 @@ class Battlegammon extends Table
   }
 
   /**
-   * Insert steps table with $step_id, $tokens, $top_player_id
+   * Insert steps table
    * @param $step_id, 1-24.
-   * @param $tokens, 0-5 and 20. 20 means 2 tokens but lower is another color.
-   * @param $top_player_id
+   * @param $white_tokens, white tokens count.
+   * @param $black_tokens, black tokens count.
+   * @param $top_token_id
+   * @param $bottom_token_id
    */
-  function createStepsRecord($step_id, $tokens, $top_player_id)
+  function createStepRecord($step_id, $white_tokens = 0, $black_tokens = 0, $top_token_id = 0, $bottom_token_id = 0)
   {
-    $sql = "INSERT INTO steps (step_id, tokens, top_player_id) VALUES ($step_id, $tokens, $top_player_id);";
+    $sql = "INSERT INTO steps (step_id, white_tokens, black_tokens, top_token_id, bottom_token_id)
+            VALUES ($step_id, $white_tokens, $black_tokens, $top_token_id, $bottom_token_id);";
     self::DbQuery($sql);
   }
 
   /**
-   * Update steps table with $step_id, $tokens, $top_player_id
+   * Update steps table
    * @param $step_id, 1-24.
-   * @param $tokens, 0-5 and 20. 20 means 2 tokens but lower is another color.
-   * @param $top_player_id
+   * @param $white_tokens, white tokens count.
+   * @param $black_tokens, black tokens count.
+   * @param $top_token_id
+   * @param $bottom_token_id
    */
-  function updateStepsRecord($step_id, $tokens, $top_player_id)
+  function updateStepRecord($step_id, $white_tokens, $black_tokens, $top_token_id, $bottom_token_id)
   {
-    $sql = "UPDATE steps SET tokens=$tokens, top_player_id=$top_player_id WHERE step_id=$step_id;";
+    $sql = "UPDATE steps SET white_tokens=$white_tokens, black_tokens=$black_tokens, top_token_id=$top_token_id, bottom_token_id=$bottom_token_id
+            WHERE step_id=$step_id;";
     self::DbQuery($sql);
   }
 
