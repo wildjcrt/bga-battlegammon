@@ -380,6 +380,40 @@ class Battlegammon extends Table
     self::DbQuery($sql);
   }
 
+  /**
+   * Insert histories table
+   * @param $turn
+   * @param $dice_number
+   * @param $token_id, 1-24 each for both player.
+   * @param $player_id
+   * @param $from_step_id
+   * @param $to_step_id
+   */
+  function createHistoryRecord($turn, $dice_number, $token_id, $player_id, $from_step_id, $to_step_id)
+  {
+    $sql = "INSERT INTO histories (turn, dice_number, token_id, player_id, from_step_id, to_step_id)
+            VALUES ($turn, $dice_number, $token_id, $player_id, $from_step_id, $to_step_id);";
+    self::DbQuery($sql);
+  }
+
+  /**
+   * Get last history
+   */
+  function getLastHistorysRecord()
+  {
+    $sql = "SELECT * FROM histories ORDER BY id DESC LIMIT 1;";
+    return self::getObjectFromDB($sql);
+  }
+
+  /**
+   * Destroy last history
+   */
+  function destroyLastHistorysRecord()
+  {
+    $sql = "DELETE FROM histories ORDER BY id DESC LIMIT 1";
+    self::DbQuery($sql);
+  }
+
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
 ////////////
