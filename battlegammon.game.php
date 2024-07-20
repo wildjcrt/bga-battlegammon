@@ -207,6 +207,11 @@ class Battlegammon extends Table
   protected function getAllDatas()
   {
     $result = array();
+    $active_player_id = $this->getActivePlayerId();
+    $sql = "SELECT player_color FROM player
+            WHERE player_id=$active_player_id";
+    $active_color_code = self::getUniqueValueFromDB($sql);
+    $active_color = ($active_color_code == 'ffffff') ? 'white' : 'black';
 
     // Get information about players
     // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
@@ -219,13 +224,12 @@ class Battlegammon extends Table
     $result['dice_result'] = self::getObjectFromDB($sql);
 
     // Get information about steps and tokens
-    $sql = "SELECT step_id, tokens, top_player_id FROM steps
-            WHERE tokens != 0";
+    $sql = "SELECT * FROM steps";
     $result['steps'] = self::getObjectListFromDB($sql);
 
     // List all available steps
     $sql = "SELECT step_id FROM steps
-            WHERE tokens < 2";
+            WHERE (white_tokens + black_tokens) < 2";
     $steps_list = self::getObjectListFromDB($sql);
     $result['availableSteps'] = array();
     foreach ($steps_list as $item) {
@@ -240,14 +244,14 @@ class Battlegammon extends Table
     sort($result['availableSteps'], SORT_NUMERIC);
 
     // List all available tokens
-    $active_player_id = $this->getActivePlayerId();
-    $sql = "SELECT step_id FROM steps
-            WHERE top_player_id = $active_player_id";
-    $steps_list = self::getObjectListFromDB($sql);
-    $result['availableTokens'] = array();
-    foreach ($steps_list as $item) {
-      $result['availableTokens'][] = $item['step_id'];
+    if ($active_color == 'white') {
+      $sql = "SELECT token_id, step_id FROM tokens
+              WHERE available = 1 AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
+    } else {
+      $sql = "SELECT token_id, step_id FROM tokens
+              WHERE available = 1 AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
     }
+    $result['availableTokens'] = self::getObjectListFromDB($sql);
 
     return $result;
   }
@@ -479,8 +483,8 @@ class Battlegammon extends Table
     // self::DbQuery($sql);
 
     // Record in "from steps"
-    $sql = "SELECT tokens FROM steps
-            WHERE step_id=$from_step AND top_player_id=$active_player_id";
+    $sql = "SELECT * FROM steps
+            WHERE step_id=$from_step";
     $from_tokens = self::getUniqueValueFromDB($sql);
     if ($from_tokens > 0)
     {
@@ -601,34 +605,29 @@ class Battlegammon extends Table
 
     // List all available steps
     $sql = "SELECT step_id FROM steps
-            WHERE tokens < 2";
+            WHERE (white_tokens + black_tokens) < 2";
     $steps_list = self::getObjectListFromDB($sql);
-    $availableSteps = array();
+    $result['availableSteps'] = array();
     foreach ($steps_list as $item) {
-      $availableSteps[] = $item['step_id'];
+      $result['availableSteps'][] = $item['step_id'];
     }
-    if (!in_array('1', $availableSteps)) {
-        $availableSteps[] = '1';
+    if (!in_array('1', $result['availableSteps'])) {
+        $result['availableSteps'][] = '1';
     }
-    if (!in_array('24', $availableSteps)) {
-        $availableSteps[] = '24';
+    if (!in_array('24', $result['availableSteps'])) {
+        $result['availableSteps'][] = '24';
     }
-    sort($availableSteps, SORT_NUMERIC);
+    sort($result['availableSteps'], SORT_NUMERIC);
 
     // List all available tokens
-    $active_player_id = $this->getActivePlayerId();
-    $sql = "SELECT player_color FROM player
-            WHERE player_id=$active_player_id";
-    $color_code = self::getUniqueValueFromDB($sql);
-    $active_player_color = ($color_code == 'ffffff') ? 'white' : 'black';
-
-    $sql = "SELECT step_id FROM steps
-            WHERE top_player_id = $active_player_id";
-    $steps_list = self::getObjectListFromDB($sql);
-    $availableTokens = array();
-    foreach ($steps_list as $item) {
-      $availableTokens[] = $item['step_id'];
+    if ($active_color == 'white') {
+      $sql = "SELECT token_id, step_id FROM tokens
+              WHERE available = 1 AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
+    } else {
+      $sql = "SELECT token_id, step_id FROM tokens
+              WHERE available = 1 AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
     }
+    $result['availableTokens'] = self::getObjectListFromDB($sql);
 
     return [
       'color'           => $active_player_color,
