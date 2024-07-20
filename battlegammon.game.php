@@ -134,6 +134,29 @@ class Battlegammon extends Table
     self::createStepRecord(23);
     self::createStepRecord(24, 0, 5, 1, 0);
 
+    // Insert token record in tokens table
+    // @params: $token_id, $player_id, $step_id
+    self::createTokenRecord( 1, $white_player_id,  1);
+    self::createTokenRecord( 2, $white_player_id,  1);
+    self::createTokenRecord( 3, $white_player_id,  1);
+    self::createTokenRecord( 4, $white_player_id,  1);
+    self::createTokenRecord( 5, $white_player_id,  1);
+    self::createTokenRecord( 6, $white_player_id,  5);
+    self::createTokenRecord( 7, $white_player_id,  8);
+    self::createTokenRecord( 8, $white_player_id,  8);
+    self::createTokenRecord( 9, $white_player_id,  9);
+    self::createTokenRecord(10, $white_player_id,  9);
+    self::createTokenRecord( 1, $black_player_id, 24);
+    self::createTokenRecord( 2, $black_player_id, 24);
+    self::createTokenRecord( 3, $black_player_id, 24);
+    self::createTokenRecord( 4, $black_player_id, 24);
+    self::createTokenRecord( 5, $black_player_id, 24);
+    self::createTokenRecord( 6, $black_player_id, 20);
+    self::createTokenRecord( 7, $black_player_id, 20);
+    self::createTokenRecord( 8, $black_player_id, 19);
+    self::createTokenRecord( 9, $black_player_id, 19);
+    self::createTokenRecord(10, $black_player_id, 16);
+
     // Init game statistics
     // (note: statistics used in this file must be defined in your stats.inc.php file)
     //self::initStat( 'table', 'table_teststat1', 0 );  // Init a table statistics
