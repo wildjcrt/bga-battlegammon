@@ -330,6 +330,33 @@ class Battlegammon extends Table
     self::DbQuery($sql);
   }
 
+  /**
+   * Insert tokens table
+   * @param $token_id, 1-24 each for both player.
+   * @param $player_id
+   * @param $step_id, token position.
+   */
+  function createTokenRecord($token_id, $player_id, $step_id)
+  {
+    $sql = "INSERT INTO tokens (token_id, player_id, step_id)
+            VALUES ($token_id, $player_id, $step_id);";
+    self::DbQuery($sql);
+  }
+
+  /**
+   * Update tokens table
+   * @param $token_id, 1-24 each for both player.
+   * @param $player_id
+   * @param $step_id, token position.
+   * @param $available
+   */
+  function updateTokenRecord($token_id, $player_id, $step_id, $available = 0)
+  {
+    $sql = "UPDATE tokens SET step_id=$step_id, available=$available
+            WHERE token_id=$token_id AND player_id=$player_id;";
+    self::DbQuery($sql);
+  }
+
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
 ////////////
