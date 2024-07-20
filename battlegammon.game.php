@@ -591,6 +591,12 @@ class Battlegammon extends Table
 
   function argSelectToken()
   {
+    $active_player_id = $this->getActivePlayerId();
+    $sql = "SELECT player_color FROM player
+            WHERE player_id=$active_player_id";
+    $active_color_code = self::getUniqueValueFromDB($sql);
+    $active_color = ($active_color_code == 'ffffff') ? 'white' : 'black';
+
     // List all available dice
     $sql = "SELECT dice1, dice1_available, dice2, dice2_available
             FROM dice_result";
@@ -630,7 +636,7 @@ class Battlegammon extends Table
     $result['availableTokens'] = self::getObjectListFromDB($sql);
 
     return [
-      'color'           => $active_player_color,
+      'color'           => $active_color,
       'availableSteps'  => $availableSteps,
       'availableTokens' => $availableTokens,
       'availableDice'   => $availableDice
