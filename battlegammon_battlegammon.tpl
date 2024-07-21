@@ -62,14 +62,14 @@
     <div id="token-10" style="left: 137px;bottom: 220px;"></div>
     <div id="token-11" style="left: 235px;bottom: 197px;"></div>
     <div id="token-12" style="left: 337px;bottom: 190px;"></div>
-    <div id="token-13" style="left:442px; bottom:171px;"></div>
-    <div id="token-14" style="left:442px; bottom:171px;"></div>
-    <div id="token-15" style="left:630px; bottom:144px;"></div>
+    <div id="token-13" style="left:436px; bottom:170px;"></div>
+    <div id="token-14" style="left:532px; bottom:150px;"></div>
+    <div id="token-15" style="left:626px; bottom:144px;"></div>
     <div id="token-16" style="left:714px; bottom:118px;"></div>
     <div id="token-17" style="left:792px; bottom:62px;"></div>
     <div id="token-18" style="left:709px; bottom:14px;"></div>
     <div id="token-19" style="left:613px; bottom:16px;"></div>
-    <div id="token-20" style="left:516px; bottom:13px;"></div>
+    <div id="token-20" style="left:511px; bottom:13px;"></div>
     <div id="token-21" style="left:419px; bottom:15px;"></div>
     <div id="token-22" style="left:321px; bottom:16px;"></div>
     <div id="token-23" style="left:223px; bottom:14px;"></div>
