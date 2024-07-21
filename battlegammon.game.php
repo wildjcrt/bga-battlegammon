@@ -189,9 +189,6 @@ class Battlegammon extends Table
     self::initStat("player", "dice6", 0);
     self::initStat("player", "number_of_pass", 0);
 
-    // Activate first player (which is in general a good idea :) )
-    $this->activeNextPlayer();
-
     /************ End of the game initialization *****/
   }
 
@@ -286,10 +283,16 @@ class Battlegammon extends Table
    */
   function rollDice()
   {
+    $this->activeNextPlayer();
     self::incStat(1, "turns_number");
 
     $active_player_id = self::getActivePlayerId();
     self::incStat(1, "turns_number", $active_player_id);
+
+    $sql = "SELECT player_color FROM player
+            WHERE player_id=$active_player_id";
+    $active_color_code = self::getUniqueValueFromDB($sql);
+    $active_color = ($active_color_code == 'ffffff') ? 'white' : 'black';
 
     // Roll dices
     $dice1_value = bga_rand(1, 6);

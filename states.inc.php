@@ -58,7 +58,7 @@ $machinestates = array(
     "description" => "Game setup",
     "type" => "manager",
     "transitions" => [
-      "roll" => 10
+      "" => 10
     ]
   ),
 
