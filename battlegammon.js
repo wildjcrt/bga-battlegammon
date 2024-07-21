@@ -202,6 +202,8 @@ function (dojo, declare) {
             );
           }
         }
+
+        dojo.query(`#step-${step.step_id}`).connect('onclick', this, 'onSelectStep');
       }
 
       // place dice 1 and dice 2
@@ -427,7 +429,6 @@ function (dojo, declare) {
 
           if (this.gamedatas.availableSteps.includes(`${this.toStep}`)) {
             dojo.addClass(`step-${this.toStep}`, 'hint');
-            dojo.query(`#step-${this.toStep}`).connect('onclick', this, 'onSelectStep');
           }
         }
       } else {
@@ -437,7 +438,6 @@ function (dojo, declare) {
 
           if (this.gamedatas.availableSteps.includes(`${toStep}`)) {
             dojo.addClass(`step-${toStep}`, 'hint');
-            dojo.query(`#step-${toStep}`).connect('onclick', this, 'onSelectStep');
           }
         }
       }
