@@ -208,9 +208,6 @@ function (dojo, declare) {
 
       if( this.isCurrentPlayerActive() )
       {
-        var activePlayerId = this.getActivePlayerId();
-        this.activePlayer = this.gamedatas.players[activePlayerId];
-
         for (let step_id in gamedatas.availableTokens)
         {
           dojo.addClass(`token-${step_id}`, 'available');
@@ -412,6 +409,9 @@ function (dojo, declare) {
       dojo.query('.step').removeClass('hint');
       dojo.removeClass('cancel-btn', 'disabled');
 
+      var activePlayerId = this.getActivePlayerId(),
+          activePlayer = this.gamedatas.players[activePlayerId];
+
       // List availableDice
       var dice_result = this.gamedatas.dice_result,
           availableDice = [];
@@ -424,7 +424,7 @@ function (dojo, declare) {
 
       this.tokenStep = parseInt(e.currentTarget.id.split('-')[1]);
       this.tokenId = this.gamedatas.availableTokens[this.tokenStep];
-      if (this.activePlayer.color === 'ffffff') {
+      if (activePlayer.color === 'ffffff') {
         for (var j = 0; j < availableDice.length; j++) {
           this.dice_number = availableDice[j];
           this.toStep = this.tokenStep + this.dice_number;
