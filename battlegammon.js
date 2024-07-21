@@ -327,16 +327,12 @@ function (dojo, declare) {
           case 'selectTokenByDice1':
             // console.log( 'battlegammon.js >> onUpdateActionButtons >> '+stateName );
             // console.log(args)
-            this.addActionButton( 'pass-btn', _('Pass'), 'onPass' );
-            dojo.addClass('pass-btn', 'disabled');
             this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
             dojo.addClass('cancel-btn', 'disabled');
             break;
           case 'selectTokenByDice2':
             // console.log( 'battlegammon.js >> onUpdateActionButtons >> '+stateName );
             // console.log(args)
-            this.addActionButton( 'pass-btn', _('Pass'), 'onPass' );
-            dojo.addClass('pass-btn', 'disabled');
             this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
             dojo.addClass('cancel-btn', 'disabled');
             break;
@@ -470,11 +466,6 @@ function (dojo, declare) {
           function( result ) {},
           function( is_error) {}
       );
-    },
-
-    onPass: function (e)
-    {
-
     },
 
     onCancel: function (e)
