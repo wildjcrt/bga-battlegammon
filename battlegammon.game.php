@@ -581,58 +581,49 @@ class Battlegammon extends Table
     self::updateStepRecord($from_step, $white_tokens, $black_tokens, $top_token_id, $bottom_token_id);
 
     // Record in "to steps"
-    $sql = "SELECT player_color FROM player
-            WHERE player_id=$active_player_id";
-    $color_code = self::getUniqueValueFromDB($sql);
+    $to_step_record = self::getStepRecord($to_step);
+    switch ($to_step_record['step_id']) {
+      case '1': // white home
+        if ($to_step_record['black_tokens'] < 3) {
+          $white_tokens = $to_step_record['white_tokens'];
+          $black_tokens = $to_step_record['black_tokens'] + 1;
+          $top_token_id = $token_id;
+          $bottom_token_id = 0;
+        }
+        break;
+      case '24': // black home
+        if ($to_step_record['white_tokens'] < 3) {
+          $white_tokens = $to_step_record['white_tokens'] + 1;
+          $black_tokens = $to_step_record['black_tokens'];
+          $top_token_id = $token_id;
+          $bottom_token_id = 0;
+        }
+        break;
+      default:
+        $tokens_count = $to_step_record['white_tokens'] + $to_step_record['black_tokens'];
+        $sql = "SELECT COUNT(token_id) FROM tokens
+                WHERE step_id=$to_step AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
+        $white_tokens = self::getUniqueValueFromDb($sql);
 
-    $sql = "SELECT tokens, top_player_id FROM steps
-            WHERE step_id=$to_step";
-    $to_step_result = self::getObjectFromDB($sql);
-    $to_tokens = $to_step_result['tokens'];
-    $to_top_player_id = $to_step_result['top_player_id'];
+        $sql = "SELECT COUNT(token_id) FROM tokens
+                WHERE step_id=$to_step AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
+        $black_tokens = self::getUniqueValueFromDb($sql);
 
-    if ($to_step == 1 && $color_code == 'ffffff') {
-      # code...
+        if (($active_color == 'white' && $to_step > $from_step) ||
+            ($active_color == 'black' && $from_step > $to_step))
+        {
+          $top_token_id = $token_id;
+          if ($tokens_count == 0) {
+            $bottom_token_id = 0;
+          }
+
+          if ($tokens_count == 1) {
+            $bottom_token_id = $to_step_record['top_token_id'];
+          }
+        }
+        break;
     }
-
-    if ($to_step == 24 && $color_code == '333333') {
-      # code...
-    }
-
-    if ($to_step >= 2 && $to_step <= 23)
-    {
-      switch ($to_tokens) {
-        case 0:
-          $to_tokens = 1;
-          break;
-        case 1:
-          if ($to_top_player_id == $active_player_id) {
-            $to_tokens = 2;
-          } else {
-            $to_tokens = 20;
-          }
-          break;
-        case 2:
-          if ($to_top_player_id == $active_player_id) {
-            $to_tokens = 3;
-          }
-          break;
-        case 3:
-          if ($to_top_player_id == $active_player_id) {
-            $to_tokens = 4;
-          }
-          break;
-        case 4:
-          if ($to_top_player_id == $active_player_id) {
-            $to_tokens = 5;
-          }
-          break;
-      }
-    }
-
-    $sql = "UPDATE steps SET tokens=$to_tokens, top_player_id=$to_top_player_id
-            WHERE step_id=$to_step";
-    self::DbQuery($sql);
+    self::updateStepRecord($to_step, $white_tokens, $black_tokens, $top_token_id, $bottom_token_id);
 
     self::updateDiceNotAvailable($dice_number);
 
