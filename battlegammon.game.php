@@ -395,6 +395,17 @@ class Battlegammon extends Table
   }
 
   /**
+   * Get step record from steps table
+   * @param $step_id, 1-24.
+   */
+  function getStepRecord($step_id)
+  {
+    $sql = "SELECT * FROM steps
+            WHERE step_id = $step_id";
+    return self::getObjectFromDB($sql);
+  }
+
+  /**
    * Insert tokens table
    * @param $token_id, 1-10 for white player and 11-20 for black player.
    * @param $step_id, token position.
