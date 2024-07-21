@@ -23,7 +23,7 @@ define([
 function (dojo, declare) {
   return declare("bgagame.battlegammon", ebg.core.gamegui, {
     constructor: function(){
-      // console.log( 'battlegammon.js >> battlegammon constructor' );
+      console.log( 'battlegammon.js >> battlegammon constructor' );
 
       // Here, you can init the global variables of your user interface
       // Example:
@@ -129,7 +129,7 @@ function (dojo, declare) {
 
     setup: function( gamedatas )
     {
-      // console.log( 'battlegammon.js >> Starting game setup' );
+      console.log( 'battlegammon.js >> Starting game setup' );
 
       // Setting up steps
       var steps = gamedatas.steps;
@@ -244,7 +244,7 @@ function (dojo, declare) {
       // Setup game notifications to handle (see "setupNotifications" method below)
       this.setupNotifications();
 
-      // console.log( 'battlegammon.js >> Ending game setup' );
+      console.log( 'battlegammon.js >> Ending game setup' );
     },
 
 
@@ -283,7 +283,7 @@ function (dojo, declare) {
     //
     onLeavingState: function( stateName )
     {
-      // console.log( 'battlegammon.js >> Leaving state: '+stateName );
+      console.log( 'battlegammon.js >> Leaving state: '+stateName );
 
       switch( stateName )
       {
@@ -308,7 +308,8 @@ function (dojo, declare) {
     //
     onUpdateActionButtons: function( stateName, args )
     {
-      // console.log( 'battlegammon.js >> onUpdateActionButtons: '+stateName );
+      console.log( 'battlegammon.js >> onUpdateActionButtons: '+stateName );
+      // console.log(args)
 
       if( this.isCurrentPlayerActive() )
       {
@@ -325,14 +326,10 @@ function (dojo, declare) {
           // this.addActionButton( 'button_3_id', _('Button 3 label'), 'onMyMethodToCall3' );
           // break;
           case 'selectTokenByDice1':
-            // console.log( 'battlegammon.js >> onUpdateActionButtons >> '+stateName );
-            // console.log(args)
             this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
             dojo.addClass('cancel-btn', 'disabled');
             break;
           case 'selectTokenByDice2':
-            // console.log( 'battlegammon.js >> onUpdateActionButtons >> '+stateName );
-            // console.log(args)
             this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
             dojo.addClass('cancel-btn', 'disabled');
             break;
@@ -458,7 +455,6 @@ function (dojo, declare) {
           fromStepId = `${this.tokenStep}`,
           fromStepRecord = this.gamedatas.steps.filter(function(el) {return el.step_id == fromStepId})[0],
           toStepRecord = this.gamedatas.steps.filter(function(el) {return el.step_id == toStepId})[0];
-
       // update from step
       var whiteTokens = parseInt(fromStepRecord.white_tokens),
           blackTokens = parseInt(fromStepRecord.black_tokens),
@@ -638,7 +634,7 @@ function (dojo, declare) {
     */
     setupNotifications: function()
     {
-      // console.log( 'battlegammon.js >> notifications subscriptions setup' );
+      console.log( 'battlegammon.js >> notifications subscriptions setup' );
 
       // TODO: here, associate your game notifications with local methods
 
