@@ -256,7 +256,7 @@ function (dojo, declare) {
     //
     onEnteringState: function( stateName, args )
     {
-      // console.log( 'battlegammon.js >> Entering state: '+stateName );
+      console.log( 'battlegammon.js >> Entering state: '+stateName );
       // console.log(args)
 
       switch( stateName )
@@ -272,7 +272,8 @@ function (dojo, declare) {
         break;
          */
 
-        case 'dummmy':
+        case 'selectTokenByDice2':
+          this.updatePageTitle();
         break;
       }
     },
@@ -296,7 +297,6 @@ function (dojo, declare) {
 
         break;
          */
-
 
         case 'dummmy':
         break;
