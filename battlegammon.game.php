@@ -322,6 +322,15 @@ class Battlegammon extends Table
     self::incStat(1, "dice" . $dice1_value, $active_player_id);
     self::incStat(1, "dice" . $dice2_value, $active_player_id);
 
+    $sql = "SELECT top_token_id FROM steps
+            WHERE " . $active_color . "_tokens > 0";
+    $available_steps = self::getCollectionFromDB($sql);
+    $token_ids = array_column($available_steps, 'top_token_id');
+    $sql = "UPDATE tokens
+            SET available = 1
+            WHERE token_id IN (" . implode(',', $token_ids) . ")";
+    self::DbQuery($sql);
+
     $this->gamestate->nextState('selectDice1');
   }
 
