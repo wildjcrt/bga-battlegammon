@@ -291,6 +291,7 @@ class Battlegammon extends Table
     self::incStat(1, "turns_number");
 
     $active_player_id = self::getActivePlayerId();
+    $active_player_name = self::getActivePlayerName();
     self::incStat(1, "turns_number", $active_player_id);
 
     $sql = "SELECT player_color FROM player
@@ -320,7 +321,7 @@ class Battlegammon extends Table
       clienttranslate( '${player_name} roll dice and get ${dice1_value} and ${dice2_value}' ),
       [
         'i18n' => array( 'additional' ),
-        'player_name' => self::getActivePlayerName(),
+        'player_name' => $active_player_name,
         'dice1_value' => $dice1_value,
         'dice2_value' => $dice2_value
       ]
