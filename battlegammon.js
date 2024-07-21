@@ -452,14 +452,164 @@ function (dojo, declare) {
       this.gamedatas.gamestate.descriptionmyturn = 'Sending your move to server';
       this.updatePageTitle();
 
-      var toStep = e.currentTarget.id.split('-')[1];
+      dojo.query('.step').removeClass('hint');
+
+      var toStepId = e.currentTarget.id.split('-')[1],
+          fromStepId = `${this.tokenStep}`,
+          fromStepRecord = this.gamedatas.steps.filter(function(el) {return el.step_id == fromStepId})[0],
+          toStepRecord = this.gamedatas.steps.filter(function(el) {return el.step_id == toStepId})[0];
+
+      // update from step
+      var whiteTokens = parseInt(fromStepRecord.white_tokens),
+          blackTokens = parseInt(fromStepRecord.black_tokens),
+          tokenColor = this.tokenColorMapping[this.tokenId],
+          tokensCount, tokenNumber, tokenColorAndNumber, directionName;
+      switch (fromStepId) {
+      case '1': // white home
+        if (whiteTokens > 0) {
+          whiteTokens -= 1;
+        }
+        tokenNumber = this.numberMapping[whiteTokens];
+        tokenColorAndNumber = `white-${tokenNumber}`;
+        directionName = this.directionMapping['white'][fromStepId];
+        break;
+      case '24': // black home
+        if (blackTokens > 0) {
+          blackTokens -= 1;
+        }
+        tokenNumber = this.numberMapping[blackTokens];
+        tokenColorAndNumber = `black-${tokenNumber}`;
+        directionName = this.directionMapping['black'][fromStepId];
+        break;
+      default:
+        tokensCount = whiteTokens + blackTokens;
+
+        if (tokensCount === 2) {
+          tokenNumber = this.numberMapping[1];
+
+          if (whiteTokens === 2) {
+            tokenColorAndNumber = 'white-one';
+            directionName = this.directionMapping['white'][fromStepId];
+          }
+
+          if (blackTokens === 2) {
+            tokenColorAndNumber = 'black-one';
+            directionName = this.directionMapping['black'][fromStepId];
+          }
+
+          if ((whiteTokens === 1) && (blackTokens === 1)) {
+            if (tokenColor === 'white') {
+              tokenColorAndNumber = 'black-one';
+              directionName = this.directionMapping['black'][fromStepId];
+            } else {
+              tokenColorAndNumber = 'white-one';
+              directionName = this.directionMapping['white'][fromStepId];
+            }
+          }
+
+          dojo.attr(
+            `token-${fromStepId}`,
+            'class',
+              this.format_block( 'js_token_class', {
+                token_number: tokenNumber,
+                token_color_and_number: tokenColorAndNumber,
+                direction: directionName
+              }
+            )
+          );
+        }
+
+        if (tokensCount === 1) {
+          dojo.attr(
+            `token-${fromStepId}`,
+            'class',
+            ''
+          );
+        }
+      }
+
+      // update to step
+      var whiteTokens = parseInt(toStepRecord.white_tokens),
+          blackTokens = parseInt(toStepRecord.black_tokens);
+      switch (toStepId) {
+      case '1': // white home
+        if (blackTokens < 3) {
+          blackTokens += 1;
+        }
+        tokenNumber = this.numberMapping[blackTokens];
+        tokenColorAndNumber = `black-${tokenNumber}`;
+        directionName = this.directionMapping['black'][toStepId];
+        break;
+      case '24': // black home
+        if (whiteTokens < 3) {
+          whiteTokens += 1;
+        }
+        tokenNumber = this.numberMapping[whiteTokens];
+        tokenColorAndNumber = `white-${tokenNumber}`;
+        directionName = this.directionMapping['white'][toStepId];
+        break;
+      default:
+        tokensCount = whiteTokens + blackTokens;
+
+        if (tokensCount === 0) {
+          tokenNumber = this.numberMapping[1];
+          tokenColorAndNumber = `${tokenColor}-${tokenNumber}`;
+          directionName = this.directionMapping[tokenColor][toStepId];
+
+          dojo.attr(
+            `token-${toStepId}`,
+            'class',
+              this.format_block( 'js_token_class', {
+                token_number: tokenNumber,
+                token_color_and_number: tokenColorAndNumber,
+                direction: directionName
+              }
+            )
+          );
+        }
+
+        if (tokensCount === 1) {
+          tokenNumber = this.numberMapping[2];
+
+          if (whiteTokens === 1) {
+            if (tokenColor == 'white') {
+              tokenColorAndNumber = `${tokenColor}-${tokenNumber}`;
+              directionName = this.directionMapping[tokenColor][toStepId];
+            } else {
+              tokenColorAndNumber = 'black-white';
+              directionName = this.directionMapping['black'][toStepId];
+            }
+          }
+
+          if (blackTokens === 1) {
+            if (tokenColor == 'white') {
+              tokenColorAndNumber = 'white-black';
+              directionName = this.directionMapping[tokenColor][toStepId];
+            } else {
+              tokenColorAndNumber = `black-${tokenNumber}`;
+              directionName = this.directionMapping['black'][toStepId];
+            }
+          }
+
+          dojo.attr(
+            `token-${toStepId}`,
+            'class',
+              this.format_block( 'js_token_class', {
+                token_number: tokenNumber,
+                token_color_and_number: tokenColorAndNumber,
+                direction: directionName
+              }
+            )
+          );
+        }
+      }
 
       this.ajaxcall(
           "/battlegammon/battlegammon/sendMoveToServer.html",
           {
               token_id:    this.tokenId,
-              from_step:   this.tokenStep,
-              to_step:     toStep,
+              from_step:   fromStepId,
+              to_step:     toStepId,
               dice_number: this.dice_number
           },
           this,
