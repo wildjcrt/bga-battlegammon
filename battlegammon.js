@@ -206,15 +206,6 @@ function (dojo, declare) {
         dojo.query(`#step-${step.step_id}`).connect('onclick', this, 'onSelectStep');
       }
 
-      if( this.isCurrentPlayerActive() )
-      {
-        for (let step_id in gamedatas.availableTokens)
-        {
-          dojo.addClass(`token-${step_id}`, 'available');
-          dojo.query(`#token-${step_id}`).connect('onclick', this, 'onSelectToken');
-        }
-      }
-
       // Setup game notifications to handle (see "setupNotifications" method below)
       this.setupNotifications();
 
@@ -247,15 +238,20 @@ function (dojo, declare) {
          */
 
         case 'selectTokenByDice1':
-          this.updatePageTitle();
-
-          this.gamedatas.dice_result = args.args.dice_result;
-          this.updateDice(args.args.dice_result);
         case 'selectTokenByDice2':
           this.updatePageTitle();
 
           this.gamedatas.dice_result = args.args.dice_result;
           this.updateDice(args.args.dice_result);
+
+          if( this.isCurrentPlayerActive() ) {
+            this.gamedatas.availableTokens = args.args.availableTokens;
+            for (let step_id in args.args.availableTokens)
+            {
+              dojo.addClass(`token-${step_id}`, 'available');
+              dojo.query(`#token-${step_id}`).connect('onclick', this, 'onSelectToken');
+            }
+          }
         break;
       }
     },
