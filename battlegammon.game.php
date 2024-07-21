@@ -286,6 +286,7 @@ class Battlegammon extends Table
    */
   function rollDice()
   {
+    // set active player and update turns_number
     $this->activeNextPlayer();
     self::incStat(1, "turns_number");
 
@@ -301,18 +302,6 @@ class Battlegammon extends Table
     $dice1_value = bga_rand(1, 6);
     $dice2_value = bga_rand(1, 6);
 
-    // Notify all players about dice rolling
-    self::notifyAllPlayers(
-      "rollDiceDone",
-      clienttranslate( '${player_name} roll dice and get ${dice1_value} and ${dice2_value}' ),
-      [
-        'i18n' => array( 'additional' ),
-        'player_name' => self::getActivePlayerName(),
-        'dice1_value' => $dice1_value,
-        'dice2_value' => $dice2_value
-      ]
-    );
-
     // save dice roll in database
     $sql = "UPDATE dice_result
             SET dice1 = $dice1_value,
@@ -324,6 +313,18 @@ class Battlegammon extends Table
 
     self::incStat(1, "dice" . $dice1_value, $active_player_id);
     self::incStat(1, "dice" . $dice2_value, $active_player_id);
+
+    // Notify all players about dice rolling
+    self::notifyAllPlayers(
+      "rollDiceDone",
+      clienttranslate( '${player_name} roll dice and get ${dice1_value} and ${dice2_value}' ),
+      [
+        'i18n' => array( 'additional' ),
+        'player_name' => self::getActivePlayerName(),
+        'dice1_value' => $dice1_value,
+        'dice2_value' => $dice2_value
+      ]
+    );
 
     // reset all tokens available
     $sql = "UPDATE tokens
