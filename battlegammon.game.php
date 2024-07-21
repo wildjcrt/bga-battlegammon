@@ -505,13 +505,21 @@ class Battlegammon extends Table
    */
   public function saveMoveFromClient($argJS)
   {
-
     $turn_number = self::getStat("turns_number");
-    $active_player_id = $this->getActivePlayerId();
     $token_id    = $argJS[0];
     $from_step   = $argJS[1];
     $to_step     = $argJS[2];
     $dice_number = $argJS[3];
+
+    $active_player_id = $this->getActivePlayerId();
+    $sql = "SELECT player_color FROM player
+            WHERE player_id=$active_player_id";
+    $active_color_code = self::getUniqueValueFromDB($sql);
+    $active_color = ($active_color_code == 'ffffff') ? 'white' : 'black';
+
+    $sql = "SELECT player_id FROM player
+            WHERE player_id != $active_player_id";
+    $opponent_id = self::getUniqueValueFromDB($sql);
 
     // Record in history
     self::createHistoryRecord($turn_number, $dice_number, $token_id, $from_step, $to_step);
