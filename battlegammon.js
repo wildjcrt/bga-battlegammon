@@ -267,6 +267,11 @@ function (dojo, declare) {
     {
       console.log( 'battlegammon.js >> Leaving state: '+stateName );
 
+      dojo.query('.token').forEach(e => {
+        this.disconnect(e, 'onclick');
+        dojo.removeClass(e, 'available');
+      });
+
       switch( stateName )
       {
 
@@ -280,8 +285,9 @@ function (dojo, declare) {
         break;
          */
 
-        case 'dummmy':
-        break;
+        // case 'selectTokenByDice1':
+        // case 'selectTokenByDice2':
+        // break;
       }
     },
 
