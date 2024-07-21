@@ -57,68 +57,53 @@ $machinestates = array(
     "name" => "gameSetup",
     "description" => "Game setup",
     "type" => "manager",
-    "action" => "stGameSetup",
     "transitions" => [
-      "playerTurn" => 10
+      "" => 10
     ]
   ),
 
-  // playerTurn state: for transition
   10 => array(
-    "name" => "playerTurn",
-    "description" => clienttranslate('${actplayer} turn.'),
-    "descriptionmyturn" => clienttranslate('Your turn. Click a ${color} token to move.'),
-    "type" => "activeplayer",
-    "args" => "argPlayerTurn",
-    "action" => "stPlayerTurn",
-    "possibleactions" => [
-      "actSelectToken",
-      "actPass"
-    ],
+    "name" => "rollDice",
+    "description" => clienttranslate('Roll dice.'),
+    "type" => "game",
+    "action" => "rollDice",
+    "updateGameProgression" => true,
     "transitions" => [
-      "selectTokenA" => 21,
-      "pass" => 29
+      "selectDice1" => 21,
+      "pass" => 10
     ]
   ),
 
   21 => array(
-    "name" => "selectTokenByDiceA",
-    "description" => clienttranslate('${actplayer} choose first token.'),
-    "descriptionmyturn" => clienttranslate('Choose first token.'),
+    "name" => "selectTokenByDice1",
+    "description" => clienttranslate('${actplayer} turn.'),
+    "descriptionmyturn" => clienttranslate('Your turn. Click a ${color} token to do first move.'),
     "type" => "activeplayer",
+    "args" => "argSelectToken",
     "possibleactions" => [
-      "actSelectToken",
+      "saveMoveFromClient",
       "actPass"
     ],
     "transitions" => [
-      "selectTokenB" => 22,
-      "pass" => 29,
+      "selectDice2" => 22,
+      "pass" => 10,
       "end" => 99
     ]
   ),
 
   22 => array(
-    "name" => "selectTokenByDiceB",
+    "name" => "selectTokenByDice2",
     "description" => clienttranslate('${actplayer} choose second token.'),
-    "descriptionmyturn" => clienttranslate('Choose second token.'),
+    "descriptionmyturn" => clienttranslate('Your turn. Click a ${color} token to do second move.'),
     "type" => "activeplayer",
+    "args" => "argSelectToken",
     "possibleactions" => [
       "actSelectToken",
       "actPass"
     ],
     "transitions" => [
-      "next" => 10,
-      "pass" => 29,
+      "roll" => 10,
       "end" => 99
-    ]
-  ),
-
-  29 => array(
-    "name" => "noDiceToMove",
-    "description" => clienttranslate('No more token to move.'),
-    "type" => "game",
-    "transitions" => [
-      "next" => 10
     ]
   ),
   /*

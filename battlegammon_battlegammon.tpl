@@ -12,8 +12,8 @@
 
 <!-- BEGIN dice -->
 <div id="dice_area">
-  <div id="dice_1" class="dice dice_1_0 dice_usable_0"></div>
-  <div id="dice_2" class="dice dice_2_0 dice_usable_0"></div>
+  <div id="dice_1" class="dice dice_1_0 dice_available_0"></div>
+  <div id="dice_2" class="dice dice_2_0 dice_available_0"></div>
 </div>
 <!-- END dice -->
 
@@ -81,7 +81,7 @@
 <script type="text/javascript">
   // Javascript HTML templates
   var js_token_class="token token-${token_number} ${token_color_and_number}-to-${direction}";
-  var js_dice_class="dice dice_${dice_id}_${dice_value} dice_usable_${dice_usable}";
+  var js_dice_class="dice dice_${dice_id}_${dice_number} dice_available_${dice_available}";
   var js_step_class="step hint-${hint_type}";
 </script>
 
