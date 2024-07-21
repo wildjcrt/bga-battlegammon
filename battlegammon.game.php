@@ -342,6 +342,7 @@ class Battlegammon extends Table
             WHERE token_id IN (" . implode(',', $token_ids) . ")";
     self::DbQuery($sql);
 
+    // TODO: check available steps and may go to pass
     $this->gamestate->nextState('selectDice1');
   }
 
