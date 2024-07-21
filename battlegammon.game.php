@@ -495,16 +495,15 @@ class Battlegammon extends Table
   public function saveMoveFromClient($argJS)
   {
 
-    // Record in token_history
     $turn_number = self::getStat("turns_number");
     $active_player_id = $this->getActivePlayerId();
     $token_id    = $argJS[0];
     $from_step   = $argJS[1];
     $to_step     = $argJS[2];
     $dice_number = $argJS[3];
-    //
-    // $sql = "INSERT INTO token_history (dice_number, token_id, player_id, from_step_id, to_step_id) VALUES ($dice_number, $token_id, $active_player_id, $from_step, $to_step);";
-    // self::DbQuery($sql);
+
+    // Record in history
+    self::createHistoryRecord($turn_number, $dice_number, $token_id, $from_step, $to_step);
 
     // Record in "from steps"
     $sql = "SELECT * FROM steps
