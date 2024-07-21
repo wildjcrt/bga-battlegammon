@@ -248,7 +248,10 @@ class Battlegammon extends Table
       $sql = "SELECT token_id, step_id FROM tokens
               WHERE available = 1 AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
     }
-    $result['availableTokens'] = self::getObjectListFromDB($sql);
+    $token_list = self::getObjectListFromDB($sql);
+    foreach ($token_list as $token) {
+      $result['availableTokens'][$token['step_id']] = $token['token_id'];
+    }
 
     return $result;
   }

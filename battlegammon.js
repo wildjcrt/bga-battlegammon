@@ -234,11 +234,10 @@ function (dojo, declare) {
 
         dojo.query('.dice.dice_available_1').connect('onclick', this, 'onSelectDice');
 
-        for (var i = 0; i < gamedatas.availableTokens.length; i++)
+        for (let step_id in gamedatas.availableTokens)
         {
-          var tokenStep = gamedatas.availableTokens[i];
-          dojo.addClass(`token-${tokenStep}`, 'available');
-          dojo.query(`#token-${tokenStep}`).connect('onclick', this, 'onSelectToken');
+          dojo.addClass(`token-${step_id}`, 'available');
+          dojo.query(`#token-${step_id}`).connect('onclick', this, 'onSelectToken');
         }
       }
 
@@ -426,16 +425,16 @@ function (dojo, declare) {
         availableDice.push(parseInt(this.gamedatas.dice_result.dice2));
       }
 
-      var availableTokens = this.gamedatas.availableTokens;
       this.tokenStep = parseInt(e.currentTarget.id.split('-')[1]);
+      this.tokenId = this.gamedatas.availableTokens[this.tokenStep];
       if (this.activePlayer.color === 'ffffff') {
         for (var j = 0; j < availableDice.length; j++) {
           this.dice_number = availableDice[j];
           this.toStep = this.tokenStep + this.dice_number;
 
           if (this.gamedatas.availableSteps.includes(`${this.toStep}`)) {
-            dojo.addClass(`step${this.toStep}`, 'hint');
-            dojo.query(`#step${this.toStep}`).connect('onclick', this, 'onSelectStep');
+            dojo.addClass(`step-${this.toStep}`, 'hint');
+            dojo.query(`#step-${this.toStep}`).connect('onclick', this, 'onSelectStep');
           }
         }
       } else {
@@ -444,8 +443,8 @@ function (dojo, declare) {
           var toStep = this.tokenStep - this.dice_number;
 
           if (this.gamedatas.availableSteps.includes(`${toStep}`)) {
-            dojo.addClass(`step${toStep}`, 'hint');
-            dojo.query(`#step${toStep}`).connect('onclick', this, 'onSelectStep');
+            dojo.addClass(`step-${toStep}`, 'hint');
+            dojo.query(`#step-${toStep}`).connect('onclick', this, 'onSelectStep');
           }
         }
       }
@@ -462,7 +461,7 @@ function (dojo, declare) {
       this.ajaxcall(
           "/battlegammon/battlegammon/sendMoveToServer.html",
           {
-              token_id:    this.tokenStep,
+              token_id:    this.tokenId,
               from_step:   this.tokenStep,
               to_step:     toStep,
               dice_number: this.dice_number
