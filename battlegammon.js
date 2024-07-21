@@ -252,10 +252,15 @@ function (dojo, declare) {
          */
 
         case 'selectTokenByDice1':
-          this.updateDice();
+          this.updatePageTitle();
+
+          this.gamedatas.dice_result = args.args.dice_result;
+          this.updateDice(args.args.dice_result);
         case 'selectTokenByDice2':
           this.updatePageTitle();
-          this.updateDice();
+
+          this.gamedatas.dice_result = args.args.dice_result;
+          this.updateDice(args.args.dice_result);
         break;
       }
     },

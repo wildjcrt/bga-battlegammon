@@ -706,6 +706,11 @@ class Battlegammon extends Table
 
     $result = array();
 
+    // List dice
+    $sql = "SELECT dice1, dice1_available, dice2, dice2_available
+            FROM dice_result";
+    $result['dice_result'] = self::getObjectFromDB($sql);
+
     // List all available steps
     $sql = "SELECT step_id FROM steps
             WHERE (white_tokens + black_tokens) < 2";
@@ -734,6 +739,7 @@ class Battlegammon extends Table
 
     return [
       'color'           => $active_color,
+      'dice_result'     => $result['dice_result'],
       'availableSteps'  => $result['availableSteps'],
       'availableTokens' => $result['availableTokens']
     ];
