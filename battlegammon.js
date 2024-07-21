@@ -454,7 +454,8 @@ function (dojo, declare) {
     onSelectStep: function (e)
     {
       dojo.stopEvent(e);
-      this.updateTitle(_('Sending your move to server'));
+      this.gamedatas.gamestate.descriptionmyturn = 'Sending your move to server';
+      this.updatePageTitle();
 
       var toStep = e.currentTarget.id.split('-')[1];
 
