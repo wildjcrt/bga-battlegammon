@@ -50,6 +50,7 @@
 
   <!--BEGIN tokens -->
   <div id="tokens">
+    <div id="token-home-white" style="left:804px; bottom:390px;"></div>
     <div id="token-1"  style="left:704px; bottom:390px;"></div>
     <div id="token-2"  style="left:591px; bottom:403px;"></div>
     <div id="token-3"  style="left:488px; bottom:391px;"></div>
@@ -74,6 +75,7 @@
     <div id="token-22" style="left:321px; bottom:16px;"></div>
     <div id="token-23" style="left:223px; bottom:14px;"></div>
     <div id="token-24" style="left:110px; bottom:13px;"></div>
+    <div id="token-home-black" style="left:10px; bottom:13px;"></div>
   </div>
   <!--END tokens -->
 </div>
