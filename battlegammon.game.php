@@ -524,6 +524,9 @@ class Battlegammon extends Table
     // Record in history
     self::createHistoryRecord($turn_number, $dice_number, $token_id, $from_step, $to_step);
 
+    // update token record
+    self::updateTokenRecord($token_id, $to_step, 0);
+
     // Record in "from steps"
     $sql = "SELECT * FROM steps
             WHERE step_id=$from_step";
