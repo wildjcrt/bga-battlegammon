@@ -211,8 +211,6 @@ function (dojo, declare) {
         var activePlayerId = this.getActivePlayerId();
         this.activePlayer = this.gamedatas.players[activePlayerId];
 
-        dojo.query('.dice.dice_available_1').connect('onclick', this, 'onSelectDice');
-
         for (let step_id in gamedatas.availableTokens)
         {
           dojo.addClass(`token-${step_id}`, 'available');
@@ -406,12 +404,6 @@ function (dojo, declare) {
           }
         )
       );
-    },
-
-    onSelectDice: function (e)
-    {
-      dojo.stopEvent(e);
-      e.currentTarget.classList.toggle('lighton_dice');
     },
 
     onSelectToken: function(e)
