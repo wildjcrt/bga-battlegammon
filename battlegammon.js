@@ -206,29 +206,6 @@ function (dojo, declare) {
         dojo.query(`#step-${step.step_id}`).connect('onclick', this, 'onSelectStep');
       }
 
-      // place dice 1 and dice 2
-      var dice_result = gamedatas.dice_result;
-      dojo.attr(
-        'dice_1',
-        'class',
-          this.format_block( 'js_dice_class', {
-            dice_id: 1,
-            dice_number: dice_result.dice1,
-            dice_available: dice_result.dice1_available
-          }
-        )
-      );
-      dojo.attr(
-        'dice_2',
-        'class',
-          this.format_block( 'js_dice_class', {
-            dice_id: 2,
-            dice_number: dice_result.dice2,
-            dice_available: dice_result.dice2_available
-          }
-        )
-      );
-
       if( this.isCurrentPlayerActive() )
       {
         var activePlayerId = this.getActivePlayerId();
@@ -274,8 +251,11 @@ function (dojo, declare) {
         break;
          */
 
+        case 'selectTokenByDice1':
+          this.updateDice();
         case 'selectTokenByDice2':
           this.updatePageTitle();
+          this.updateDice();
         break;
       }
     },
@@ -397,6 +377,31 @@ function (dojo, declare) {
     },
 
     */
+
+    updateDice: function (dice_result)
+    {
+      // place dice 1 and dice 2
+      dojo.attr(
+        'dice_1',
+        'class',
+          this.format_block( 'js_dice_class', {
+            dice_id: 1,
+            dice_number: dice_result.dice1,
+            dice_available: dice_result.dice1_available
+          }
+        )
+      );
+      dojo.attr(
+        'dice_2',
+        'class',
+          this.format_block( 'js_dice_class', {
+            dice_id: 2,
+            dice_number: dice_result.dice2,
+            dice_available: dice_result.dice2_available
+          }
+        )
+      );
+    },
 
     onSelectDice: function (e)
     {
