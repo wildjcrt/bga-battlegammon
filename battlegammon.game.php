@@ -658,7 +658,15 @@ class Battlegammon extends Table
 
     self::updateDiceNotAvailable($dice_number);
 
-    $this->gamestate->nextState( 'selectTokenB' );
+    $state = $this->gamestate->state();
+    switch ($state['name']) {
+      case 'selectTokenByDice1':
+        $this->gamestate->nextState( 'selectDice2' );
+        break;
+      case 'selectTokenByDice2':
+        $this->gamestate->nextState( 'roll' );
+        break;
+    }
   }
 
 //////////////////////////////////////////////////////////////////////////////
