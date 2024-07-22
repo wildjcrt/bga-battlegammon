@@ -165,6 +165,12 @@ function (dojo, declare) {
         case 'selectTokenByDice2':
           this.updatePageTitle();
 
+          // Reset all token onclick event and available class
+          dojo.query('.token').forEach(e => {
+            this.disconnect(e, 'onclick');
+            dojo.removeClass(e, 'available');
+          });
+
           // Setting up steps
           this.gamedatas.steps = args.args.steps;
           var steps = this.gamedatas.steps;
@@ -263,11 +269,6 @@ function (dojo, declare) {
     onLeavingState: function( stateName )
     {
       console.log( 'battlegammon.js >> Leaving state: '+stateName );
-
-      dojo.query('.token').forEach(e => {
-        this.disconnect(e, 'onclick');
-        dojo.removeClass(e, 'available');
-      });
 
       switch( stateName )
       {
