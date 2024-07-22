@@ -284,7 +284,7 @@ class Battlegammon extends Table
   /**
    * Roll new dice and notify players that dice has been rolled
    */
-  function rollDice()
+  function stRollDice()
   {
     $prev_turn_number = self::getStat("turns_number");
     if ($prev_turn_number != 0) {
