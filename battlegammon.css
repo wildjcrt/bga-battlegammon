@@ -195,6 +195,13 @@
 
 .token.available {
   cursor: pointer;
+  animation: blink 5s linear infinite;
+}
+
+@keyframes blink {
+  25% { opacity: 0.5; }
+  50% { opacity: 0; }
+  75% { opacity: 0.5; }
 }
 
 .token-five {
