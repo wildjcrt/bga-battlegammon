@@ -457,6 +457,7 @@ function (dojo, declare) {
 
       var toStepId = e.currentTarget.id.split('-')[1],
           fromStepId = `${this.tokenStep}`,
+          dice_number = Math.abs(this.tokenStep - toStepId),
           fromStepRecord = this.gamedatas.steps.filter(function(el) {return el.step_id == fromStepId})[0],
           toStepRecord = this.gamedatas.steps.filter(function(el) {return el.step_id == toStepId})[0];
       // update from step
@@ -610,7 +611,7 @@ function (dojo, declare) {
               token_id:    this.tokenId,
               from_step:   fromStepId,
               to_step:     toStepId,
-              dice_number: this.dice_number
+              dice_number: dice_number
           },
           this,
           function( result ) {},
