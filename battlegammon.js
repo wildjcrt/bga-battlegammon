@@ -202,7 +202,7 @@ function (dojo, declare) {
           }
         }
 
-        dojo.query(`#step-${step.step_id}`).connect('onclick', this, 'onSelectStep');
+        dojo.connect($(`step-${step.step_id}`), 'onclick', this, 'onSelectStep');
       }
 
       // Setup game notifications to handle (see "setupNotifications" method below)
@@ -248,7 +248,7 @@ function (dojo, declare) {
             for (let step_id in args.args.availableTokens)
             {
               dojo.addClass(`token-${step_id}`, 'available');
-              dojo.query(`#token-${step_id}`).connect('onclick', this, 'onSelectToken');
+              dojo.connect($(`token-${step_id}`), 'onclick', this, 'onSelectToken');
             }
           }
         break;
