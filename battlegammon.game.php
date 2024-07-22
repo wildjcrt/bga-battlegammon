@@ -286,6 +286,33 @@ class Battlegammon extends Table
    */
   function rollDice()
   {
+    $prev_turn_number = self::getStat("turns_number");
+    if ($prev_turn_number != 0) {
+      // notifyAllPlayers previous moves
+      $prev_player_id = self::getActivePlayerId();
+      $prev_player_name = self::getActivePlayerName();
+
+      $sql = "SELECT player_color FROM player
+              WHERE player_id=$prev_player_id";
+      $prev_player_color = self::getUniqueValueFromDB($sql);
+
+      $histories = self::getHistoryRecordsByTurn($prev_turn_number, $prev_player_color);
+      foreach ($histories as $history) {
+        self::notifyAllPlayers(
+          "playerMoves",
+          clienttranslate( '${player_name} uses dice ${dice_number} to move ${token_id} from ${from_step_id} to ${to_step_id}.' ),
+          [
+            'i18n' => array( 'additional' ),
+            'player_name' => $prev_player_name,
+            'dice_number' => $history['dice_number'],
+            'token_id' => $history['token_id'],
+            'from_step_id' => $history['from_step_id'],
+            'to_step_id' => $history['to_step_id']
+          ]
+        );
+      }
+    }
+
     // set active player and update turns_number
     $this->activeNextPlayer();
     self::incStat(1, "turns_number");
@@ -318,7 +345,7 @@ class Battlegammon extends Table
     // Notify all players about dice rolling
     self::notifyAllPlayers(
       "rollDiceDone",
-      clienttranslate( '${player_name} roll dice and get ${dice1_value} and ${dice2_value}' ),
+      clienttranslate( '${player_name} roll dice and get ${dice1_value} and ${dice2_value}.' ),
       [
         'i18n' => array( 'additional' ),
         'player_name' => $active_player_name,
