@@ -454,6 +454,7 @@ function (dojo, declare) {
           dice_number = Math.abs(this.tokenStep - toStepId),
           fromStepRecord = this.gamedatas.steps.filter(function(el) {return el.step_id == fromStepId})[0],
           toStepRecord = this.gamedatas.steps.filter(function(el) {return el.step_id == toStepId})[0];
+
       // update from step
       var whiteTokens = parseInt(fromStepRecord.white_tokens),
           blackTokens = parseInt(fromStepRecord.black_tokens),
@@ -501,26 +502,31 @@ function (dojo, declare) {
               directionName = this.directionMapping['white'][fromStepId];
             }
           }
-
-          dojo.attr(
-            `token-${fromStepId}`,
-            'class',
-              this.format_block( 'js_token_class', {
-                token_number: tokenNumber,
-                token_color_and_number: tokenColorAndNumber,
-                direction: directionName
-              }
-            )
-          );
         }
 
         if (tokensCount === 1) {
-          dojo.attr(
-            `token-${fromStepId}`,
-            'class',
-            ''
-          );
+          tokenNumber = tokenColorAndNumber = directionName = null;
         }
+      }
+
+      // set token on from step
+      if (tokenNumber !== null) {
+        dojo.attr(
+          `token-${fromStepId}`,
+          'class',
+            this.format_block( 'js_token_class', {
+              token_number: tokenNumber,
+              token_color_and_number: tokenColorAndNumber,
+              direction: directionName
+            }
+          )
+        );
+      } else {
+        dojo.attr(
+          `token-${fromStepId}`,
+          'class',
+          ''
+        );
       }
 
       // update to step
@@ -550,17 +556,6 @@ function (dojo, declare) {
           tokenNumber = this.numberMapping[1];
           tokenColorAndNumber = `${tokenColor}-${tokenNumber}`;
           directionName = this.directionMapping[tokenColor][toStepId];
-
-          dojo.attr(
-            `token-${toStepId}`,
-            'class',
-              this.format_block( 'js_token_class', {
-                token_number: tokenNumber,
-                token_color_and_number: tokenColorAndNumber,
-                direction: directionName
-              }
-            )
-          );
         }
 
         if (tokensCount === 1) {
@@ -585,19 +580,20 @@ function (dojo, declare) {
               directionName = this.directionMapping['black'][toStepId];
             }
           }
-
-          dojo.attr(
-            `token-${toStepId}`,
-            'class',
-              this.format_block( 'js_token_class', {
-                token_number: tokenNumber,
-                token_color_and_number: tokenColorAndNumber,
-                direction: directionName
-              }
-            )
-          );
         }
       }
+
+      // set token on to step
+      dojo.attr(
+        `token-${toStepId}`,
+        'class',
+          this.format_block( 'js_token_class', {
+            token_number: tokenNumber,
+            token_color_and_number: tokenColorAndNumber,
+            direction: directionName
+          }
+        )
+      );
 
       this.ajaxcall(
           "/battlegammon/battlegammon/sendMoveToServer.html",
