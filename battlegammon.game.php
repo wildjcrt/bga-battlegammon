@@ -446,12 +446,25 @@ class Battlegammon extends Table
   }
 
   /**
-   * Get last history
+   * Get history records by turn number
+   * @param $turn
+   * @param $color, ffffff or 333333
    */
-  function getLastHistorysRecord()
+  function getHistoryRecordsByTurn($turn, $color)
   {
-    $sql = "SELECT * FROM histories ORDER BY id DESC LIMIT 1;";
-    return self::getObjectFromDB($sql);
+    if ($color == 'ffffff') {
+      $sql = "SELECT * FROM histories
+              WHERE turn = $turn
+                AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+              ORDER BY history_id";
+    } else {
+      $sql = "SELECT * FROM histories
+              WHERE turn = $turn
+                AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
+              ORDER BY history_id";
+    }
+
+    return self::getObjectListFromDB($sql);
   }
 
   /**
