@@ -215,15 +215,6 @@ class Battlegammon extends Table
     $sql = "SELECT player_id id, player_score score FROM player";
     $result['players'] = self::getCollectionFromDb( $sql );
 
-    // Get information about the dice roll
-    $sql = "SELECT dice1, dice1_available, dice2, dice2_available
-            FROM dice_result";
-    $result['dice_result'] = self::getObjectFromDB($sql);
-
-    // Get information about steps and tokens
-    $sql = "SELECT * FROM steps";
-    $result['steps'] = self::getObjectListFromDB($sql);
-
     // List all available steps
     $sql = "SELECT step_id FROM steps
             WHERE (white_tokens + black_tokens) < 2";
@@ -248,7 +239,10 @@ class Battlegammon extends Table
       $sql = "SELECT token_id, step_id FROM tokens
               WHERE available = 1 AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
     }
-    $result['availableTokens'] = self::getObjectListFromDB($sql);
+    $token_list = self::getObjectListFromDB($sql);
+    foreach ($token_list as $token) {
+      $result['availableTokens'][$token['step_id']] = $token['token_id'];
+    }
 
     return $result;
   }
@@ -281,12 +275,41 @@ class Battlegammon extends Table
   /**
    * Roll new dice and notify players that dice has been rolled
    */
-  function rollDice()
+  function stRollDice()
   {
+    $prev_turn_number = self::getStat("turns_number");
+    if ($prev_turn_number != 0) {
+      // notifyAllPlayers previous moves
+      $prev_player_id = self::getActivePlayerId();
+      $prev_player_name = self::getActivePlayerName();
+
+      $sql = "SELECT player_color FROM player
+              WHERE player_id=$prev_player_id";
+      $prev_player_color = self::getUniqueValueFromDB($sql);
+
+      $histories = self::getHistoryRecordsByTurn($prev_turn_number, $prev_player_color);
+      foreach ($histories as $history) {
+        self::notifyAllPlayers(
+          "playerMoves",
+          clienttranslate( '${player_name} uses dice ${dice_number} to move ${token_id} from ${from_step_id} to ${to_step_id}.' ),
+          [
+            'i18n' => array( 'additional' ),
+            'player_name' => $prev_player_name,
+            'dice_number' => $history['dice_number'],
+            'token_id' => $history['token_id'],
+            'from_step_id' => $history['from_step_id'],
+            'to_step_id' => $history['to_step_id']
+          ]
+        );
+      }
+    }
+
+    // set active player and update turns_number
     $this->activeNextPlayer();
     self::incStat(1, "turns_number");
 
     $active_player_id = self::getActivePlayerId();
+    $active_player_name = self::getActivePlayerName();
     self::incStat(1, "turns_number", $active_player_id);
 
     $sql = "SELECT player_color FROM player
@@ -297,18 +320,6 @@ class Battlegammon extends Table
     // Roll dices
     $dice1_value = bga_rand(1, 6);
     $dice2_value = bga_rand(1, 6);
-
-    // Notify all players about dice rolling
-    self::notifyAllPlayers(
-      "rollDiceDone",
-      clienttranslate( '${player_name} roll dice and get ${dice1_value} and ${dice2_value}' ),
-      [
-        'i18n' => array( 'additional' ),
-        'player_name' => self::getActivePlayerName(),
-        'dice1_value' => $dice1_value,
-        'dice2_value' => $dice2_value
-      ]
-    );
 
     // save dice roll in database
     $sql = "UPDATE dice_result
@@ -322,6 +333,24 @@ class Battlegammon extends Table
     self::incStat(1, "dice" . $dice1_value, $active_player_id);
     self::incStat(1, "dice" . $dice2_value, $active_player_id);
 
+    // Notify all players about dice rolling
+    self::notifyAllPlayers(
+      "rollDiceDone",
+      clienttranslate( '${player_name} roll dice and get ${dice1_value} and ${dice2_value}.' ),
+      [
+        'i18n' => array( 'additional' ),
+        'player_name' => $active_player_name,
+        'dice1_value' => $dice1_value,
+        'dice2_value' => $dice2_value
+      ]
+    );
+
+    // reset all tokens available
+    $sql = "UPDATE tokens
+            SET available = 0";
+    self::DbQuery($sql);
+
+    // set available tokens
     $sql = "SELECT top_token_id FROM steps
             WHERE " . $active_color . "_tokens > 0";
     $available_steps = self::getCollectionFromDB($sql);
@@ -331,7 +360,38 @@ class Battlegammon extends Table
             WHERE token_id IN (" . implode(',', $token_ids) . ")";
     self::DbQuery($sql);
 
+    // TODO: check available steps and may go to pass
     $this->gamestate->nextState('selectDice1');
+  }
+
+  function stGameEnd()
+  {
+    $prev_turn_number = self::getStat("turns_number");
+    if ($prev_turn_number != 0) {
+      // notifyAllPlayers previous moves
+      $prev_player_id = self::getActivePlayerId();
+      $prev_player_name = self::getActivePlayerName();
+
+      $sql = "SELECT player_color FROM player
+              WHERE player_id=$prev_player_id";
+      $prev_player_color = self::getUniqueValueFromDB($sql);
+
+      $histories = self::getHistoryRecordsByTurn($prev_turn_number, $prev_player_color);
+      foreach ($histories as $history) {
+        self::notifyAllPlayers(
+          "playerMoves",
+          clienttranslate( '${player_name} uses dice ${dice_number} to move ${token_id} from ${from_step_id} to ${to_step_id}.' ),
+          [
+            'i18n' => array( 'additional' ),
+            'player_name' => $prev_player_name,
+            'dice_number' => $history['dice_number'],
+            'token_id' => $history['token_id'],
+            'from_step_id' => $history['from_step_id'],
+            'to_step_id' => $history['to_step_id']
+          ]
+        );
+      }
+    }
   }
 
   /**
@@ -383,6 +443,17 @@ class Battlegammon extends Table
   }
 
   /**
+   * Get step record from steps table
+   * @param $step_id, 1-24.
+   */
+  function getStepRecord($step_id)
+  {
+    $sql = "SELECT * FROM steps
+            WHERE step_id = $step_id";
+    return self::getObjectFromDB($sql);
+  }
+
+  /**
    * Insert tokens table
    * @param $token_id, 1-10 for white player and 11-20 for black player.
    * @param $step_id, token position.
@@ -423,12 +494,25 @@ class Battlegammon extends Table
   }
 
   /**
-   * Get last history
+   * Get history records by turn number
+   * @param $turn
+   * @param $color, ffffff or 333333
    */
-  function getLastHistorysRecord()
+  function getHistoryRecordsByTurn($turn, $color)
   {
-    $sql = "SELECT * FROM histories ORDER BY id DESC LIMIT 1;";
-    return self::getObjectFromDB($sql);
+    if ($color == 'ffffff') {
+      $sql = "SELECT * FROM histories
+              WHERE turn = $turn
+                AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+              ORDER BY history_id";
+    } else {
+      $sql = "SELECT * FROM histories
+              WHERE turn = $turn
+                AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
+              ORDER BY history_id";
+    }
+
+    return self::getObjectListFromDB($sql);
   }
 
   /**
@@ -482,96 +566,182 @@ class Battlegammon extends Table
    */
   public function saveMoveFromClient($argJS)
   {
-
-    // Record in token_history
     $turn_number = self::getStat("turns_number");
-    $active_player_id = $this->getActivePlayerId();
     $token_id    = $argJS[0];
     $from_step   = $argJS[1];
     $to_step     = $argJS[2];
     $dice_number = $argJS[3];
-    //
-    // $sql = "INSERT INTO token_history (dice_number, token_id, player_id, from_step_id, to_step_id) VALUES ($dice_number, $token_id, $active_player_id, $from_step, $to_step);";
-    // self::DbQuery($sql);
 
-    // Record in "from steps"
-    $sql = "SELECT * FROM steps
-            WHERE step_id=$from_step";
-    $from_tokens = self::getUniqueValueFromDB($sql);
-    if ($from_tokens > 0)
-    {
-      if ($from_tokens != 20) {
-        $from_tokens -= 1;
-        $from_top_player_id = $active_player_id;
-      } else {
-        $from_tokens = 1;
-        $sql = "SELECT player_id FROM player
-                WHERE player_id!=$active_player_id";
-        $from_top_player_id = self::getUniqueValueFromDB($sql);
-      }
-    }
-
-    $sql = "UPDATE steps SET tokens=$from_tokens, top_player_id=$from_top_player_id
-            WHERE step_id=$from_step";
-    self::DbQuery($sql);
-
-    // Record in "to steps"
+    $active_player_id = $this->getActivePlayerId();
     $sql = "SELECT player_color FROM player
             WHERE player_id=$active_player_id";
-    $color_code = self::getUniqueValueFromDB($sql);
+    $active_color_code = self::getUniqueValueFromDB($sql);
+    $active_color = ($active_color_code == 'ffffff') ? 'white' : 'black';
 
-    $sql = "SELECT tokens, top_player_id FROM steps
-            WHERE step_id=$to_step";
-    $to_step_result = self::getObjectFromDB($sql);
-    $to_tokens = $to_step_result['tokens'];
-    $to_top_player_id = $to_step_result['top_player_id'];
+    $sql = "SELECT player_id FROM player
+            WHERE player_id != $active_player_id";
+    $opponent_id = self::getUniqueValueFromDB($sql);
 
-    if ($to_step == 1 && $color_code == 'ffffff') {
-      # code...
-    }
+    // Record in history
+    self::createHistoryRecord($turn_number, $dice_number, $token_id, $from_step, $to_step);
 
-    if ($to_step == 24 && $color_code == '333333') {
-      # code...
-    }
+    // update token record
+    self::updateTokenRecord($token_id, $to_step, 0);
 
-    if ($to_step >= 2 && $to_step <= 23)
-    {
-      switch ($to_tokens) {
-        case 0:
-          $to_tokens = 1;
-          break;
-        case 1:
-          if ($to_top_player_id == $active_player_id) {
-            $to_tokens = 2;
-          } else {
-            $to_tokens = 20;
-          }
-          break;
-        case 2:
-          if ($to_top_player_id == $active_player_id) {
-            $to_tokens = 3;
-          }
-          break;
-        case 3:
-          if ($to_top_player_id == $active_player_id) {
-            $to_tokens = 4;
-          }
-          break;
-        case 4:
-          if ($to_top_player_id == $active_player_id) {
-            $to_tokens = 5;
-          }
-          break;
+    // win?
+    if ($active_color == 'white') {
+      $sql = "SELECT COUNT(token_id) FROM tokens
+              WHERE step_id IN (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24)
+                AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
+      $white_tokens_in_black_steps_count = self::getUniqueValueFromDb($sql);
+      if ($white_tokens_in_black_steps_count == 8) {
+        $this->gamestate->nextState( 'end' );
+      }
+    } else {
+      $sql = "SELECT COUNT(token_id) FROM tokens
+              WHERE step_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+                AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
+      $black_tokens_in_white_steps_count = self::getUniqueValueFromDb($sql);
+      if ($black_tokens_in_white_steps_count == 8) {
+        $this->gamestate->nextState( 'end' );
       }
     }
 
-    $sql = "UPDATE steps SET tokens=$to_tokens, top_player_id=$to_top_player_id
-            WHERE step_id=$to_step";
-    self::DbQuery($sql);
+    // update for "from steps"
+    $from_step_record = self::getStepRecord($from_step);
+    switch ($from_step_record['step_id']) {
+      case '1': // white home
+        if ($from_step_record['white_tokens'] > 0) {
+          $white_tokens = $from_step_record['white_tokens'] - 1;
+          $black_tokens = $from_step_record['black_tokens'];
+          $bottom_token_id = 0;
+          if ($white_tokens == 0) {
+            $top_token_id = 0;
+          } else {
+            $top_token_id = $from_step_record['top_token_id'] + 1;
+          }
+        }
+        break;
+      case '24': // black home
+        if ($from_step_record['black_tokens'] > 0) {
+          $white_tokens = $from_step_record['white_tokens'];
+          $black_tokens = $from_step_record['black_tokens'] - 1;
+          $bottom_token_id = 0;
+          if ($black_tokens == 0) {
+            $top_token_id = 0;
+          } else {
+            $top_token_id = $from_step_record['top_token_id'] + 1;
+          }
+        }
+        break;
+      default:
+        $tokens_count = $from_step_record['white_tokens'] + $from_step_record['black_tokens'];
+        $sql = "SELECT COUNT(token_id) FROM tokens
+                WHERE step_id=$from_step AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
+        $white_tokens = self::getUniqueValueFromDb($sql);
+
+        $sql = "SELECT COUNT(token_id) FROM tokens
+                WHERE step_id=$from_step AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
+        $black_tokens = self::getUniqueValueFromDb($sql);
+
+        if (($active_color == 'white' && $to_step > $from_step) ||
+            ($active_color == 'black' && $from_step > $to_step))
+        {
+          $bottom_token_id = 0;
+          if ($tokens_count == 2) {
+            $top_token_id = $from_step_record['bottom_token_id'];
+          }
+
+          if ($tokens_count == 1) {
+            $top_token_id = 0;
+          }
+        }
+        break;
+    }
+    self::updateStepRecord($from_step, $white_tokens, $black_tokens, $top_token_id, $bottom_token_id);
+
+    // Record in "to steps"
+    $to_step_record = self::getStepRecord($to_step);
+    switch ($to_step_record['step_id']) {
+      case '1': // white home
+        if ($to_step_record['black_tokens'] < 3) {
+          $white_tokens = $to_step_record['white_tokens'];
+          $black_tokens = $to_step_record['black_tokens'] + 1;
+
+          // win?
+          if ($black_tokens == 3) {
+            $this->gamestate->nextState( 'end' );
+          }
+
+          $top_token_id = $token_id;
+          $bottom_token_id = 0;
+        }
+        break;
+      case '24': // black home
+        if ($to_step_record['white_tokens'] < 3) {
+          $white_tokens = $to_step_record['white_tokens'] + 1;
+          $black_tokens = $to_step_record['black_tokens'];
+
+          // win?
+          if ($white_tokens == 3) {
+            $this->gamestate->nextState( 'end' );
+          }
+
+          $top_token_id = $token_id;
+          $bottom_token_id = 0;
+        }
+        break;
+      default:
+        $tokens_count = $to_step_record['white_tokens'] + $to_step_record['black_tokens'];
+        $sql = "SELECT COUNT(token_id) FROM tokens
+                WHERE step_id=$to_step AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
+        $white_tokens = self::getUniqueValueFromDb($sql);
+
+        $sql = "SELECT COUNT(token_id) FROM tokens
+                WHERE step_id=$to_step AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
+        $black_tokens = self::getUniqueValueFromDb($sql);
+
+        if (($active_color == 'white' && $to_step > $from_step) ||
+            ($active_color == 'black' && $from_step > $to_step))
+        {
+          $top_token_id = $token_id;
+          if ($tokens_count == 0) {
+            $bottom_token_id = 0;
+          }
+
+          if ($tokens_count == 1) {
+            $bottom_token_id = $to_step_record['top_token_id'];
+          }
+        }
+        break;
+    }
+    self::updateStepRecord($to_step, $white_tokens, $black_tokens, $top_token_id, $bottom_token_id);
 
     self::updateDiceNotAvailable($dice_number);
 
-    $this->gamestate->nextState( 'selectTokenB' );
+    self::notifyPlayer(
+      $active_player_id,
+      "temporaryMove",
+      clienttranslate( '[TEMPORARY] ${player_name} TEMPORARY uses dice ${dice_number} to move ${token_id} from ${from_step_id} to ${to_step_id}.' ),
+      [
+        'i18n' => array( 'additional' ),
+        'player_name' => self::getActivePlayerName(),
+        'dice_number' => $dice_number,
+        'token_id' => $token_id,
+        'from_step_id' => $from_step,
+        'to_step_id' => $to_step
+      ]
+    );
+
+    $state = $this->gamestate->state();
+    switch ($state['name']) {
+      case 'selectTokenByDice1':
+        $this->gamestate->nextState( 'selectDice2' );
+        break;
+      case 'selectTokenByDice2':
+        $this->gamestate->nextState( 'roll' );
+        break;
+    }
   }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -611,6 +781,15 @@ class Battlegammon extends Table
 
     $result = array();
 
+    // List dice
+    $sql = "SELECT dice1, dice1_available, dice2, dice2_available
+            FROM dice_result";
+    $result['dice_result'] = self::getObjectFromDB($sql);
+
+    // List steps
+    $sql = "SELECT * FROM steps";
+    $result['steps'] = self::getObjectListFromDB($sql);
+
     // List all available steps
     $sql = "SELECT step_id FROM steps
             WHERE (white_tokens + black_tokens) < 2";
@@ -635,10 +814,15 @@ class Battlegammon extends Table
       $sql = "SELECT token_id, step_id FROM tokens
               WHERE available = 1 AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
     }
-    $result['availableTokens'] = self::getObjectListFromDB($sql);
+    $token_list = self::getObjectListFromDB($sql);
+    foreach ($token_list as $token) {
+      $result['availableTokens'][$token['step_id']] = $token['token_id'];
+    }
 
     return [
       'color'           => $active_color,
+      'dice_result'     => $result['dice_result'],
+      'steps'           => $result['steps'],
       'availableSteps'  => $result['availableSteps'],
       'availableTokens' => $result['availableTokens']
     ];

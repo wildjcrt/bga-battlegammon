@@ -159,12 +159,6 @@
   opacity: 0.2;
 }
 
-.lighton_dice {
-  border: 1px solid #DDDDDD;
-  border-radius: 50%;
-  background-color: #DDDDDD;
-}
-
 /* dices end */
 
 .step {
@@ -201,6 +195,13 @@
 
 .token.available {
   cursor: pointer;
+  animation: blink 5s linear infinite;
+}
+
+@keyframes blink {
+  25% { opacity: 0.5; }
+  50% { opacity: 0; }
+  75% { opacity: 0.5; }
 }
 
 .token-five {
