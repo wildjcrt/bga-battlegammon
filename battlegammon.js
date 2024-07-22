@@ -411,10 +411,7 @@ function (dojo, declare) {
       dojo.query('.step').removeClass('hint');
       dojo.removeClass('cancel-btn', 'disabled');
 
-      var activePlayerId = this.getActivePlayerId(),
-          activePlayer = this.gamedatas.players[activePlayerId];
-
-      // List availableDice
+      // Get all availableDice
       var dice_result = this.gamedatas.dice_result,
           availableDice = [];
       if (dice_result.dice1_available === '1') {
@@ -424,25 +421,23 @@ function (dojo, declare) {
         availableDice.push(parseInt(this.gamedatas.dice_result.dice2));
       }
 
+      // Add hint on available steps
+      var activePlayerId = this.getActivePlayerId(),
+          activeColor = this.gamedatas.players[activePlayerId].color,
+          toStep;
+
       this.tokenStep = parseInt(e.currentTarget.id.split('-')[1]);
       this.tokenId = this.gamedatas.availableTokens[this.tokenStep];
-      if (activePlayer.color === 'ffffff') {
-        for (var j = 0; j < availableDice.length; j++) {
-          this.dice_number = availableDice[j];
-          this.toStep = this.tokenStep + this.dice_number;
 
-          if (this.gamedatas.availableSteps.includes(`${this.toStep}`)) {
-            dojo.addClass(`step-${this.toStep}`, 'hint');
-          }
+      for (var j = 0; j < availableDice.length; j++) {
+        if (activeColor === 'ffffff') {
+          toStep = this.tokenStep + availableDice[j];
+        } else {
+          toStep = this.tokenStep - availableDice[j];
         }
-      } else {
-        for (var j = 0; j < availableDice.length; j++) {
-          this.dice_number = availableDice[j];
-          var toStep = this.tokenStep - this.dice_number;
 
-          if (this.gamedatas.availableSteps.includes(`${toStep}`)) {
-            dojo.addClass(`step-${toStep}`, 'hint');
-          }
+        if (this.gamedatas.availableSteps.includes(`${toStep}`)) {
+          dojo.addClass(`step-${toStep}`, 'hint');
         }
       }
     },
