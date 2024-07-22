@@ -130,81 +130,6 @@ function (dojo, declare) {
     {
       console.log( 'battlegammon.js >> Starting game setup' );
 
-      // Setting up steps
-      var steps = gamedatas.steps;
-      for (var i = 0; i < steps.length; i++)
-      {
-        var step = steps[i],
-            tokens = parseInt(step.white_tokens) + parseInt(step.black_tokens),
-            directionName, tokenNumber, tokenColorAndNumber;
-
-        if (tokens > 0) {
-          switch (step.step_id) {
-          case '1': // white home
-            directionName = this.directionMapping['white'][step.step_id];
-            tokenNumber = this.numberMapping[step.white_tokens];
-            tokenColorAndNumber = `white-${tokenNumber}`;
-            dojo.attr(
-              `token-${step.step_id}`,
-              'class',
-                this.format_block( 'js_token_class', {
-                  token_number: tokenNumber,
-                  token_color_and_number: tokenColorAndNumber,
-                  direction: directionName
-                }
-              )
-            );
-            break;
-          case '24': // black home
-            directionName = this.directionMapping['black'][step.step_id];
-            tokenNumber = this.numberMapping[step.black_tokens];
-            tokenColorAndNumber = `black-${tokenNumber}`;
-            dojo.attr(
-              `token-${step.step_id}`,
-              'class',
-                this.format_block( 'js_token_class', {
-                  token_number: tokenNumber,
-                  token_color_and_number: tokenColorAndNumber,
-                  direction: directionName
-                }
-              )
-            );
-            break;
-          default:
-            tokenNumber = this.numberMapping[tokens];
-            var topTokenColor = this.tokenColorMapping[step.top_token_id],
-                bottomTokenColor = this.tokenColorMapping[step.bottom_token_id];
-            directionName = this.directionMapping[topTokenColor][step.step_id];
-
-            switch (tokens) {
-            case 1:
-              tokenColorAndNumber = `${topTokenColor}-${tokenNumber}`;
-              break;
-            case 2:
-              if (step.white_tokens == '2' || step.black_tokens == '2') {
-                tokenColorAndNumber = `${topTokenColor}-${tokenNumber}`;
-              } else {
-                tokenColorAndNumber = `${topTokenColor}-${bottomTokenColor}`;
-              }
-              break;
-            }
-
-            dojo.attr(
-              `token-${step.step_id}`,
-              'class',
-                this.format_block( 'js_token_class', {
-                  token_number: tokenNumber,
-                  token_color_and_number: tokenColorAndNumber,
-                  direction: directionName
-                }
-              )
-            );
-          }
-        }
-
-        dojo.connect($(`step-${step.step_id}`), 'onclick', this, 'onSelectStep');
-      }
-
       // Setup game notifications to handle (see "setupNotifications" method below)
       this.setupNotifications();
 
@@ -240,6 +165,83 @@ function (dojo, declare) {
         case 'selectTokenByDice2':
           this.updatePageTitle();
 
+          // Setting up steps
+          this.gamedatas.steps = args.args.steps;
+          var steps = this.gamedatas.steps;
+          for (var i = 0; i < steps.length; i++)
+          {
+            var step = steps[i],
+                tokens = parseInt(step.white_tokens) + parseInt(step.black_tokens),
+                directionName, tokenNumber, tokenColorAndNumber;
+
+            if (tokens > 0) {
+              switch (step.step_id) {
+              case '1': // white home
+                directionName = this.directionMapping['white'][step.step_id];
+                tokenNumber = this.numberMapping[step.white_tokens];
+                tokenColorAndNumber = `white-${tokenNumber}`;
+                dojo.attr(
+                  `token-${step.step_id}`,
+                  'class',
+                    this.format_block( 'js_token_class', {
+                      token_number: tokenNumber,
+                      token_color_and_number: tokenColorAndNumber,
+                      direction: directionName
+                    }
+                  )
+                );
+                break;
+              case '24': // black home
+                directionName = this.directionMapping['black'][step.step_id];
+                tokenNumber = this.numberMapping[step.black_tokens];
+                tokenColorAndNumber = `black-${tokenNumber}`;
+                dojo.attr(
+                  `token-${step.step_id}`,
+                  'class',
+                    this.format_block( 'js_token_class', {
+                      token_number: tokenNumber,
+                      token_color_and_number: tokenColorAndNumber,
+                      direction: directionName
+                    }
+                  )
+                );
+                break;
+              default:
+                tokenNumber = this.numberMapping[tokens];
+                var topTokenColor = this.tokenColorMapping[step.top_token_id],
+                    bottomTokenColor = this.tokenColorMapping[step.bottom_token_id];
+                directionName = this.directionMapping[topTokenColor][step.step_id];
+
+                switch (tokens) {
+                case 1:
+                  tokenColorAndNumber = `${topTokenColor}-${tokenNumber}`;
+                  break;
+                case 2:
+                  if (step.white_tokens == '2' || step.black_tokens == '2') {
+                    tokenColorAndNumber = `${topTokenColor}-${tokenNumber}`;
+                  } else {
+                    tokenColorAndNumber = `${topTokenColor}-${bottomTokenColor}`;
+                  }
+                  break;
+                }
+
+                dojo.attr(
+                  `token-${step.step_id}`,
+                  'class',
+                    this.format_block( 'js_token_class', {
+                      token_number: tokenNumber,
+                      token_color_and_number: tokenColorAndNumber,
+                      direction: directionName
+                    }
+                  )
+                );
+              }
+            }
+
+            dojo.connect($(`step-${step.step_id}`), 'onclick', this, 'onSelectStep');
+          }
+
+          // Setting up dice
           this.gamedatas.dice_result = args.args.dice_result;
           this.updateDice(args.args.dice_result);
 
