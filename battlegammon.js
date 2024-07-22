@@ -309,10 +309,14 @@ function (dojo, declare) {
           // this.addActionButton( 'button_3_id', _('Button 3 label'), 'onMyMethodToCall3' );
           // break;
           case 'selectTokenByDice1':
+            this.addActionButton( 'undo-btn', _('Undo'), 'onUndo' );
+            dojo.addClass('undo-btn', 'disabled');
             this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
             dojo.addClass('cancel-btn', 'disabled');
             break;
           case 'selectTokenByDice2':
+            this.addActionButton( 'undo-btn', _('Undo'), 'onUndo' );
+            dojo.addClass('undo-btn', 'disabled');
             this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
             dojo.addClass('cancel-btn', 'disabled');
             break;
@@ -607,6 +611,11 @@ function (dojo, declare) {
           function( result ) {},
           function( is_error) {}
       );
+    },
+
+    onUndo: function (e)
+    {
+
     },
 
     onCancel: function (e)
