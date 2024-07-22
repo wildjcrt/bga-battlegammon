@@ -215,11 +215,6 @@ class Battlegammon extends Table
     $sql = "SELECT player_id id, player_score score FROM player";
     $result['players'] = self::getCollectionFromDb( $sql );
 
-    // Get information about the dice roll
-    $sql = "SELECT dice1, dice1_available, dice2, dice2_available
-            FROM dice_result";
-    $result['dice_result'] = self::getObjectFromDB($sql);
-
     // Get information about steps and tokens
     $sql = "SELECT * FROM steps";
     $result['steps'] = self::getObjectListFromDB($sql);
