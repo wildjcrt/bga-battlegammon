@@ -28,7 +28,6 @@ function (dojo, declare) {
       // Here, you can init the global variables of your user interface
       // Example:
       // this.myGlobalValue = 0;
-      this.colorMapping = {'ffffff': 'white', '333333': 'black'};
       this.tokenColorMapping = {
           1:  'white',
           2:  'white',
