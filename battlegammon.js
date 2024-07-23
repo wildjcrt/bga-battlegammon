@@ -416,7 +416,7 @@ function (dojo, declare) {
     onSelectToken: function(e)
     {
       dojo.stopEvent(e);
-      dojo.query('.step').removeClass('hint');
+      dojo.query('.step.hint').removeClass('hint');
       dojo.removeClass('cancel-btn', 'disabled');
 
       // Get all availableDice
