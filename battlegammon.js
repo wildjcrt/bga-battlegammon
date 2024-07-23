@@ -111,6 +111,10 @@ function (dojo, declare) {
           24: 'right'
         }
       };
+      this.onClickHandlers = {
+        'tokens': [],
+        'steps': []
+      };
     },
 
     /*
@@ -164,12 +168,6 @@ function (dojo, declare) {
         case 'selectTokenByDice1':
         case 'selectTokenByDice2':
           this.updatePageTitle();
-
-          // Reset all token onclick event and available class
-          dojo.query('.token').forEach(e => {
-            this.disconnect(e, 'onclick');
-            dojo.removeClass(e, 'available');
-          });
 
           // Setting up steps
           this.gamedatas.steps = args.args.steps;
@@ -244,7 +242,9 @@ function (dojo, declare) {
               }
             }
 
-            dojo.connect($(`step-${step.step_id}`), 'onclick', this, 'onSelectStep');
+            this.onClickHandlers['steps'].push(
+              dojo.connect($(`step-${step.step_id}`), 'onclick', this, 'onSelectStep')
+            );
           }
 
           // Setting up dice
@@ -256,7 +256,9 @@ function (dojo, declare) {
             for (let step_id in args.args.availableTokens)
             {
               dojo.addClass(`token-${step_id}`, 'available');
-              dojo.connect($(`token-${step_id}`), 'onclick', this, 'onSelectToken');
+              this.onClickHandlers['tokens'].push(
+                dojo.connect($(`token-${step_id}`), 'onclick', this, 'onSelectToken')
+              );
             }
           }
         break;
@@ -414,7 +416,7 @@ function (dojo, declare) {
     onSelectToken: function(e)
     {
       dojo.stopEvent(e);
-      dojo.query('.step').removeClass('hint');
+      dojo.query('.step.hint').removeClass('hint');
       dojo.removeClass('cancel-btn', 'disabled');
 
       // Get all availableDice
@@ -454,7 +456,23 @@ function (dojo, declare) {
       this.gamedatas.gamestate.descriptionmyturn = 'Sending your move to server';
       this.updatePageTitle();
 
-      dojo.query('.step').removeClass('hint');
+      // Remove all tokens dom available class
+      dojo.query('.token').forEach(e => {
+        dojo.removeClass(e, 'available');
+      });
+
+      // Disconnect all tokens dom onclick event
+      dojo.forEach(this.onClickHandlers['tokens'], dojo.disconnect);
+      this.onClickHandlers['tokens'] = [];
+
+      // Remove all steps dom onclick event
+      dojo.query('.step').forEach(e => {
+        dojo.removeClass(e, 'hint');
+      });
+
+      // Disconnect all steps dom onclick event
+      dojo.forEach(this.onClickHandlers['steps'], dojo.disconnect);
+      this.onClickHandlers['steps'] = [];
 
       var toStepId = e.currentTarget.id.split('-')[1],
           fromStepId = `${this.tokenStep}`,
@@ -472,17 +490,27 @@ function (dojo, declare) {
         if (whiteTokens > 0) {
           whiteTokens -= 1;
         }
-        tokenNumber = this.numberMapping[whiteTokens];
-        tokenColorAndNumber = `white-${tokenNumber}`;
-        directionName = this.directionMapping['white'][fromStepId];
+
+        if (whiteTokens !== 0) {
+          tokenNumber = this.numberMapping[whiteTokens];
+          tokenColorAndNumber = `white-${tokenNumber}`;
+          directionName = this.directionMapping['white'][fromStepId];
+        } else {
+          tokenNumber = tokenColorAndNumber = directionName = null;
+        }
         break;
       case '24': // black home
         if (blackTokens > 0) {
           blackTokens -= 1;
         }
-        tokenNumber = this.numberMapping[blackTokens];
-        tokenColorAndNumber = `black-${tokenNumber}`;
-        directionName = this.directionMapping['black'][fromStepId];
+
+        if (blackTokens !== 0) {
+          tokenNumber = this.numberMapping[blackTokens];
+          tokenColorAndNumber = `black-${tokenNumber}`;
+          directionName = this.directionMapping['black'][fromStepId];
+        } else {
+          tokenNumber = tokenColorAndNumber = directionName = null;
+        }
         break;
       default:
         tokensCount = whiteTokens + blackTokens;
@@ -529,11 +557,7 @@ function (dojo, declare) {
           )
         );
       } else {
-        dojo.attr(
-          `token-${fromStepId}`,
-          'class',
-          ''
-        );
+        dojo.removeClass(`token-${fromStepId}`);
       }
 
       // update to step
