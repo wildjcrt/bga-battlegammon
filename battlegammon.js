@@ -420,20 +420,28 @@ function (dojo, declare) {
       );
     },
 
+    getAvailableDice: function()
+    {
+      var dice_result = this.dice_result,
+          availableDice = [];
+
+      if (dice_result.dice1_available === '1') {
+        availableDice.push(parseInt(dice_result.dice1));
+      }
+      if (dice_result.dice2_available === '1') {
+        availableDice.push(parseInt(dice_result.dice2));
+      }
+
+      return availableDice;
+    },
+
     onSelectToken: function(e)
     {
       dojo.stopEvent(e);
       dojo.query('.step.hint').removeClass('hint');
       dojo.removeClass('cancel-btn', 'disabled');
 
-      // Get all availableDice
-      var availableDice = [];
-      if (this.dice_result.dice1_available === '1') {
-        availableDice.push(parseInt(this.dice_result.dice1));
-      }
-      if (this.dice_result.dice2_available === '1') {
-        availableDice.push(parseInt(this.dice_result.dice2));
-      }
+      var availableDice = getAvailableDice();
 
       // Add hint on available steps
       var activePlayerId = this.getActivePlayerId(),
