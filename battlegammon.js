@@ -115,10 +115,10 @@ function (dojo, declare) {
         'tokens': [],
         'steps': []
       };
-      this.steps = [];
       this.dice_result = {};
-      this.availableTokens = {};
+      this.steps = [];
       this.availableSteps = [];
+      this.availableTokens = {};
     },
 
     /*
@@ -174,10 +174,12 @@ function (dojo, declare) {
           this.updatePageTitle();
 
           // update global vars
-          this.availableSteps = args.args.availableSteps;
+          this.dice_result     = args.args.dice_result;
+          this.steps           = args.args.steps;
+          this.availableSteps  = args.args.availableSteps;
+          this.availableTokens = args.args.availableTokens;
 
           // Setting up steps
-          this.steps = args.args.steps;
           for (var i = 0; i < this.steps.length; i++)
           {
             var step = this.steps[i],
@@ -254,11 +256,10 @@ function (dojo, declare) {
           }
 
           // Setting up dice
-          this.dice_result = args.args.dice_result;
           this.updateDice();
 
+          // Setting up available tokens onclick event
           if( this.isCurrentPlayerActive() ) {
-            this.availableTokens = args.args.availableTokens;
             for (let step_id in this.availableTokens)
             {
               dojo.addClass(`token-${step_id}`, 'available');
