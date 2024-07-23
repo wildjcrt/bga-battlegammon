@@ -381,9 +381,17 @@ class Battlegammon extends Table
             WHERE " . $color . "_tokens > 0";
     $available_steps = self::getCollectionFromDB($sql);
     $token_ids = array_column($available_steps, 'top_token_id');
-    $sql = "UPDATE tokens
-            SET available = 1
-            WHERE token_id IN (" . implode(',', $token_ids) . ")";
+    if ($color == 'white') {
+      $white_token_ids = array_intersect($token_ids, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      $sql = "UPDATE tokens
+              SET available = 1
+              WHERE token_id IN (" . implode(',', $white_token_ids) . ")";
+    } else {
+      $black_token_ids = array_intersect($token_ids, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
+      $sql = "UPDATE tokens
+              SET available = 1
+              WHERE token_id IN (" . implode(',', $black_token_ids) . ")";
+    }
     self::DbQuery($sql);
   }
 
