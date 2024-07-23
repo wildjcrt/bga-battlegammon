@@ -118,6 +118,7 @@ function (dojo, declare) {
       this.steps = [];
       this.dice_result = {};
       this.availableTokens = {};
+      this.availableSteps = [];
     },
 
     /*
@@ -171,6 +172,9 @@ function (dojo, declare) {
         case 'selectTokenByDice1':
         case 'selectTokenByDice2':
           this.updatePageTitle();
+
+          // update global vars
+          this.availableSteps = args.args.availableSteps;
 
           // Setting up steps
           this.steps = args.args.steps;
@@ -445,7 +449,7 @@ function (dojo, declare) {
           toStep = this.tokenStep - availableDice[j];
         }
 
-        if (this.gamedatas.availableSteps.includes(`${toStep}`)) {
+        if (this.availableSteps.includes(`${toStep}`)) {
           dojo.addClass(`step-${toStep}`, 'hint');
         }
       }
