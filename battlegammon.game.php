@@ -785,6 +785,7 @@ class Battlegammon extends Table
     }
 
     return [
+      'color'           => (($active_color_code == 'ffffff') ? 'white' : 'black'),
       'dice_result'     => $result['dice_result'],
       'steps'           => $result['steps'],
       'availableSteps'  => $result['availableSteps'],
