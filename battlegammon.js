@@ -117,6 +117,7 @@ function (dojo, declare) {
       };
       this.steps = [];
       this.dice_result = {};
+      this.availableTokens = {};
     },
 
     /*
@@ -253,8 +254,8 @@ function (dojo, declare) {
           this.updateDice();
 
           if( this.isCurrentPlayerActive() ) {
-            this.gamedatas.availableTokens = args.args.availableTokens;
-            for (let step_id in args.args.availableTokens)
+            this.availableTokens = args.args.availableTokens;
+            for (let step_id in this.availableTokens)
             {
               dojo.addClass(`token-${step_id}`, 'available');
               this.onClickHandlers['tokens'].push(
@@ -435,7 +436,7 @@ function (dojo, declare) {
           toStep;
 
       this.tokenStep = parseInt(e.currentTarget.id.split('-')[1]);
-      this.tokenId = this.gamedatas.availableTokens[this.tokenStep];
+      this.tokenId = this.availableTokens[this.tokenStep];
 
       for (var j = 0; j < availableDice.length; j++) {
         if (activeColor === 'ffffff') {
