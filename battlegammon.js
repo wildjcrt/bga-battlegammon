@@ -115,6 +115,10 @@ function (dojo, declare) {
         'tokens': [],
         'steps': []
       };
+      this.dice_result = {};
+      this.steps = [];
+      this.availableSteps = [];
+      this.availableTokens = {};
     },
 
     /*
@@ -169,12 +173,16 @@ function (dojo, declare) {
         case 'selectTokenByDice2':
           this.updatePageTitle();
 
+          // update global vars
+          this.dice_result     = args.args.dice_result;
+          this.steps           = args.args.steps;
+          this.availableSteps  = args.args.availableSteps;
+          this.availableTokens = args.args.availableTokens;
+
           // Setting up steps
-          this.gamedatas.steps = args.args.steps;
-          var steps = this.gamedatas.steps;
-          for (var i = 0; i < steps.length; i++)
+          for (var i = 0; i < this.steps.length; i++)
           {
-            var step = steps[i],
+            var step = this.steps[i],
                 tokens = parseInt(step.white_tokens) + parseInt(step.black_tokens),
                 directionName, tokenNumber, tokenColorAndNumber;
 
@@ -248,12 +256,11 @@ function (dojo, declare) {
           }
 
           // Setting up dice
-          this.gamedatas.dice_result = args.args.dice_result;
-          this.updateDice(args.args.dice_result);
+          this.updateDice();
 
+          // Setting up available tokens onclick event
           if( this.isCurrentPlayerActive() ) {
-            this.gamedatas.availableTokens = args.args.availableTokens;
-            for (let step_id in args.args.availableTokens)
+            for (let step_id in this.availableTokens)
             {
               dojo.addClass(`token-${step_id}`, 'available');
               this.onClickHandlers['tokens'].push(
@@ -388,7 +395,7 @@ function (dojo, declare) {
 
     */
 
-    updateDice: function (dice_result)
+    updateDice: function ()
     {
       // place dice 1 and dice 2
       dojo.attr(
@@ -396,8 +403,8 @@ function (dojo, declare) {
         'class',
           this.format_block( 'js_dice_class', {
             dice_id: 1,
-            dice_number: dice_result.dice1,
-            dice_available: dice_result.dice1_available
+            dice_number: this.dice_result.dice1,
+            dice_available: this.dice_result.dice1_available
           }
         )
       );
@@ -406,8 +413,8 @@ function (dojo, declare) {
         'class',
           this.format_block( 'js_dice_class', {
             dice_id: 2,
-            dice_number: dice_result.dice2,
-            dice_available: dice_result.dice2_available
+            dice_number: this.dice_result.dice2,
+            dice_available: this.dice_result.dice2_available
           }
         )
       );
@@ -420,13 +427,12 @@ function (dojo, declare) {
       dojo.removeClass('cancel-btn', 'disabled');
 
       // Get all availableDice
-      var dice_result = this.gamedatas.dice_result,
-          availableDice = [];
-      if (dice_result.dice1_available === '1') {
-        availableDice.push(parseInt(this.gamedatas.dice_result.dice1));
+      var availableDice = [];
+      if (this.dice_result.dice1_available === '1') {
+        availableDice.push(parseInt(this.dice_result.dice1));
       }
-      if (dice_result.dice2_available === '1') {
-        availableDice.push(parseInt(this.gamedatas.dice_result.dice2));
+      if (this.dice_result.dice2_available === '1') {
+        availableDice.push(parseInt(this.dice_result.dice2));
       }
 
       // Add hint on available steps
@@ -435,7 +441,7 @@ function (dojo, declare) {
           toStep;
 
       this.tokenStep = parseInt(e.currentTarget.id.split('-')[1]);
-      this.tokenId = this.gamedatas.availableTokens[this.tokenStep];
+      this.tokenId = this.availableTokens[this.tokenStep];
 
       for (var j = 0; j < availableDice.length; j++) {
         if (activeColor === 'ffffff') {
@@ -444,7 +450,7 @@ function (dojo, declare) {
           toStep = this.tokenStep - availableDice[j];
         }
 
-        if (this.gamedatas.availableSteps.includes(`${toStep}`)) {
+        if (this.availableSteps.includes(`${toStep}`)) {
           dojo.addClass(`step-${toStep}`, 'hint');
         }
       }
@@ -477,8 +483,8 @@ function (dojo, declare) {
       var toStepId = e.currentTarget.id.split('-')[1],
           fromStepId = `${this.tokenStep}`,
           dice_number = Math.abs(this.tokenStep - toStepId),
-          fromStepRecord = this.gamedatas.steps.filter(function(el) {return el.step_id == fromStepId})[0],
-          toStepRecord = this.gamedatas.steps.filter(function(el) {return el.step_id == toStepId})[0];
+          fromStepRecord = this.steps.filter(function(el) {return el.step_id == fromStepId})[0],
+          toStepRecord = this.steps.filter(function(el) {return el.step_id == toStepId})[0];
 
       // update from step
       var whiteTokens = parseInt(fromStepRecord.white_tokens),

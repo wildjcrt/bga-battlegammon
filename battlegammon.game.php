@@ -204,44 +204,11 @@ class Battlegammon extends Table
   protected function getAllDatas()
   {
     $result = array();
-    $active_player_id = $this->getActivePlayerId();
-    $sql = "SELECT player_color FROM player
-            WHERE player_id=$active_player_id";
-    $active_color_code = self::getUniqueValueFromDB($sql);
 
     // Get information about players
     // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
     $sql = "SELECT player_id id, player_score score FROM player";
     $result['players'] = self::getCollectionFromDb( $sql );
-
-    // List all available steps
-    $sql = "SELECT step_id FROM steps
-            WHERE (white_tokens + black_tokens) < 2";
-    $steps_list = self::getObjectListFromDB($sql);
-    $result['availableSteps'] = array();
-    foreach ($steps_list as $item) {
-      $result['availableSteps'][] = $item['step_id'];
-    }
-    if (!in_array('1', $result['availableSteps'])) {
-        $result['availableSteps'][] = '1';
-    }
-    if (!in_array('24', $result['availableSteps'])) {
-        $result['availableSteps'][] = '24';
-    }
-    sort($result['availableSteps'], SORT_NUMERIC);
-
-    // List all available tokens
-    if ($active_color_code == 'ffffff') {
-      $sql = "SELECT token_id, step_id FROM tokens
-              WHERE available = 1 AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
-    } else {
-      $sql = "SELECT token_id, step_id FROM tokens
-              WHERE available = 1 AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
-    }
-    $token_list = self::getObjectListFromDB($sql);
-    foreach ($token_list as $token) {
-      $result['availableTokens'][$token['step_id']] = $token['token_id'];
-    }
 
     return $result;
   }
@@ -818,6 +785,7 @@ class Battlegammon extends Table
     }
 
     return [
+      'color'           => (($active_color_code == 'ffffff') ? 'white' : 'black'),
       'dice_result'     => $result['dice_result'],
       'steps'           => $result['steps'],
       'availableSteps'  => $result['availableSteps'],
