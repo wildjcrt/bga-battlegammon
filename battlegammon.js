@@ -116,6 +116,7 @@ function (dojo, declare) {
         'steps': []
       };
       this.steps = [];
+      this.dice_result = {};
     },
 
     /*
@@ -248,8 +249,8 @@ function (dojo, declare) {
           }
 
           // Setting up dice
-          this.gamedatas.dice_result = args.args.dice_result;
-          this.updateDice(args.args.dice_result);
+          this.dice_result = args.args.dice_result;
+          this.updateDice();
 
           if( this.isCurrentPlayerActive() ) {
             this.gamedatas.availableTokens = args.args.availableTokens;
@@ -388,7 +389,7 @@ function (dojo, declare) {
 
     */
 
-    updateDice: function (dice_result)
+    updateDice: function ()
     {
       // place dice 1 and dice 2
       dojo.attr(
@@ -396,8 +397,8 @@ function (dojo, declare) {
         'class',
           this.format_block( 'js_dice_class', {
             dice_id: 1,
-            dice_number: dice_result.dice1,
-            dice_available: dice_result.dice1_available
+            dice_number: this.dice_result.dice1,
+            dice_available: this.dice_result.dice1_available
           }
         )
       );
@@ -406,8 +407,8 @@ function (dojo, declare) {
         'class',
           this.format_block( 'js_dice_class', {
             dice_id: 2,
-            dice_number: dice_result.dice2,
-            dice_available: dice_result.dice2_available
+            dice_number: this.dice_result.dice2,
+            dice_available: this.dice_result.dice2_available
           }
         )
       );
@@ -420,13 +421,12 @@ function (dojo, declare) {
       dojo.removeClass('cancel-btn', 'disabled');
 
       // Get all availableDice
-      var dice_result = this.gamedatas.dice_result,
-          availableDice = [];
-      if (dice_result.dice1_available === '1') {
-        availableDice.push(parseInt(this.gamedatas.dice_result.dice1));
+      var availableDice = [];
+      if (this.dice_result.dice1_available === '1') {
+        availableDice.push(parseInt(this.dice_result.dice1));
       }
-      if (dice_result.dice2_available === '1') {
-        availableDice.push(parseInt(this.gamedatas.dice_result.dice2));
+      if (this.dice_result.dice2_available === '1') {
+        availableDice.push(parseInt(this.dice_result.dice2));
       }
 
       // Add hint on available steps
