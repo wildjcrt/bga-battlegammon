@@ -602,6 +602,18 @@ function (dojo, declare) {
         tokenNumber = this.numberMapping[blackTokens];
         tokenColorAndNumber = `black-${tokenNumber}`;
         directionName = this.directionMapping['black'][toStepId];
+
+        // set token on to step
+        dojo.attr(
+          `token-home-white`,
+          'class',
+            this.format_block( 'js_token_class', {
+              token_number: tokenNumber,
+              token_color_and_number: tokenColorAndNumber,
+              direction: directionName
+            }
+          )
+        );
         break;
       case '24': // black home
         if (whiteTokens < 3) {
@@ -610,6 +622,18 @@ function (dojo, declare) {
         tokenNumber = this.numberMapping[whiteTokens];
         tokenColorAndNumber = `white-${tokenNumber}`;
         directionName = this.directionMapping['white'][toStepId];
+
+        // set token on to step
+        dojo.attr(
+          `token-home-black`,
+          'class',
+            this.format_block( 'js_token_class', {
+              token_number: tokenNumber,
+              token_color_and_number: tokenColorAndNumber,
+              direction: directionName
+            }
+          )
+        );
         break;
       default:
         tokensCount = whiteTokens + blackTokens;
@@ -643,19 +667,19 @@ function (dojo, declare) {
             }
           }
         }
-      }
 
-      // set token on to step
-      dojo.attr(
-        `token-${toStepId}`,
-        'class',
-          this.format_block( 'js_token_class', {
-            token_number: tokenNumber,
-            token_color_and_number: tokenColorAndNumber,
-            direction: directionName
-          }
-        )
-      );
+        // set token on to step
+        dojo.attr(
+          `token-${toStepId}`,
+          'class',
+            this.format_block( 'js_token_class', {
+              token_number: tokenNumber,
+              token_color_and_number: tokenColorAndNumber,
+              direction: directionName
+            }
+          )
+        );
+      }
 
       this.ajaxcall(
           "/battlegammon/battlegammon/sendMoveToServer.html",
