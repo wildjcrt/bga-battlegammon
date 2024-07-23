@@ -529,11 +529,7 @@ function (dojo, declare) {
           )
         );
       } else {
-        dojo.attr(
-          `token-${fromStepId}`,
-          'class',
-          ''
-        );
+        dojo.removeClass(`token-${fromStepId}`);
       }
 
       // update to step
