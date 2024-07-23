@@ -115,6 +115,7 @@ function (dojo, declare) {
         'tokens': [],
         'steps': []
       };
+      this.steps = [];
     },
 
     /*
@@ -170,11 +171,10 @@ function (dojo, declare) {
           this.updatePageTitle();
 
           // Setting up steps
-          this.gamedatas.steps = args.args.steps;
-          var steps = this.gamedatas.steps;
-          for (var i = 0; i < steps.length; i++)
+          this.steps = args.args.steps;
+          for (var i = 0; i < this.steps.length; i++)
           {
-            var step = steps[i],
+            var step = this.steps[i],
                 tokens = parseInt(step.white_tokens) + parseInt(step.black_tokens),
                 directionName, tokenNumber, tokenColorAndNumber;
 
@@ -477,8 +477,8 @@ function (dojo, declare) {
       var toStepId = e.currentTarget.id.split('-')[1],
           fromStepId = `${this.tokenStep}`,
           dice_number = Math.abs(this.tokenStep - toStepId),
-          fromStepRecord = this.gamedatas.steps.filter(function(el) {return el.step_id == fromStepId})[0],
-          toStepRecord = this.gamedatas.steps.filter(function(el) {return el.step_id == toStepId})[0];
+          fromStepRecord = this.steps.filter(function(el) {return el.step_id == fromStepId})[0],
+          toStepRecord = this.steps.filter(function(el) {return el.step_id == toStepId})[0];
 
       // update from step
       var whiteTokens = parseInt(fromStepRecord.white_tokens),
