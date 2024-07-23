@@ -260,9 +260,26 @@ function (dojo, declare) {
 
           // Setting up available tokens onclick event
           if( this.isCurrentPlayerActive() ) {
+            var activePlayerId = this.getActivePlayerId(),
+                activeColor = this.gamedatas.players[activePlayerId].color,
+                availableDice = this.getAvailableDice(),
+                toStep;
+
             for (let step_id in this.availableTokens)
             {
-              dojo.addClass(`token-${step_id}`, 'available');
+              step_id = parseInt(step_id);
+              for (var i = 0; i < availableDice.length; i++) {
+                if (activeColor === 'ffffff') {
+                  toStep = step_id + availableDice[i];
+                } else {
+                  toStep = step_id - availableDice[i];
+                }
+
+                if (this.availableSteps.includes(`${toStep}`)) {
+                  dojo.addClass(`token-${step_id}`, 'available');
+                }
+              }
+
               this.onClickHandlers['tokens'].push(
                 dojo.connect($(`token-${step_id}`), 'onclick', this, 'onSelectToken')
               );
@@ -420,20 +437,28 @@ function (dojo, declare) {
       );
     },
 
+    getAvailableDice: function()
+    {
+      var dice_result = this.dice_result,
+          availableDice = [];
+
+      if (dice_result.dice1_available === '1') {
+        availableDice.push(parseInt(dice_result.dice1));
+      }
+      if (dice_result.dice2_available === '1') {
+        availableDice.push(parseInt(dice_result.dice2));
+      }
+
+      return availableDice;
+    },
+
     onSelectToken: function(e)
     {
       dojo.stopEvent(e);
       dojo.query('.step.hint').removeClass('hint');
       dojo.removeClass('cancel-btn', 'disabled');
 
-      // Get all availableDice
-      var availableDice = [];
-      if (this.dice_result.dice1_available === '1') {
-        availableDice.push(parseInt(this.dice_result.dice1));
-      }
-      if (this.dice_result.dice2_available === '1') {
-        availableDice.push(parseInt(this.dice_result.dice2));
-      }
+      var availableDice = this.getAvailableDice();
 
       // Add hint on available steps
       var activePlayerId = this.getActivePlayerId(),

@@ -311,20 +311,7 @@ class Battlegammon extends Table
       ]
     );
 
-    // reset all tokens available
-    $sql = "UPDATE tokens
-            SET available = 0";
-    self::DbQuery($sql);
-
-    // set available tokens
-    $sql = "SELECT top_token_id FROM steps
-            WHERE " . $active_color . "_tokens > 0";
-    $available_steps = self::getCollectionFromDB($sql);
-    $token_ids = array_column($available_steps, 'top_token_id');
-    $sql = "UPDATE tokens
-            SET available = 1
-            WHERE token_id IN (" . implode(',', $token_ids) . ")";
-    self::DbQuery($sql);
+    self::updateAvailableTokens($active_color);
 
     // TODO: check available steps and may go to pass
     $this->gamestate->nextState('selectDice1');
@@ -374,6 +361,36 @@ class Battlegammon extends Table
       $sql = "UPDATE dice_result SET dice1_available=0";
     } else {
       $sql = "UPDATE dice_result SET dice2_available=0";
+    }
+    self::DbQuery($sql);
+  }
+
+  /**
+   * Update available tokens by color
+   * @param $color
+   */
+  function updateAvailableTokens($color)
+  {
+    // reset all tokens to available = 0
+    $sql = "UPDATE tokens
+            SET available = 0";
+    self::DbQuery($sql);
+
+    // set available tokens
+    $sql = "SELECT top_token_id FROM steps
+            WHERE " . $color . "_tokens > 0";
+    $available_steps = self::getCollectionFromDB($sql);
+    $token_ids = array_column($available_steps, 'top_token_id');
+    if ($color == 'white') {
+      $white_token_ids = array_intersect($token_ids, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      $sql = "UPDATE tokens
+              SET available = 1
+              WHERE token_id IN (" . implode(',', $white_token_ids) . ")";
+    } else {
+      $black_token_ids = array_intersect($token_ids, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
+      $sql = "UPDATE tokens
+              SET available = 1
+              WHERE token_id IN (" . implode(',', $black_token_ids) . ")";
     }
     self::DbQuery($sql);
   }
@@ -702,6 +719,7 @@ class Battlegammon extends Table
     $state = $this->gamestate->state();
     switch ($state['name']) {
       case 'selectTokenByDice1':
+        self::updateAvailableTokens($active_color);
         $this->gamestate->nextState( 'selectDice2' );
         break;
       case 'selectTokenByDice2':
