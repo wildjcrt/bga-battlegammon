@@ -597,7 +597,7 @@ class Battlegammon extends Table
         if ($from_step_record['white_tokens'] > 0) {
           $white_tokens = $from_step_record['white_tokens'] - 1;
           $black_tokens = $from_step_record['black_tokens'];
-          $bottom_token_id = 0;
+          $bottom_token_id = $from_step_record['bottom_token_id'];
           if ($white_tokens == 0) {
             $top_token_id = 0;
           } else {
@@ -609,7 +609,7 @@ class Battlegammon extends Table
         if ($from_step_record['black_tokens'] > 0) {
           $white_tokens = $from_step_record['white_tokens'];
           $black_tokens = $from_step_record['black_tokens'] - 1;
-          $bottom_token_id = 0;
+          $bottom_token_id = $from_step_record['bottom_token_id'];
           if ($black_tokens == 0) {
             $top_token_id = 0;
           } else {
@@ -656,8 +656,8 @@ class Battlegammon extends Table
             $this->gamestate->nextState( 'end' );
           }
 
-          $top_token_id = $token_id;
-          $bottom_token_id = 0;
+          $top_token_id = $to_step_record['top_token_id'];
+          $bottom_token_id = $token_id;
         }
         break;
       case '24': // black home
@@ -670,8 +670,8 @@ class Battlegammon extends Table
             $this->gamestate->nextState( 'end' );
           }
 
-          $top_token_id = $token_id;
-          $bottom_token_id = 0;
+          $top_token_id = $to_step_record['top_token_id'];
+          $bottom_token_id = $token_id;
         }
         break;
       default:
