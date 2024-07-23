@@ -208,7 +208,6 @@ class Battlegammon extends Table
     $sql = "SELECT player_color FROM player
             WHERE player_id=$active_player_id";
     $active_color_code = self::getUniqueValueFromDB($sql);
-    $active_color = ($active_color_code == 'ffffff') ? 'white' : 'black';
 
     // Get information about players
     // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
@@ -232,7 +231,7 @@ class Battlegammon extends Table
     sort($result['availableSteps'], SORT_NUMERIC);
 
     // List all available tokens
-    if ($active_color == 'white') {
+    if ($active_color_code == 'ffffff') {
       $sql = "SELECT token_id, step_id FROM tokens
               WHERE available = 1 AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
     } else {
@@ -777,7 +776,6 @@ class Battlegammon extends Table
     $sql = "SELECT player_color FROM player
             WHERE player_id=$active_player_id";
     $active_color_code = self::getUniqueValueFromDB($sql);
-    $active_color = ($active_color_code == 'ffffff') ? 'white' : 'black';
 
     $result = array();
 
@@ -807,7 +805,7 @@ class Battlegammon extends Table
     sort($result['availableSteps'], SORT_NUMERIC);
 
     // List all available tokens
-    if ($active_color == 'white') {
+    if ($active_color_code == 'ffffff') {
       $sql = "SELECT token_id, step_id FROM tokens
               WHERE available = 1 AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
     } else {
@@ -820,7 +818,6 @@ class Battlegammon extends Table
     }
 
     return [
-      'color'           => $active_color,
       'dice_result'     => $result['dice_result'],
       'steps'           => $result['steps'],
       'availableSteps'  => $result['availableSteps'],
