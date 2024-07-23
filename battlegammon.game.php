@@ -311,20 +311,7 @@ class Battlegammon extends Table
       ]
     );
 
-    // reset all tokens available
-    $sql = "UPDATE tokens
-            SET available = 0";
-    self::DbQuery($sql);
-
-    // set available tokens
-    $sql = "SELECT top_token_id FROM steps
-            WHERE " . $active_color . "_tokens > 0";
-    $available_steps = self::getCollectionFromDB($sql);
-    $token_ids = array_column($available_steps, 'top_token_id');
-    $sql = "UPDATE tokens
-            SET available = 1
-            WHERE token_id IN (" . implode(',', $token_ids) . ")";
-    self::DbQuery($sql);
+    self::updateAvailableTokens($active_color);
 
     // TODO: check available steps and may go to pass
     $this->gamestate->nextState('selectDice1');
@@ -375,6 +362,28 @@ class Battlegammon extends Table
     } else {
       $sql = "UPDATE dice_result SET dice2_available=0";
     }
+    self::DbQuery($sql);
+  }
+
+  /**
+   * Update available tokens by color
+   * @param $color
+   */
+  function updateAvailableTokens($color)
+  {
+    // reset all tokens to available = 0
+    $sql = "UPDATE tokens
+            SET available = 0";
+    self::DbQuery($sql);
+
+    // set available tokens
+    $sql = "SELECT top_token_id FROM steps
+            WHERE " . $color . "_tokens > 0";
+    $available_steps = self::getCollectionFromDB($sql);
+    $token_ids = array_column($available_steps, 'top_token_id');
+    $sql = "UPDATE tokens
+            SET available = 1
+            WHERE token_id IN (" . implode(',', $token_ids) . ")";
     self::DbQuery($sql);
   }
 
