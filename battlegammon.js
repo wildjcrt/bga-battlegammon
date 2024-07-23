@@ -189,34 +189,70 @@ function (dojo, declare) {
             if (tokens > 0) {
               switch (step.step_id) {
               case '1': // white home
-                directionName = this.directionMapping['white'][step.step_id];
-                tokenNumber = this.numberMapping[step.white_tokens];
-                tokenColorAndNumber = `white-${tokenNumber}`;
-                dojo.attr(
-                  `token-${step.step_id}`,
-                  'class',
-                    this.format_block( 'js_token_class', {
-                      token_number: tokenNumber,
-                      token_color_and_number: tokenColorAndNumber,
-                      direction: directionName
-                    }
-                  )
-                );
+                if (parseInt(step.white_tokens) > 0) {
+                  directionName = this.directionMapping['white'][step.step_id];
+                  tokenNumber = this.numberMapping[step.white_tokens];
+                  tokenColorAndNumber = `white-${tokenNumber}`;
+                  dojo.attr(
+                    `token-${step.step_id}`,
+                    'class',
+                      this.format_block( 'js_token_class', {
+                        token_number: tokenNumber,
+                        token_color_and_number: tokenColorAndNumber,
+                        direction: directionName
+                      }
+                    )
+                  );
+                }
+
+                if (parseInt(step.black_tokens) > 0) {
+                  directionName = this.directionMapping['black'][step.step_id];
+                  tokenNumber = this.numberMapping[step.black_tokens];
+                  tokenColorAndNumber = `black-${tokenNumber}`;
+                  dojo.attr(
+                    `token-home-white`,
+                    'class',
+                      this.format_block( 'js_token_class', {
+                        token_number: tokenNumber,
+                        token_color_and_number: tokenColorAndNumber,
+                        direction: directionName
+                      }
+                    )
+                  );
+                }
                 break;
               case '24': // black home
-                directionName = this.directionMapping['black'][step.step_id];
-                tokenNumber = this.numberMapping[step.black_tokens];
-                tokenColorAndNumber = `black-${tokenNumber}`;
-                dojo.attr(
-                  `token-${step.step_id}`,
-                  'class',
-                    this.format_block( 'js_token_class', {
-                      token_number: tokenNumber,
-                      token_color_and_number: tokenColorAndNumber,
-                      direction: directionName
-                    }
-                  )
-                );
+                if (parseInt(step.black_tokens) > 0) {
+                  directionName = this.directionMapping['black'][step.step_id];
+                  tokenNumber = this.numberMapping[step.black_tokens];
+                  tokenColorAndNumber = `black-${tokenNumber}`;
+                  dojo.attr(
+                    `token-${step.step_id}`,
+                    'class',
+                      this.format_block( 'js_token_class', {
+                        token_number: tokenNumber,
+                        token_color_and_number: tokenColorAndNumber,
+                        direction: directionName
+                      }
+                    )
+                  );
+                }
+
+                if (parseInt(step.white_tokens) > 0) {
+                  directionName = this.directionMapping['white'][step.step_id];
+                  tokenNumber = this.numberMapping[step.white_tokens];
+                  tokenColorAndNumber = `white-${tokenNumber}`;
+                  dojo.attr(
+                    `token-home-black`,
+                    'class',
+                      this.format_block( 'js_token_class', {
+                        token_number: tokenNumber,
+                        token_color_and_number: tokenColorAndNumber,
+                        direction: directionName
+                      }
+                    )
+                  );
+                }
                 break;
               default:
                 tokenNumber = this.numberMapping[tokens];
