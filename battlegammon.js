@@ -490,17 +490,27 @@ function (dojo, declare) {
         if (whiteTokens > 0) {
           whiteTokens -= 1;
         }
-        tokenNumber = this.numberMapping[whiteTokens];
-        tokenColorAndNumber = `white-${tokenNumber}`;
-        directionName = this.directionMapping['white'][fromStepId];
+
+        if (whiteTokens !== 0) {
+          tokenNumber = this.numberMapping[whiteTokens];
+          tokenColorAndNumber = `white-${tokenNumber}`;
+          directionName = this.directionMapping['white'][fromStepId];
+        } else {
+          tokenNumber = tokenColorAndNumber = directionName = null;
+        }
         break;
       case '24': // black home
         if (blackTokens > 0) {
           blackTokens -= 1;
         }
-        tokenNumber = this.numberMapping[blackTokens];
-        tokenColorAndNumber = `black-${tokenNumber}`;
-        directionName = this.directionMapping['black'][fromStepId];
+
+        if (blackTokens !== 0) {
+          tokenNumber = this.numberMapping[blackTokens];
+          tokenColorAndNumber = `black-${tokenNumber}`;
+          directionName = this.directionMapping['black'][fromStepId];
+        } else {
+          tokenNumber = tokenColorAndNumber = directionName = null;
+        }
         break;
       default:
         tokensCount = whiteTokens + blackTokens;
