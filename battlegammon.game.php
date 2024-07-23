@@ -711,6 +711,7 @@ class Battlegammon extends Table
     $state = $this->gamestate->state();
     switch ($state['name']) {
       case 'selectTokenByDice1':
+        self::updateAvailableTokens($active_color);
         $this->gamestate->nextState( 'selectDice2' );
         break;
       case 'selectTokenByDice2':
