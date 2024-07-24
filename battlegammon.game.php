@@ -275,6 +275,20 @@ class Battlegammon extends Table
           ]
         );
       }
+
+      $sql = "SELECT player_score FROM player
+              WHERE player_id = $prev_player_id";
+      $prev_player_score = self::getUniqueValueFromDB($sql);
+      self::notifyAllPlayers(
+        "score",
+        clienttranslate( '${player_name} score is ${player_score}.' ),
+        [
+          'i18n' => array( 'additional' ),
+          'player_id' => $prev_player_id,
+          'player_name' => $prev_player_name,
+          'player_score' => $prev_player_score
+        ]
+      );
     }
 
     // set active player and update turns_number
