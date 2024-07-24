@@ -397,6 +397,59 @@ class Battlegammon extends Table
   }
 
   /**
+   * Update score by color
+   * @param $color, ffffff or 333333
+   */
+  function updatePlayerScore($color_code)
+  {
+    if ($color_code == 'ffffff') {
+      $sql = "SELECT COUNT(token_id) FROM tokens
+              WHERE step_id = 24
+                AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
+      $tokens_count = self::getUniqueValueFromDb($sql);
+
+      if ($tokens_count >= 3) {
+        $score = 10;
+      } else {
+        $sql = "SELECT COUNT(token_id) FROM tokens
+                WHERE step_id IN (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24)
+                  AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
+        $score = self::getUniqueValueFromDb($sql);
+      }
+    } else {
+      $sql = "SELECT COUNT(token_id) FROM tokens
+              WHERE step_id = 1
+                AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
+      $tokens_count = self::getUniqueValueFromDb($sql);
+
+      if ($tokens_count >= 3) {
+        $score = 10;
+      } else {
+        $sql = "SELECT COUNT(token_id) FROM tokens
+                WHERE step_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+                  AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
+        $score = self::getUniqueValueFromDb($sql);
+      }
+    }
+
+    $sql = "UPDATE player
+            SET player_score = $score
+            WHERE player_color = '$color_code'";
+    self::DbQuery($sql);
+  }
+
+  /**
+   * Check winer. The player_score should be 8 or 10.
+   * @param $player_id
+   */
+  function checkWiner($player_id)
+  {
+    $sql = "SELECT player_score FROM player
+            WHERE player_id = $player_id";
+    return (self::getUniqueValueFromDB($sql) >= 8);
+  }
+
+  /**
    * Insert steps table
    * @param $step_id, 1-24.
    * @param $white_tokens, white tokens count.
