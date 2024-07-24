@@ -781,7 +781,7 @@ function (dojo, declare) {
     },
 
     noti_score: function(noti) {
-      this.scoreCtrl[noti.args.player_id].toValue(noti.args.player_score);
+      this.scoreCtrl[noti.args.player_id].toValue(noti.args.score);
     },
 
     // TODO: from this point and below, you can write your game notifications handling methods

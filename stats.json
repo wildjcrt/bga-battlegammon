@@ -42,8 +42,13 @@
       "name": "Roll 6",
       "type": "int"
     },
-    "number_of_pass": {
+    "number_of_score_tokens": {
       "id": 17,
+      "name": "Number of tokens score in opponent steps",
+      "type": "int"
+    },
+    "number_of_pass": {
+      "id": 18,
       "name": "Number of times you had to pass",
       "type": "int"
     }

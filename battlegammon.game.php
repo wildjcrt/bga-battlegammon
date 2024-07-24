@@ -187,6 +187,7 @@ class Battlegammon extends Table
     self::initStat("player", "dice4", 0);
     self::initStat("player", "dice5", 0);
     self::initStat("player", "dice6", 0);
+    self::initStat("player", "number_of_score_tokens", 0);
     self::initStat("player", "number_of_pass", 0);
 
     /************ End of the game initialization *****/
@@ -276,19 +277,24 @@ class Battlegammon extends Table
         );
       }
 
+      $prev_player_score = self::getStat('number_of_score_tokens', $prev_player_id);
       $sql = "SELECT player_score FROM player
               WHERE player_id = $prev_player_id";
-      $prev_player_score = self::getUniqueValueFromDB($sql);
-      self::notifyAllPlayers(
-        "score",
-        clienttranslate( '${player_name} score is ${player_score}.' ),
-        [
-          'i18n' => array( 'additional' ),
-          'player_id' => $prev_player_id,
-          'player_name' => $prev_player_name,
-          'player_score' => $prev_player_score
-        ]
-      );
+      $prev_player_current_score = self::getUniqueValueFromDB($sql);
+      if ($prev_player_current_score > $prev_player_score) {
+        self::setStat($prev_player_current_score, 'number_of_score_tokens', $prev_player_id);
+        self::notifyAllPlayers(
+          "score",
+          clienttranslate( '${player_name} score advances from ${prev_score} to ${score}.' ),
+          [
+            'i18n' => array( 'additional' ),
+            'player_id'   => $prev_player_id,
+            'player_name' => $prev_player_name,
+            'prev_score'  => $prev_player_score,
+            'score'       => $prev_player_current_score
+          ]
+        );
+      }
     }
 
     // set active player and update turns_number
