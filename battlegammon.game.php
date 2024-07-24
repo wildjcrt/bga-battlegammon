@@ -225,9 +225,16 @@ class Battlegammon extends Table
   */
   function getGameProgression()
   {
-    // TODO: compute and return the game progression
 
-    return 0;
+    $sql = "SELECT player_score FROM player
+            ORDER BY player_score DESC LIMIT 1";
+    $score = self::getUniqueValueFromDB($sql);
+
+    if ($score == 0) {
+      return 0;
+    } else {
+      return round(($score / 8) * 100);
+    }
   }
 
 
