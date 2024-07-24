@@ -87,7 +87,7 @@ $machinestates = array(
     "transitions" => [
       "selectDice2" => 22,
       "pass" => 10,
-      "end" => 99
+      "end" => 23
     ]
   ),
 
@@ -103,7 +103,18 @@ $machinestates = array(
     ],
     "transitions" => [
       "roll" => 10,
-      "end" => 99
+      "end" => 23
+    ]
+  ),
+
+  23 => array(
+    "name" => "beforeGameEnd",
+    "description" => clienttranslate('Ending game.'),
+    "type" => "game",
+    "action" => "stBeforeGameEnd",
+    "updateGameProgression" => true,
+    "transitions" => [
+      "" => 99
     ]
   ),
   /*
@@ -133,10 +144,10 @@ $machinestates = array(
   // Please do not modify (and do not overload action/args methods).
   99 => array(
     "name" => "gameEnd",
-    "description" => "End of game",
+    "description" => clienttranslate("End of game"),
     "type" => "manager",
-    "args" => "argGameEnd",
-    "action" => "stGameEnd"
+    "action" => "stGameEnd",
+    "args" => "argGameEnd"
   )
 
 );
