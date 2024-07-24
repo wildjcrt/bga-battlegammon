@@ -211,6 +211,9 @@ class Battlegammon extends Table
     $sql = "SELECT player_id id, player_score score FROM player";
     $result['players'] = self::getCollectionFromDb( $sql );
 
+    $sql = "SELECT * FROM steps";
+    $result['steps'] = self::getObjectListFromDB($sql);
+
     return $result;
   }
 
