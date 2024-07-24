@@ -340,11 +340,10 @@ class Battlegammon extends Table
 
     self::updateAvailableTokens($active_color);
 
-    // TODO: check available steps and may go to pass
     $this->gamestate->nextState('selectDice1');
   }
 
-  function stGameEnd()
+  function stBeforeGameEnd()
   {
     $prev_turn_number = self::getStat("turns_number");
     if ($prev_turn_number != 0) {
@@ -371,7 +370,28 @@ class Battlegammon extends Table
           ]
         );
       }
+
+      $prev_player_score = self::getStat('number_of_score_tokens', $prev_player_id);
+      $sql = "SELECT player_score FROM player
+              WHERE player_id = $prev_player_id";
+      $prev_player_current_score = self::getUniqueValueFromDB($sql);
+      if ($prev_player_current_score > $prev_player_score) {
+        self::setStat($prev_player_current_score, 'number_of_score_tokens', $prev_player_id);
+        self::notifyAllPlayers(
+          "score",
+          clienttranslate( '${player_name} score advances from ${prev_score} to ${score}.' ),
+          [
+            'i18n' => array( 'additional' ),
+            'player_id'   => $prev_player_id,
+            'player_name' => $prev_player_name,
+            'prev_score'  => $prev_player_score,
+            'score'       => $prev_player_current_score
+          ]
+        );
+      }
     }
+
+    $this->gamestate->nextState();
   }
 
   /**
