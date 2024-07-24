@@ -368,8 +368,9 @@ class Battlegammon extends Table
   /**
    * Update available tokens by color
    * @param $color
+   * @param $moved_token, token is moved in this turn.
    */
-  function updateAvailableTokens($color)
+  function updateAvailableTokens($color, $moved_token_id = 0)
   {
     // reset all tokens to available = 0
     $sql = "UPDATE tokens
@@ -382,7 +383,7 @@ class Battlegammon extends Table
     $available_steps = self::getCollectionFromDB($sql);
     $token_ids = array_column($available_steps, 'top_token_id');
     if ($color == 'white') {
-      $white_token_ids = array_intersect($token_ids, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      $white_token_ids = array_intersect($token_ids, array_diff([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], [$moved_token_id]));
       $sql = "UPDATE tokens
               SET available = 1
               WHERE token_id IN (" . implode(',', $white_token_ids) . ")";
@@ -597,7 +598,7 @@ class Battlegammon extends Table
         if ($from_step_record['white_tokens'] > 0) {
           $white_tokens = $from_step_record['white_tokens'] - 1;
           $black_tokens = $from_step_record['black_tokens'];
-          $bottom_token_id = 0;
+          $bottom_token_id = $from_step_record['bottom_token_id'];
           if ($white_tokens == 0) {
             $top_token_id = 0;
           } else {
@@ -609,7 +610,7 @@ class Battlegammon extends Table
         if ($from_step_record['black_tokens'] > 0) {
           $white_tokens = $from_step_record['white_tokens'];
           $black_tokens = $from_step_record['black_tokens'] - 1;
-          $bottom_token_id = 0;
+          $bottom_token_id = $from_step_record['bottom_token_id'];
           if ($black_tokens == 0) {
             $top_token_id = 0;
           } else {
@@ -656,8 +657,8 @@ class Battlegammon extends Table
             $this->gamestate->nextState( 'end' );
           }
 
-          $top_token_id = $token_id;
-          $bottom_token_id = 0;
+          $top_token_id = $to_step_record['top_token_id'];
+          $bottom_token_id = $token_id;
         }
         break;
       case '24': // black home
@@ -670,8 +671,8 @@ class Battlegammon extends Table
             $this->gamestate->nextState( 'end' );
           }
 
-          $top_token_id = $token_id;
-          $bottom_token_id = 0;
+          $top_token_id = $to_step_record['top_token_id'];
+          $bottom_token_id = $token_id;
         }
         break;
       default:
@@ -719,7 +720,7 @@ class Battlegammon extends Table
     $state = $this->gamestate->state();
     switch ($state['name']) {
       case 'selectTokenByDice1':
-        self::updateAvailableTokens($active_color);
+        self::updateAvailableTokens($active_color, $token_id);
         $this->gamestate->nextState( 'selectDice2' );
         break;
       case 'selectTokenByDice2':

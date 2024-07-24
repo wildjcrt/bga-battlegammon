@@ -189,34 +189,70 @@ function (dojo, declare) {
             if (tokens > 0) {
               switch (step.step_id) {
               case '1': // white home
-                directionName = this.directionMapping['white'][step.step_id];
-                tokenNumber = this.numberMapping[step.white_tokens];
-                tokenColorAndNumber = `white-${tokenNumber}`;
-                dojo.attr(
-                  `token-${step.step_id}`,
-                  'class',
-                    this.format_block( 'js_token_class', {
-                      token_number: tokenNumber,
-                      token_color_and_number: tokenColorAndNumber,
-                      direction: directionName
-                    }
-                  )
-                );
+                if (parseInt(step.white_tokens) > 0) {
+                  directionName = this.directionMapping['white'][step.step_id];
+                  tokenNumber = this.numberMapping[step.white_tokens];
+                  tokenColorAndNumber = `white-${tokenNumber}`;
+                  dojo.attr(
+                    `token-${step.step_id}`,
+                    'class',
+                      this.format_block( 'js_token_class', {
+                        token_number: tokenNumber,
+                        token_color_and_number: tokenColorAndNumber,
+                        direction: directionName
+                      }
+                    )
+                  );
+                }
+
+                if (parseInt(step.black_tokens) > 0) {
+                  directionName = this.directionMapping['black'][step.step_id];
+                  tokenNumber = this.numberMapping[step.black_tokens];
+                  tokenColorAndNumber = `black-${tokenNumber}`;
+                  dojo.attr(
+                    `token-home-white`,
+                    'class',
+                      this.format_block( 'js_token_class', {
+                        token_number: tokenNumber,
+                        token_color_and_number: tokenColorAndNumber,
+                        direction: directionName
+                      }
+                    )
+                  );
+                }
                 break;
               case '24': // black home
-                directionName = this.directionMapping['black'][step.step_id];
-                tokenNumber = this.numberMapping[step.black_tokens];
-                tokenColorAndNumber = `black-${tokenNumber}`;
-                dojo.attr(
-                  `token-${step.step_id}`,
-                  'class',
-                    this.format_block( 'js_token_class', {
-                      token_number: tokenNumber,
-                      token_color_and_number: tokenColorAndNumber,
-                      direction: directionName
-                    }
-                  )
-                );
+                if (parseInt(step.black_tokens) > 0) {
+                  directionName = this.directionMapping['black'][step.step_id];
+                  tokenNumber = this.numberMapping[step.black_tokens];
+                  tokenColorAndNumber = `black-${tokenNumber}`;
+                  dojo.attr(
+                    `token-${step.step_id}`,
+                    'class',
+                      this.format_block( 'js_token_class', {
+                        token_number: tokenNumber,
+                        token_color_and_number: tokenColorAndNumber,
+                        direction: directionName
+                      }
+                    )
+                  );
+                }
+
+                if (parseInt(step.white_tokens) > 0) {
+                  directionName = this.directionMapping['white'][step.step_id];
+                  tokenNumber = this.numberMapping[step.white_tokens];
+                  tokenColorAndNumber = `white-${tokenNumber}`;
+                  dojo.attr(
+                    `token-home-black`,
+                    'class',
+                      this.format_block( 'js_token_class', {
+                        token_number: tokenNumber,
+                        token_color_and_number: tokenColorAndNumber,
+                        direction: directionName
+                      }
+                    )
+                  );
+                }
                 break;
               default:
                 tokenNumber = this.numberMapping[tokens];
@@ -248,6 +284,14 @@ function (dojo, declare) {
                   )
                 );
               }
+            } else {
+              if (step.step_id === '1') {
+                dojo.removeClass('token-home-white');
+              }
+              if (step.step_id === '24') {
+                dojo.removeClass('token-home-black');
+              }
+              dojo.removeClass(`token-${step.step_id}`);
             }
 
             this.onClickHandlers['steps'].push(
@@ -285,7 +329,7 @@ function (dojo, declare) {
               );
             }
           }
-        break;
+          break;
       }
     },
 
@@ -602,6 +646,18 @@ function (dojo, declare) {
         tokenNumber = this.numberMapping[blackTokens];
         tokenColorAndNumber = `black-${tokenNumber}`;
         directionName = this.directionMapping['black'][toStepId];
+
+        // set token on to step
+        dojo.attr(
+          `token-home-white`,
+          'class',
+            this.format_block( 'js_token_class', {
+              token_number: tokenNumber,
+              token_color_and_number: tokenColorAndNumber,
+              direction: directionName
+            }
+          )
+        );
         break;
       case '24': // black home
         if (whiteTokens < 3) {
@@ -610,6 +666,18 @@ function (dojo, declare) {
         tokenNumber = this.numberMapping[whiteTokens];
         tokenColorAndNumber = `white-${tokenNumber}`;
         directionName = this.directionMapping['white'][toStepId];
+
+        // set token on to step
+        dojo.attr(
+          `token-home-black`,
+          'class',
+            this.format_block( 'js_token_class', {
+              token_number: tokenNumber,
+              token_color_and_number: tokenColorAndNumber,
+              direction: directionName
+            }
+          )
+        );
         break;
       default:
         tokensCount = whiteTokens + blackTokens;
@@ -643,19 +711,19 @@ function (dojo, declare) {
             }
           }
         }
-      }
 
-      // set token on to step
-      dojo.attr(
-        `token-${toStepId}`,
-        'class',
-          this.format_block( 'js_token_class', {
-            token_number: tokenNumber,
-            token_color_and_number: tokenColorAndNumber,
-            direction: directionName
-          }
-        )
-      );
+        // set token on to step
+        dojo.attr(
+          `token-${toStepId}`,
+          'class',
+            this.format_block( 'js_token_class', {
+              token_number: tokenNumber,
+              token_color_and_number: tokenColorAndNumber,
+              direction: directionName
+            }
+          )
+        );
+      }
 
       this.ajaxcall(
           "/battlegammon/battlegammon/sendMoveToServer.html",
