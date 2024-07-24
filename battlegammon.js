@@ -284,6 +284,14 @@ function (dojo, declare) {
                   )
                 );
               }
+            } else {
+              if (step.step_id === '1') {
+                dojo.removeClass('token-home-white');
+              }
+              if (step.step_id === '24') {
+                dojo.removeClass('token-home-black');
+              }
+              dojo.removeClass(`token-${step.step_id}`);
             }
 
             this.onClickHandlers['steps'].push(
@@ -321,7 +329,7 @@ function (dojo, declare) {
               );
             }
           }
-        break;
+          break;
       }
     },
 
