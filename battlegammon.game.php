@@ -187,6 +187,7 @@ class Battlegammon extends Table
     self::initStat("player", "dice4", 0);
     self::initStat("player", "dice5", 0);
     self::initStat("player", "dice6", 0);
+    self::initStat("player", "number_of_score_tokens", 0);
     self::initStat("player", "number_of_pass", 0);
 
     /************ End of the game initialization *****/
@@ -225,9 +226,16 @@ class Battlegammon extends Table
   */
   function getGameProgression()
   {
-    // TODO: compute and return the game progression
 
-    return 0;
+    $sql = "SELECT player_score FROM player
+            ORDER BY player_score DESC LIMIT 1";
+    $score = self::getUniqueValueFromDB($sql);
+
+    if ($score == 0) {
+      return 0;
+    } else {
+      return round(($score / 8) * 100);
+    }
   }
 
 
@@ -265,6 +273,25 @@ class Battlegammon extends Table
             'token_id' => $history['token_id'],
             'from_step_id' => $history['from_step_id'],
             'to_step_id' => $history['to_step_id']
+          ]
+        );
+      }
+
+      $prev_player_score = self::getStat('number_of_score_tokens', $prev_player_id);
+      $sql = "SELECT player_score FROM player
+              WHERE player_id = $prev_player_id";
+      $prev_player_current_score = self::getUniqueValueFromDB($sql);
+      if ($prev_player_current_score > $prev_player_score) {
+        self::setStat($prev_player_current_score, 'number_of_score_tokens', $prev_player_id);
+        self::notifyAllPlayers(
+          "score",
+          clienttranslate( '${player_name} score advances from ${prev_score} to ${score}.' ),
+          [
+            'i18n' => array( 'additional' ),
+            'player_id'   => $prev_player_id,
+            'player_name' => $prev_player_name,
+            'prev_score'  => $prev_player_score,
+            'score'       => $prev_player_current_score
           ]
         );
       }
@@ -394,6 +421,59 @@ class Battlegammon extends Table
               WHERE token_id IN (" . implode(',', $black_token_ids) . ")";
     }
     self::DbQuery($sql);
+  }
+
+  /**
+   * Update score by color
+   * @param $color, ffffff or 333333
+   */
+  function updatePlayerScore($color_code)
+  {
+    if ($color_code == 'ffffff') {
+      $sql = "SELECT COUNT(token_id) FROM tokens
+              WHERE step_id = 24
+                AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
+      $tokens_count = self::getUniqueValueFromDb($sql);
+
+      if ($tokens_count >= 3) {
+        $score = 10;
+      } else {
+        $sql = "SELECT COUNT(token_id) FROM tokens
+                WHERE step_id IN (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24)
+                  AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
+        $score = self::getUniqueValueFromDb($sql);
+      }
+    } else {
+      $sql = "SELECT COUNT(token_id) FROM tokens
+              WHERE step_id = 1
+                AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
+      $tokens_count = self::getUniqueValueFromDb($sql);
+
+      if ($tokens_count >= 3) {
+        $score = 10;
+      } else {
+        $sql = "SELECT COUNT(token_id) FROM tokens
+                WHERE step_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+                  AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
+        $score = self::getUniqueValueFromDb($sql);
+      }
+    }
+
+    $sql = "UPDATE player
+            SET player_score = $score
+            WHERE player_color = '$color_code'";
+    self::DbQuery($sql);
+  }
+
+  /**
+   * Check winer. The player_score should be 8 or 10.
+   * @param $player_id
+   */
+  function checkWiner($player_id)
+  {
+    $sql = "SELECT player_score FROM player
+            WHERE player_id = $player_id";
+    return (self::getUniqueValueFromDB($sql) >= 8);
   }
 
   /**
@@ -572,25 +652,6 @@ class Battlegammon extends Table
     // update token record
     self::updateTokenRecord($token_id, $to_step, 0);
 
-    // win?
-    if ($active_color == 'white') {
-      $sql = "SELECT COUNT(token_id) FROM tokens
-              WHERE step_id IN (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24)
-                AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
-      $white_tokens_in_black_steps_count = self::getUniqueValueFromDb($sql);
-      if ($white_tokens_in_black_steps_count == 8) {
-        $this->gamestate->nextState( 'end' );
-      }
-    } else {
-      $sql = "SELECT COUNT(token_id) FROM tokens
-              WHERE step_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
-                AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
-      $black_tokens_in_white_steps_count = self::getUniqueValueFromDb($sql);
-      if ($black_tokens_in_white_steps_count == 8) {
-        $this->gamestate->nextState( 'end' );
-      }
-    }
-
     // update for "from steps"
     $from_step_record = self::getStepRecord($from_step);
     switch ($from_step_record['step_id']) {
@@ -652,11 +713,6 @@ class Battlegammon extends Table
           $white_tokens = $to_step_record['white_tokens'];
           $black_tokens = $to_step_record['black_tokens'] + 1;
 
-          // win?
-          if ($black_tokens == 3) {
-            $this->gamestate->nextState( 'end' );
-          }
-
           $top_token_id = $to_step_record['top_token_id'];
           $bottom_token_id = $token_id;
         }
@@ -665,11 +721,6 @@ class Battlegammon extends Table
         if ($to_step_record['white_tokens'] < 3) {
           $white_tokens = $to_step_record['white_tokens'] + 1;
           $black_tokens = $to_step_record['black_tokens'];
-
-          // win?
-          if ($white_tokens == 3) {
-            $this->gamestate->nextState( 'end' );
-          }
 
           $top_token_id = $to_step_record['top_token_id'];
           $bottom_token_id = $token_id;
@@ -716,6 +767,12 @@ class Battlegammon extends Table
         'to_step_id' => $to_step
       ]
     );
+
+    // win?
+    self::updatePlayerScore($active_color_code);
+    if (self::checkWiner($active_player_id)) {
+      $this->gamestate->nextState( 'end' );
+    }
 
     $state = $this->gamestate->state();
     switch ($state['name']) {

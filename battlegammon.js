@@ -777,6 +777,11 @@ function (dojo, declare) {
       // dojo.subscribe( 'cardPlayed', this, "notif_cardPlayed" );
       // this.notifqueue.setSynchronous( 'cardPlayed', 3000 );
       //
+      dojo.subscribe('score', this, 'noti_score');
+    },
+
+    noti_score: function(noti) {
+      this.scoreCtrl[noti.args.player_id].toValue(noti.args.score);
     },
 
     // TODO: from this point and below, you can write your game notifications handling methods
