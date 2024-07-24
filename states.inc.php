@@ -133,10 +133,10 @@ $machinestates = array(
   // Please do not modify (and do not overload action/args methods).
   99 => array(
     "name" => "gameEnd",
-    "description" => "End of game",
+    "description" => clienttranslate("End of game"),
     "type" => "manager",
-    "args" => "argGameEnd",
-    "action" => "stGameEnd"
+    "action" => "stGameEnd",
+    "args" => "argGameEnd"
   )
 
 );
