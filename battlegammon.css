@@ -199,9 +199,9 @@
 }
 
 @keyframes blink {
-  25% { opacity: 0.5; }
-  50% { opacity: 0; }
-  75% { opacity: 0.5; }
+  25% { opacity: 0.8; }
+  50% { opacity: 0.3; }
+  75% { opacity: 0.8; }
 }
 
 .token-five {
