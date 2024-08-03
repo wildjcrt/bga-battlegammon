@@ -426,6 +426,7 @@ function (dojo, declare) {
             var activePlayerId = this.getActivePlayerId(),
                 activeColor = this.gamedatas.players[activePlayerId].color,
                 availableDice = this.getAvailableDice(),
+                legalSteps = [],
                 toStep;
 
             for (let step_id in this.availableTokens)
@@ -439,6 +440,7 @@ function (dojo, declare) {
                 }
 
                 if (this.availableSteps.includes(`${toStep}`)) {
+                  legalSteps.push(toStep);
                   dojo.addClass(`token-${step_id}`, 'available');
                 }
               }
@@ -446,6 +448,10 @@ function (dojo, declare) {
               this.onClickHandlers['tokens'].push(
                 dojo.connect($(`token-${step_id}`), 'onclick', this, 'onSelectToken')
               );
+            }
+
+            if (legalSteps.length === 0) {
+              dojo.removeClass('pass-btn', 'disabled');
             }
           }
           break;
@@ -501,12 +507,16 @@ function (dojo, declare) {
           // this.addActionButton( 'button_3_id', _('Button 3 label'), 'onMyMethodToCall3' );
           // break;
           case 'selectTokenByDice1':
+            this.addActionButton( 'pass-btn', _('Pass'), 'onPass', null, false);
+            dojo.addClass('pass-btn', 'disabled');
             this.addActionButton( 'undo-btn', _('Undo'), 'onUndo' );
             dojo.addClass('undo-btn', 'disabled');
             this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
             dojo.addClass('cancel-btn', 'disabled');
             break;
           case 'selectTokenByDice2':
+            this.addActionButton( 'pass-btn', _('Pass'), 'onPass', null, false);
+            dojo.addClass('pass-btn', 'disabled');
             this.addActionButton( 'undo-btn', _('Undo'), 'onUndo' );
             dojo.addClass('undo-btn', 'disabled');
             this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
@@ -867,6 +877,10 @@ function (dojo, declare) {
     {
       dojo.query('.step').removeClass('hint');
       dojo.addClass('cancel-btn', 'disabled');
+    },
+
+    onPass: function (e)
+    {
     },
 
     ///////////////////////////////////////////////////
