@@ -69,8 +69,7 @@ $machinestates = array(
     "action" => "stRollDice",
     "updateGameProgression" => true,
     "transitions" => [
-      "selectDice1" => 21,
-      "pass" => 10
+      "" => 21
     ]
   ),
 
@@ -103,6 +102,7 @@ $machinestates = array(
     ],
     "transitions" => [
       "roll" => 10,
+      "pass" => 10,
       "end" => 23
     ]
   ),

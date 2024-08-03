@@ -50,6 +50,12 @@ class action_battlegammon extends APP_GameAction
       self::ajaxResponse( );
   }
 
+  public function sendPassToServer()
+  {
+      self::setAjaxMode();
+      $this->game->savePassFromClient();
+      self::ajaxResponse( );
+  }
 
   /*
 

@@ -343,7 +343,7 @@ class Battlegammon extends Table
 
     self::updateAvailableTokens($active_color);
 
-    $this->gamestate->nextState('selectDice1');
+    $this->gamestate->nextState();
   }
 
   function stBeforeGameEnd()
@@ -807,6 +807,18 @@ class Battlegammon extends Table
         $this->gamestate->nextState( 'roll' );
         break;
     }
+  }
+
+  /**
+   * save pass from client
+   * increase stat and go to next state
+   */
+  public function savePassFromClient()
+  {
+    $active_player_id = self::getActivePlayerId();
+    self::incStat(1, "number_of_pass", $active_player_id);
+
+    $this->gamestate->nextState( 'pass' );
   }
 
 //////////////////////////////////////////////////////////////////////////////

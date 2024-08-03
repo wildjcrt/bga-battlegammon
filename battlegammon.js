@@ -881,6 +881,13 @@ function (dojo, declare) {
 
     onPass: function (e)
     {
+      this.ajaxcall(
+        "/battlegammon/battlegammon/sendPassToServer.html",
+        {},
+        this,
+        function( result ) {},
+        function( is_error) {}
+      );
     },
 
     ///////////////////////////////////////////////////
