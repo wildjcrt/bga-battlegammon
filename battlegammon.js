@@ -855,16 +855,16 @@ function (dojo, declare) {
       }
 
       this.ajaxcall(
-          "/battlegammon/battlegammon/sendMoveToServer.html",
-          {
-              token_id:    this.tokenId,
-              from_step:   fromStepId,
-              to_step:     toStepId,
-              dice_number: dice_number
-          },
-          this,
-          function( result ) {},
-          function( is_error) {}
+        "/battlegammon/battlegammon/sendMoveToServer.html",
+        {
+          token_id:    this.tokenId,
+          from_step:   fromStepId,
+          to_step:     toStepId,
+          dice_number: dice_number
+        },
+        this,
+        function( result ) {},
+        function( is_error) {}
       );
     },
 
