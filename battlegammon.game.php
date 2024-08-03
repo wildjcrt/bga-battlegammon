@@ -821,6 +821,21 @@ class Battlegammon extends Table
     $this->gamestate->nextState( 'pass' );
   }
 
+  /**
+   * confirm all moves and change player
+   */
+  public function saveConfirmFromClient()
+  {
+
+  }
+
+  /**
+   * undo last move
+   */
+  public function actUndo()
+  {
+
+  }
 //////////////////////////////////////////////////////////////////////////////
 //////////// Game state arguments
 ////////////
