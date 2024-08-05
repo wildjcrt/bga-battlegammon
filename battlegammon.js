@@ -275,43 +275,43 @@ function (dojo, declare) {
       console.log( 'battlegammon.js >> Entering state: '+stateName );
       // console.log(args)
 
-      switch( stateName )
-      {
+      this.updatePageTitle();
 
-        /* Example:
+      // update global vars
+      this.dice_result     = args.args.dice_result;
+      this.steps           = args.args.steps;
+      this.availableSteps  = args.args.availableSteps;
+      this.availableTokens = args.args.availableTokens;
 
-        case 'myGameState':
+      // Setting up steps
+      this.updateSteps();
 
-        // Show some HTML block at this game state
-        dojo.style( 'my_html_block_id', 'display', 'block' );
+      // Setting up dice
+      this.updateDice();
 
-        break;
-         */
+      if( this.isCurrentPlayerActive() ) {
+        switch( stateName )
+        {
 
-        case 'selectTokenByDice1':
-        case 'selectTokenByDice2':
-          this.updatePageTitle();
+          /* Example:
 
-          // update global vars
-          this.dice_result     = args.args.dice_result;
-          this.steps           = args.args.steps;
-          this.availableSteps  = args.args.availableSteps;
-          this.availableTokens = args.args.availableTokens;
+          case 'myGameState':
 
-          // Setting up steps
-          this.updateSteps();
+          // Show some HTML block at this game state
+          dojo.style( 'my_html_block_id', 'display', 'block' );
 
-          // Setting up dice
-          this.updateDice();
+          break;
+           */
 
-          // Setting up available tokens onclick event
-          if( this.isCurrentPlayerActive() ) {
+          case 'selectTokenByDice1':
+          case 'selectTokenByDice2':
             var activePlayerId = this.getActivePlayerId(),
                 activeColor = this.gamedatas.players[activePlayerId].color,
                 availableDice = this.getAvailableDice(),
                 legalSteps = [],
                 toStep;
 
+            // Setting up available tokens onclick event
             for (let step_id in this.availableTokens)
             {
               step_id = parseInt(step_id);
@@ -336,8 +336,11 @@ function (dojo, declare) {
             if (legalSteps.length === 0) {
               dojo.removeClass('pass-btn', 'disabled');
             }
-          }
-          break;
+            break;
+          case 'confrimMoves'
+
+            break;
+        }
       }
     },
 
