@@ -392,18 +392,19 @@ function (dojo, declare) {
           case 'selectTokenByDice1':
             this.addActionButton( 'pass-btn', _('Pass'), 'onPass', null, false);
             dojo.addClass('pass-btn', 'disabled');
-            this.addActionButton( 'undo-btn', _('Undo'), 'onUndo' );
-            dojo.addClass('undo-btn', 'disabled');
             this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
             dojo.addClass('cancel-btn', 'disabled');
             break;
           case 'selectTokenByDice2':
             this.addActionButton( 'pass-btn', _('Pass'), 'onPass', null, false);
             dojo.addClass('pass-btn', 'disabled');
-            this.addActionButton( 'undo-btn', _('Undo'), 'onUndo' );
-            dojo.addClass('undo-btn', 'disabled');
+            this.addActionButton( 'undo-btn', _('Undo'), 'onUndo', null, false, 'red' );
             this.addActionButton( 'cancel-btn', _('Cancel'), 'onCancel', null, false, 'red' );
             dojo.addClass('cancel-btn', 'disabled');
+            break;
+          case 'confrimMoves':
+            this.addActionButton( 'confirm-btn', _('Confirm'), 'onConfirm', null, false);
+            this.addActionButton( 'undo-btn', _('Undo'), 'onUndo', null, false, 'red' );
             break;
         }
       }
