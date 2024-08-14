@@ -22,7 +22,7 @@ $gameinfos = array(
   'publisher_website' => 'https://2plus.com.tw/english/',
 
   // Board Game Geek ID of the publisher
-  'publisher_bgg_id' => 4896,
+  'publisher_bgg_id' => 9215,
 
   // Board game geek ID of the game
   'bgg_id' => 419109,
