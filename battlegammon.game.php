@@ -790,6 +790,8 @@ class Battlegammon extends Table
    */
   public function actMove($argJS)
   {
+    self::checkAction( 'actMove' );
+
     $turn_number = self::getStat("turns_number");
     $token_id    = $argJS[0];
     $from_step   = $argJS[1];
@@ -865,6 +867,8 @@ class Battlegammon extends Table
    */
   public function actPass()
   {
+    self::checkAction( 'actPass' );
+
     $active_player_id = self::getActivePlayerId();
     self::incStat(1, "number_of_pass", $active_player_id);
 
@@ -876,6 +880,8 @@ class Battlegammon extends Table
    */
   public function actUndo()
   {
+    self::checkAction( 'actUndo' );
+
     $last_move   = self::getLastHistorysRecord();
     $token_id    = $last_move['token_id'];
     $to_step     = $last_move['from_step_id'];
@@ -907,6 +913,8 @@ class Battlegammon extends Table
    */
   public function actConfirm()
   {
+    self::checkAction( 'actConfirm' );
+
     $this->gamestate->nextState( 'roll' );
   }
 
