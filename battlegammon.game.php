@@ -455,6 +455,94 @@ class Battlegammon extends Table
   }
 
   /**
+   * Calculate $top_token_id and $bottom_token_id by from_step
+   * @param $step_id
+   */
+  function calculate_token_ids_by_from_step($step_id)
+  {
+    $step = self::getStepRecord($step_id);
+
+    switch ($step['step_id']) {
+      case 1: // white home
+        if ($step['white_tokens'] > 0) {
+          $bottom_token_id = $step['bottom_token_id'];
+          if ($step['white_tokens'] == 1) {
+            $top_token_id = 0;
+          } else {
+            $top_token_id = $step['top_token_id'] + 1;
+          }
+        }
+        break;
+      case 24: // black home
+        if ($step['black_tokens'] > 0) {
+          $bottom_token_id = $step['bottom_token_id'];
+          if ($step['black_tokens'] == 1) {
+            $top_token_id = 0;
+          } else {
+            $top_token_id = $step['top_token_id'] + 1;
+          }
+        }
+        break;
+      default:
+        $bottom_token_id = 0;
+
+        $tokens_count = $step['white_tokens'] + $step['black_tokens'];
+        switch ($tokens_count) {
+          case 2:
+            $top_token_id = $step['bottom_token_id'];
+            break;
+          case 1:
+            $top_token_id = 0;
+            break;
+        }
+
+        break;
+    }
+
+    return [$top_token_id, $bottom_token_id];
+  }
+
+  /**
+   * Calculate $top_token_id and $bottom_token_id by to_step
+   * @param $step_id
+   */
+  function calculate_token_ids_by_to_step($step_id)
+  {
+    $step = self::getStepRecord($step_id);
+
+    switch ($step['step_id']) {
+      case 1: // white home
+        if ($step['black_tokens'] < 3) {
+          $top_token_id = $step['top_token_id'];
+          $bottom_token_id = $token_id;
+        }
+        break;
+      case 24: // black home
+        if ($step['white_tokens'] < 3) {
+          $top_token_id = $step['top_token_id'];
+          $bottom_token_id = $token_id;
+        }
+        break;
+      default:
+        $top_token_id = $token_id;
+
+        $tokens_count = $step['white_tokens'] + $step['black_tokens'];
+        switch ($tokens_count) {
+          case 0:
+            $bottom_token_id = 0;
+            break;
+          case 1:
+            $bottom_token_id = $step['top_token_id'];
+            break;
+        }
+
+        break;
+    }
+
+    return [$top_token_id, $bottom_token_id];
+  }
+
+  /**
    * Update score by color
    * @param $color, ffffff or 333333
    */
@@ -719,89 +807,27 @@ class Battlegammon extends Table
             WHERE player_id != $active_player_id";
     $opponent_id = self::getUniqueValueFromDB($sql);
 
-    // Record in history
-    self::createHistoryRecord($turn_number, $dice_number, $token_id, $from_step, $to_step);
 
-    // update token record
-    self::updateTokenRecord($token_id, $to_step, 0);
+    if (($active_color == 'white' && $to_step > $from_step) ||
+        ($active_color == 'black' && $from_step > $to_step))
+    {
+      // Record in history
+      self::createHistoryRecord($turn_number, $dice_number, $token_id, $from_step, $to_step);
 
-    // update for "from steps"
-    $from_step_record = self::getStepRecord($from_step);
-    switch ($from_step_record['step_id']) {
-      case '1': // white home
-        if ($from_step_record['white_tokens'] > 0) {
-          $bottom_token_id = $from_step_record['bottom_token_id'];
-          if ($from_step_record['white_tokens'] == 1) {
-            $top_token_id = 0;
-          } else {
-            $top_token_id = $from_step_record['top_token_id'] + 1;
-          }
-        }
-        break;
-      case '24': // black home
-        if ($from_step_record['black_tokens'] > 0) {
-          $bottom_token_id = $from_step_record['bottom_token_id'];
-          if ($from_step_record['black_tokens'] == 1) {
-            $top_token_id = 0;
-          } else {
-            $top_token_id = $from_step_record['top_token_id'] + 1;
-          }
-        }
-        break;
-      default:
-        $tokens_count = $from_step_record['white_tokens'] + $from_step_record['black_tokens'];
+      // update token record
+      self::updateTokenRecord($token_id, $to_step, 0);
 
-        if (($active_color == 'white' && $to_step > $from_step) ||
-            ($active_color == 'black' && $from_step > $to_step))
-        {
-          $bottom_token_id = 0;
-          if ($tokens_count == 2) {
-            $top_token_id = $from_step_record['bottom_token_id'];
-          }
+      // update for "from steps"
+      list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_from_step($from_step);
+      self::updateStepRecord($from_step, $top_token_id, $bottom_token_id);
 
-          if ($tokens_count == 1) {
-            $top_token_id = 0;
-          }
-        }
-        break;
+      // update for "to steps"
+      list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_to_step($to_step);
+      self::updateStepRecord($to_step, $top_token_id, $bottom_token_id);
+
+      // update dice not available
+      self::updateDiceState($dice_number);
     }
-    self::updateStepRecord($from_step, $top_token_id, $bottom_token_id);
-
-    // Record in "to steps"
-    $to_step_record = self::getStepRecord($to_step);
-    switch ($to_step_record['step_id']) {
-      case '1': // white home
-        if ($to_step_record['black_tokens'] < 3) {
-          $top_token_id = $to_step_record['top_token_id'];
-          $bottom_token_id = $token_id;
-        }
-        break;
-      case '24': // black home
-        if ($to_step_record['white_tokens'] < 3) {
-          $top_token_id = $to_step_record['top_token_id'];
-          $bottom_token_id = $token_id;
-        }
-        break;
-      default:
-        $tokens_count = $to_step_record['white_tokens'] + $to_step_record['black_tokens'];
-
-        if (($active_color == 'white' && $to_step > $from_step) ||
-            ($active_color == 'black' && $from_step > $to_step))
-        {
-          $top_token_id = $token_id;
-          if ($tokens_count == 0) {
-            $bottom_token_id = 0;
-          }
-
-          if ($tokens_count == 1) {
-            $bottom_token_id = $to_step_record['top_token_id'];
-          }
-        }
-        break;
-    }
-    self::updateStepRecord($to_step, $top_token_id, $bottom_token_id);
-
-    self::updateDiceState($dice_number);
 
     self::notifyPlayer(
       $active_player_id,
