@@ -51,6 +51,11 @@
       "id": 18,
       "name": "Number of times you had to pass",
       "type": "int"
+    },
+    "number_of_moves": {
+      "id": 19,
+      "name": "Number of times you moved token",
+      "type": "int"
     }
   }
 }
