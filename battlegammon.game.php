@@ -872,6 +872,11 @@ class Battlegammon extends Table
    */
   public function actUndo()
   {
+    $last_move = self::getLastHistorysRecord();
+    self::updateDiceState($last_move['dice_number'], 1);
+    self::updateTokenRecord($last_move['token_id'], $last_move['from_step_id'], 1);
+
+    self::destroyLastHistorysRecord();
 
     $this->gamestate->nextState( 'undo' );
   }
