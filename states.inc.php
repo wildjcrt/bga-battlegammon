@@ -116,7 +116,7 @@ $machinestates = array(
     "type" => "activeplayer",
     "args" => "argSelectToken",
     "possibleactions" => [
-      "saveConfirmFromClient",
+      "actConfirm",
       "actUndo"
     ],
     "transitions" => [

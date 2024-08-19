@@ -853,7 +853,7 @@ class Battlegammon extends Table
   /**
    * confirm all moves and change player
    */
-  public function saveConfirmFromClient()
+  public function actConfirm()
   {
 
   }
