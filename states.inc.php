@@ -80,7 +80,7 @@ $machinestates = array(
     "type" => "activeplayer",
     "args" => "argSelectToken",
     "possibleactions" => [
-      "saveMoveFromClient",
+      "actMove",
       "savePassFromClient"
     ],
     "transitions" => [
@@ -97,7 +97,7 @@ $machinestates = array(
     "type" => "activeplayer",
     "args" => "argSelectToken",
     "possibleactions" => [
-      "saveMoveFromClient",
+      "actMove",
       "savePassFromClient",
       "actUndo"
     ],

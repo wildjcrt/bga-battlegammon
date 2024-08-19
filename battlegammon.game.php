@@ -677,7 +677,7 @@ class Battlegammon extends Table
    * check if this move is valid and change board and go to next state
    * @param $argJS [$token_id, $from_step, $to_step, $dice_number]
    */
-  public function saveMoveFromClient($argJS)
+  public function actMove($argJS)
   {
     $turn_number = self::getStat("turns_number");
     $token_id    = $argJS[0];

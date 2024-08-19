@@ -863,7 +863,7 @@ function (dojo, declare) {
       }
 
       this.ajaxcall(
-        "/battlegammon/battlegammon/sendMoveToServer.html",
+        "/battlegammon/battlegammon/actMove.html",
         {
           token_id:    this.tokenId,
           from_step:   fromStepId,
