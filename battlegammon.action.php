@@ -57,6 +57,13 @@ class action_battlegammon extends APP_GameAction
       self::ajaxResponse( );
   }
 
+  public function actUndo()
+  {
+      self::setAjaxMode();
+      $this->game->actUndo();
+      self::ajaxResponse( );
+  }
+
   /*
 
   Example:
