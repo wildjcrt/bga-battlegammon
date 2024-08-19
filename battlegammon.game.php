@@ -839,7 +839,7 @@ class Battlegammon extends Table
    * save pass from client
    * increase stat and go to next state
    */
-  public function savePassFromClient()
+  public function actPass()
   {
     $active_player_id = self::getActivePlayerId();
     self::incStat(1, "number_of_pass", $active_player_id);

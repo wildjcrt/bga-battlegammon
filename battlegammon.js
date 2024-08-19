@@ -890,7 +890,7 @@ function (dojo, declare) {
     onPass: function (e)
     {
       this.ajaxcall(
-        "/battlegammon/battlegammon/sendPassToServer.html",
+        "/battlegammon/battlegammon/actPass.html",
         {},
         this,
         function( result ) {},

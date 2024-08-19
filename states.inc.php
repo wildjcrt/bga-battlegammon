@@ -81,7 +81,7 @@ $machinestates = array(
     "args" => "argSelectToken",
     "possibleactions" => [
       "actMove",
-      "savePassFromClient"
+      "actPass"
     ],
     "transitions" => [
       "selectDice2" => 22,
@@ -98,7 +98,7 @@ $machinestates = array(
     "args" => "argSelectToken",
     "possibleactions" => [
       "actMove",
-      "savePassFromClient",
+      "actPass",
       "actUndo"
     ],
     "transitions" => [
