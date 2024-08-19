@@ -632,11 +632,20 @@ class Battlegammon extends Table
   }
 
   /**
+   * Get last history
+   */
+  function getLastHistorysRecord()
+  {
+    $sql = "SELECT * FROM histories ORDER BY history_id DESC LIMIT 1";
+    return self::getObjectFromDB($sql);
+  }
+
+  /**
    * Destroy last history
    */
   function destroyLastHistorysRecord()
   {
-    $sql = "DELETE FROM histories ORDER BY id DESC LIMIT 1";
+    $sql = "DELETE FROM histories ORDER BY history_id DESC LIMIT 1";
     self::DbQuery($sql);
   }
 
