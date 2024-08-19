@@ -269,12 +269,11 @@ class Battlegammon extends Table
       foreach ($histories as $history) {
         self::notifyAllPlayers(
           "playerMoves",
-          clienttranslate( '${player_name} uses dice ${dice_number} to move ${token_id} from ${from_step_id} to ${to_step_id}.' ),
+          clienttranslate( '${player_name} uses dice ${dice_number} to move token from ${from_step_id} to ${to_step_id}.' ),
           [
             'i18n' => array( 'additional' ),
             'player_name' => $prev_player_name,
             'dice_number' => $history['dice_number'],
-            'token_id' => $history['token_id'],
             'from_step_id' => $history['from_step_id'],
             'to_step_id' => $history['to_step_id']
           ]
@@ -368,12 +367,11 @@ class Battlegammon extends Table
       foreach ($histories as $history) {
         self::notifyAllPlayers(
           "playerMoves",
-          clienttranslate( '${player_name} uses dice ${dice_number} to move ${token_id} from ${from_step_id} to ${to_step_id}.' ),
+          clienttranslate( '${player_name} uses dice ${dice_number} to move token from ${from_step_id} to ${to_step_id}.' ),
           [
             'i18n' => array( 'additional' ),
             'player_name' => $prev_player_name,
             'dice_number' => $history['dice_number'],
-            'token_id' => $history['token_id'],
             'from_step_id' => $history['from_step_id'],
             'to_step_id' => $history['to_step_id']
           ]
@@ -833,12 +831,11 @@ class Battlegammon extends Table
     self::notifyPlayer(
       $active_player_id,
       "temporaryMove",
-      clienttranslate( '[TEMPORARY] ${player_name} TEMPORARY uses dice ${dice_number} to move ${token_id} from ${from_step_id} to ${to_step_id}.' ),
+      clienttranslate( '[TEMPORARY] ${player_name} TEMPORARY uses dice ${dice_number} to move token from ${from_step_id} to ${to_step_id}.' ),
       [
         'i18n' => array( 'additional' ),
         'player_name' => self::getActivePlayerName(),
         'dice_number' => $dice_number,
-        'token_id' => $token_id,
         'from_step_id' => $from_step,
         'to_step_id' => $to_step
       ]
