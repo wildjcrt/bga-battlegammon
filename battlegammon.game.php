@@ -349,6 +349,9 @@ class Battlegammon extends Table
     $this->gamestate->nextState();
   }
 
+  /**
+   * Send notify and update stat before game end
+   */
   function stBeforeGameEnd()
   {
     $prev_turn_number = self::getStat("turns_number");
