@@ -505,8 +505,9 @@ class Battlegammon extends Table
   /**
    * Calculate $top_token_id and $bottom_token_id by to_step
    * @param $step_id
+   * @param $token_id
    */
-  function calculate_token_ids_by_to_step($step_id)
+  function calculate_token_ids_by_to_step($step_id, $token_id)
   {
     $step = self::getStepRecord($step_id);
 
@@ -822,7 +823,7 @@ class Battlegammon extends Table
       self::updateStepRecord($from_step, $top_token_id, $bottom_token_id);
 
       // update for "to steps"
-      list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_to_step($to_step);
+      list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_to_step($to_step, $token_id);
       self::updateStepRecord($to_step, $top_token_id, $bottom_token_id);
 
       // update dice not available
@@ -895,7 +896,7 @@ class Battlegammon extends Table
     self::updateStepRecord($from_step, $top_token_id, $bottom_token_id);
 
     // update for "to steps"
-    list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_to_step($to_step);
+    list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_to_step($to_step, $token_id);
     self::updateStepRecord($to_step, $top_token_id, $bottom_token_id);
 
     // update dice not available
