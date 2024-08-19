@@ -337,9 +337,6 @@ function (dojo, declare) {
               dojo.removeClass('pass-btn', 'disabled');
             }
             break;
-          case 'confrimMoves'
-
-            break;
         }
       }
     },
@@ -876,11 +873,6 @@ function (dojo, declare) {
       );
     },
 
-    onUndo: function (e)
-    {
-
-    },
-
     onCancel: function (e)
     {
       dojo.query('.step').removeClass('hint');
@@ -891,6 +883,28 @@ function (dojo, declare) {
     {
       this.ajaxcall(
         "/battlegammon/battlegammon/actPass.html",
+        {},
+        this,
+        function( result ) {},
+        function( is_error) {}
+      );
+    },
+
+    onUndo: function (e)
+    {
+      this.ajaxcall(
+        "/battlegammon/battlegammon/actUndo.html",
+        {},
+        this,
+        function( result ) {},
+        function( is_error) {}
+      );
+    },
+
+    onConfirm: function (e)
+    {
+      this.ajaxcall(
+        "/battlegammon/battlegammon/actConfirm.html",
         {},
         this,
         function( result ) {},
