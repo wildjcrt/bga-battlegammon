@@ -886,11 +886,28 @@ class Battlegammon extends Table
    */
   public function actUndo()
   {
-    $last_move = self::getLastHistorysRecord();
-    self::updateDiceState($last_move['dice_number'], 1);
-    self::updateTokenRecord($last_move['token_id'], $last_move['from_step_id'], 1);
+    $last_move   = self::getLastHistorysRecord();
+    $token_id    = $last_move['token_id'];
+    $to_step     = $last_move['from_step_id'];
+    $from_step   = $last_move['to_step_id'];
+    $dice_number = $last_move['dice_number'];
 
+    // destroy history
     self::destroyLastHistorysRecord();
+
+    // update token record to be available again
+    self::updateTokenRecord($token_id, $to_step, 1);
+
+    // update for "from steps"
+    list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_from_step($from_step);
+    self::updateStepRecord($from_step, $top_token_id, $bottom_token_id);
+
+    // update for "to steps"
+    list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_to_step($to_step);
+    self::updateStepRecord($to_step, $top_token_id, $bottom_token_id);
+
+    // update dice not available
+    self::updateDiceState($dice_number, 1);
 
     $this->gamestate->nextState( 'undo' );
   }
