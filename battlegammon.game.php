@@ -552,13 +552,19 @@ class Battlegammon extends Table
   /**
    * Update steps table
    * @param $step_id, 1-24.
-   * @param $white_tokens, white tokens count.
-   * @param $black_tokens, black tokens count.
    * @param $top_token_id
    * @param $bottom_token_id
    */
-  function updateStepRecord($step_id, $white_tokens, $black_tokens, $top_token_id, $bottom_token_id)
+  function updateStepRecord($step_id, $top_token_id, $bottom_token_id)
   {
+    $sql = "SELECT COUNT(token_id) FROM tokens
+            WHERE step_id=$step_id AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
+    $white_tokens = self::getUniqueValueFromDb($sql);
+
+    $sql = "SELECT COUNT(token_id) FROM tokens
+            WHERE step_id=$step_id AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
+    $black_tokens = self::getUniqueValueFromDb($sql);
+
     $sql = "UPDATE steps SET white_tokens=$white_tokens, black_tokens=$black_tokens, top_token_id=$top_token_id, bottom_token_id=$bottom_token_id
             WHERE step_id=$step_id;";
     self::DbQuery($sql);
@@ -724,10 +730,8 @@ class Battlegammon extends Table
     switch ($from_step_record['step_id']) {
       case '1': // white home
         if ($from_step_record['white_tokens'] > 0) {
-          $white_tokens = $from_step_record['white_tokens'] - 1;
-          $black_tokens = $from_step_record['black_tokens'];
           $bottom_token_id = $from_step_record['bottom_token_id'];
-          if ($white_tokens == 0) {
+          if ($from_step_record['white_tokens'] == 1) {
             $top_token_id = 0;
           } else {
             $top_token_id = $from_step_record['top_token_id'] + 1;
@@ -736,10 +740,8 @@ class Battlegammon extends Table
         break;
       case '24': // black home
         if ($from_step_record['black_tokens'] > 0) {
-          $white_tokens = $from_step_record['white_tokens'];
-          $black_tokens = $from_step_record['black_tokens'] - 1;
           $bottom_token_id = $from_step_record['bottom_token_id'];
-          if ($black_tokens == 0) {
+          if ($from_step_record['black_tokens'] == 1) {
             $top_token_id = 0;
           } else {
             $top_token_id = $from_step_record['top_token_id'] + 1;
@@ -748,13 +750,6 @@ class Battlegammon extends Table
         break;
       default:
         $tokens_count = $from_step_record['white_tokens'] + $from_step_record['black_tokens'];
-        $sql = "SELECT COUNT(token_id) FROM tokens
-                WHERE step_id=$from_step AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
-        $white_tokens = self::getUniqueValueFromDb($sql);
-
-        $sql = "SELECT COUNT(token_id) FROM tokens
-                WHERE step_id=$from_step AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
-        $black_tokens = self::getUniqueValueFromDb($sql);
 
         if (($active_color == 'white' && $to_step > $from_step) ||
             ($active_color == 'black' && $from_step > $to_step))
@@ -770,38 +765,25 @@ class Battlegammon extends Table
         }
         break;
     }
-    self::updateStepRecord($from_step, $white_tokens, $black_tokens, $top_token_id, $bottom_token_id);
+    self::updateStepRecord($from_step, $top_token_id, $bottom_token_id);
 
     // Record in "to steps"
     $to_step_record = self::getStepRecord($to_step);
     switch ($to_step_record['step_id']) {
       case '1': // white home
         if ($to_step_record['black_tokens'] < 3) {
-          $white_tokens = $to_step_record['white_tokens'];
-          $black_tokens = $to_step_record['black_tokens'] + 1;
-
           $top_token_id = $to_step_record['top_token_id'];
           $bottom_token_id = $token_id;
         }
         break;
       case '24': // black home
         if ($to_step_record['white_tokens'] < 3) {
-          $white_tokens = $to_step_record['white_tokens'] + 1;
-          $black_tokens = $to_step_record['black_tokens'];
-
           $top_token_id = $to_step_record['top_token_id'];
           $bottom_token_id = $token_id;
         }
         break;
       default:
         $tokens_count = $to_step_record['white_tokens'] + $to_step_record['black_tokens'];
-        $sql = "SELECT COUNT(token_id) FROM tokens
-                WHERE step_id=$to_step AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
-        $white_tokens = self::getUniqueValueFromDb($sql);
-
-        $sql = "SELECT COUNT(token_id) FROM tokens
-                WHERE step_id=$to_step AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
-        $black_tokens = self::getUniqueValueFromDb($sql);
 
         if (($active_color == 'white' && $to_step > $from_step) ||
             ($active_color == 'black' && $from_step > $to_step))
@@ -817,7 +799,7 @@ class Battlegammon extends Table
         }
         break;
     }
-    self::updateStepRecord($to_step, $white_tokens, $black_tokens, $top_token_id, $bottom_token_id);
+    self::updateStepRecord($to_step, $top_token_id, $bottom_token_id);
 
     self::updateDiceState($dice_number);
 
