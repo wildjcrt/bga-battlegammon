@@ -277,34 +277,34 @@ function (dojo, declare) {
 
       this.updatePageTitle();
 
-      // update global vars
-      this.dice_result     = args.args.dice_result;
-      this.steps           = args.args.steps;
-      this.availableSteps  = args.args.availableSteps;
-      this.availableTokens = args.args.availableTokens;
+      switch( stateName )
+      {
 
-      // Setting up steps
-      this.updateSteps();
+        /* Example:
 
-      // Setting up dice
-      this.updateDice();
+        case 'myGameState':
 
-      if( this.isCurrentPlayerActive() ) {
-        switch( stateName )
-        {
+        // Show some HTML block at this game state
+        dojo.style( 'my_html_block_id', 'display', 'block' );
 
-          /* Example:
+        break;
+         */
 
-          case 'myGameState':
+        case 'selectTokenByDice1':
+        case 'selectTokenByDice2':
+          // update global vars
+          this.dice_result     = args.args.dice_result;
+          this.steps           = args.args.steps;
+          this.availableSteps  = args.args.availableSteps;
+          this.availableTokens = args.args.availableTokens;
 
-          // Show some HTML block at this game state
-          dojo.style( 'my_html_block_id', 'display', 'block' );
+          // Setting up steps
+          this.updateSteps();
 
-          break;
-           */
+          // Setting up dice
+          this.updateDice();
 
-          case 'selectTokenByDice1':
-          case 'selectTokenByDice2':
+          if( this.isCurrentPlayerActive() ) {
             var activePlayerId = this.getActivePlayerId(),
                 activeColor = this.gamedatas.players[activePlayerId].color,
                 availableDice = this.getAvailableDice(),
@@ -336,9 +336,11 @@ function (dojo, declare) {
             if (legalSteps.length === 0) {
               dojo.removeClass('pass-btn', 'disabled');
             }
-            break;
-        }
+          }
+
+          break;
       }
+
     },
 
     // onLeavingState: this method is called each time we are leaving a game state.
