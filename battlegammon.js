@@ -864,6 +864,7 @@ function (dojo, declare) {
       this.ajaxcall(
         "/battlegammon/battlegammon/actMove.html",
         {
+          lock:        true,
           token_id:    this.tokenId,
           from_step:   fromStepId,
           to_step:     toStepId,
@@ -885,7 +886,7 @@ function (dojo, declare) {
     {
       this.ajaxcall(
         "/battlegammon/battlegammon/actPass.html",
-        {},
+        { lock: true },
         this,
         function( result ) {},
         function( is_error) {}
@@ -896,7 +897,7 @@ function (dojo, declare) {
     {
       this.ajaxcall(
         "/battlegammon/battlegammon/actUndo.html",
-        {},
+        { lock: true },
         this,
         function( result ) {},
         function( is_error) {}
@@ -907,7 +908,7 @@ function (dojo, declare) {
     {
       this.ajaxcall(
         "/battlegammon/battlegammon/actConfirm.html",
-        {},
+        { lock: true },
         this,
         function( result ) {},
         function( is_error) {}
