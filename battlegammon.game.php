@@ -862,7 +862,7 @@ class Battlegammon extends Table
   }
 
   /**
-   * save pass from client
+   * pass to next state
    * increase stat and go to next state
    */
   public function actPass()
@@ -874,15 +874,7 @@ class Battlegammon extends Table
   }
 
   /**
-   * confirm all moves and change player
-   */
-  public function actConfirm()
-  {
-    $this->gamestate->nextState( 'roll' );
-  }
-
-  /**
-   * undo last move
+   * undo last move and change state
    */
   public function actUndo()
   {
@@ -911,6 +903,15 @@ class Battlegammon extends Table
 
     $this->gamestate->nextState( 'undo' );
   }
+
+  /**
+   * confirm all moves and change state
+   */
+  public function actConfirm()
+  {
+    $this->gamestate->nextState( 'roll' );
+  }
+
 //////////////////////////////////////////////////////////////////////////////
 //////////// Game state arguments
 ////////////

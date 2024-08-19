@@ -41,27 +41,34 @@ class action_battlegammon extends APP_GameAction
 
   public function actMove()
   {
-      self::setAjaxMode();
-      $token_id    = self::getArg( "token_id", AT_alphanum, true );
-      $from_step   = self::getArg( "from_step", AT_alphanum, true );
-      $to_step     = self::getArg( "to_step", AT_alphanum, true );
-      $dice_number = self::getArg( "dice_number", AT_alphanum, true );
-      $this->game->actMove([$token_id, $from_step, $to_step, $dice_number]);
-      self::ajaxResponse( );
+    self::setAjaxMode();
+    $token_id    = self::getArg( "token_id", AT_alphanum, true );
+    $from_step   = self::getArg( "from_step", AT_alphanum, true );
+    $to_step     = self::getArg( "to_step", AT_alphanum, true );
+    $dice_number = self::getArg( "dice_number", AT_alphanum, true );
+    $this->game->actMove([$token_id, $from_step, $to_step, $dice_number]);
+    self::ajaxResponse( );
   }
 
   public function actPass()
   {
-      self::setAjaxMode();
-      $this->game->actPass();
-      self::ajaxResponse( );
+    self::setAjaxMode();
+    $this->game->actPass();
+    self::ajaxResponse( );
   }
 
   public function actUndo()
   {
-      self::setAjaxMode();
-      $this->game->actUndo();
-      self::ajaxResponse( );
+    self::setAjaxMode();
+    $this->game->actUndo();
+    self::ajaxResponse( );
+  }
+
+  public function actConfirm()
+  {
+    self::setAjaxMode();
+    $this->game->actConfirm();
+    self::ajaxResponse( );
   }
 
   /*
