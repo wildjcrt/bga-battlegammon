@@ -409,16 +409,16 @@ class Battlegammon extends Table
    * Update used dice number to dice_available: 0
    * @param $dice_number
    */
-  function updateDiceNotAvailable($dice_number)
+  function updateDiceState($dice_number, $available = 0)
   {
     $sql = "SELECT dice1, dice1_available, dice2, dice2_available
             FROM dice_result";
     $dice_result = self::getObjectFromDB($sql);
 
     if ($dice_result['dice1'] == $dice_number) {
-      $sql = "UPDATE dice_result SET dice1_available=0";
+      $sql = "UPDATE dice_result SET dice1_available=$available";
     } else {
-      $sql = "UPDATE dice_result SET dice2_available=0";
+      $sql = "UPDATE dice_result SET dice2_available=$available";
     }
     self::DbQuery($sql);
   }
@@ -813,7 +813,7 @@ class Battlegammon extends Table
     }
     self::updateStepRecord($to_step, $white_tokens, $black_tokens, $top_token_id, $bottom_token_id);
 
-    self::updateDiceNotAvailable($dice_number);
+    self::updateDiceState($dice_number);
 
     self::notifyPlayer(
       $active_player_id,
