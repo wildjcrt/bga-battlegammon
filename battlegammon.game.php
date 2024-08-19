@@ -101,33 +101,6 @@ class Battlegammon extends Table
             VALUES (0, 0)";
     self::DbQuery( $sql );
 
-    // Insert step record in steps table
-    // @params: $step_id, $white_tokens, $black_tokens, $top_token_id, $bottom_token_id
-    self::createStepRecord( 1, 5, 0, 1, 0);
-    self::createStepRecord( 2);
-    self::createStepRecord( 3);
-    self::createStepRecord( 4);
-    self::createStepRecord( 5, 1, 0, 6, 0);
-    self::createStepRecord( 6);
-    self::createStepRecord( 7);
-    self::createStepRecord( 8, 2, 0, 7, 8);
-    self::createStepRecord( 9, 2, 0, 9, 10);
-    self::createStepRecord(10);
-    self::createStepRecord(11);
-    self::createStepRecord(12);
-    self::createStepRecord(13);
-    self::createStepRecord(14);
-    self::createStepRecord(15);
-    self::createStepRecord(16, 0, 1, 20, 0);
-    self::createStepRecord(17);
-    self::createStepRecord(18);
-    self::createStepRecord(19, 0, 2, 18, 19);
-    self::createStepRecord(20, 0, 2, 16, 17);
-    self::createStepRecord(21);
-    self::createStepRecord(22);
-    self::createStepRecord(23);
-    self::createStepRecord(24, 0, 5, 11, 0);
-
     // Insert token record in tokens table
     // @params: $token_id, $step_id
     self::createTokenRecord( 1,  1);
@@ -150,6 +123,33 @@ class Battlegammon extends Table
     self::createTokenRecord(18, 19);
     self::createTokenRecord(19, 19);
     self::createTokenRecord(20, 16);
+
+    // Insert step record in steps table
+    // @params: $step_id, $top_token_id, $bottom_token_id
+    self::createStepRecord( 1, 1, 0);
+    self::createStepRecord( 2);
+    self::createStepRecord( 3);
+    self::createStepRecord( 4);
+    self::createStepRecord( 5, 6, 0);
+    self::createStepRecord( 6);
+    self::createStepRecord( 7);
+    self::createStepRecord( 8, 7, 8);
+    self::createStepRecord( 9, 9, 10);
+    self::createStepRecord(10);
+    self::createStepRecord(11);
+    self::createStepRecord(12);
+    self::createStepRecord(13);
+    self::createStepRecord(14);
+    self::createStepRecord(15);
+    self::createStepRecord(16, 20, 0);
+    self::createStepRecord(17);
+    self::createStepRecord(18);
+    self::createStepRecord(19, 18, 19);
+    self::createStepRecord(20, 16, 17);
+    self::createStepRecord(21);
+    self::createStepRecord(22);
+    self::createStepRecord(23);
+    self::createStepRecord(24, 11, 0);
 
     // Insert history record in histories table
     // @params: $turn, $dice_number, $token_id, $from_step_id, $to_step_id
@@ -531,13 +531,19 @@ class Battlegammon extends Table
   /**
    * Insert steps table
    * @param $step_id, 1-24.
-   * @param $white_tokens, white tokens count.
-   * @param $black_tokens, black tokens count.
    * @param $top_token_id
    * @param $bottom_token_id
    */
-  function createStepRecord($step_id, $white_tokens = 0, $black_tokens = 0, $top_token_id = 0, $bottom_token_id = 0)
+  function createStepRecord($step_id, $top_token_id = 0, $bottom_token_id = 0)
   {
+    $sql = "SELECT COUNT(token_id) FROM tokens
+            WHERE step_id=$step_id AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
+    $white_tokens = self::getUniqueValueFromDb($sql);
+
+    $sql = "SELECT COUNT(token_id) FROM tokens
+            WHERE step_id=$step_id AND token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
+    $black_tokens = self::getUniqueValueFromDb($sql);
+
     $sql = "INSERT INTO steps (step_id, white_tokens, black_tokens, top_token_id, bottom_token_id)
             VALUES ($step_id, $white_tokens, $black_tokens, $top_token_id, $bottom_token_id);";
     self::DbQuery($sql);
