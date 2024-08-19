@@ -69,8 +69,7 @@ $machinestates = array(
     "action" => "stRollDice",
     "updateGameProgression" => true,
     "transitions" => [
-      "selectDice1" => 21,
-      "pass" => 10
+      "" => 21
     ]
   ),
 
@@ -81,13 +80,13 @@ $machinestates = array(
     "type" => "activeplayer",
     "args" => "argSelectToken",
     "possibleactions" => [
-      "saveMoveFromClient",
+      "actMove",
       "actPass"
     ],
     "transitions" => [
       "selectDice2" => 22,
       "pass" => 10,
-      "end" => 23
+      "end"  => 24
     ]
   ),
 
@@ -98,16 +97,35 @@ $machinestates = array(
     "type" => "activeplayer",
     "args" => "argSelectToken",
     "possibleactions" => [
-      "actSelectToken",
-      "actPass"
+      "actMove",
+      "actPass",
+      "actUndo"
     ],
     "transitions" => [
-      "roll" => 10,
-      "end" => 23
+      "confirm" => 23,
+      "undo" => 21,
+      "pass" => 10,
+      "end"  => 24
     ]
   ),
 
   23 => array(
+    "name" => "confrimMoves",
+    "description" => clienttranslate('${actplayer} confirm.'),
+    "descriptionmyturn" => clienttranslate('Your turn. Click a ${color} token to do second move.'),
+    "type" => "activeplayer",
+    "args" => "argSelectToken",
+    "possibleactions" => [
+      "actConfirm",
+      "actUndo"
+    ],
+    "transitions" => [
+      "roll" => 10,
+      "undo" => 22
+    ]
+  ),
+
+  24 => array(
     "name" => "beforeGameEnd",
     "description" => clienttranslate('Ending game.'),
     "type" => "game",
