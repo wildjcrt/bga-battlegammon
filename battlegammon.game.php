@@ -833,7 +833,7 @@ class Battlegammon extends Table
         $this->gamestate->nextState( 'selectDice2' );
         break;
       case 'selectTokenByDice2':
-        $this->gamestate->nextState( 'roll' );
+        $this->gamestate->nextState( 'confirm' );
         break;
     }
   }
@@ -855,7 +855,7 @@ class Battlegammon extends Table
    */
   public function actConfirm()
   {
-
+    $this->gamestate->nextState( 'roll' );
   }
 
   /**
@@ -864,6 +864,7 @@ class Battlegammon extends Table
   public function actUndo()
   {
 
+    $this->gamestate->nextState( 'undo' );
   }
 //////////////////////////////////////////////////////////////////////////////
 //////////// Game state arguments
