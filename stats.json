@@ -56,6 +56,11 @@
       "id": 19,
       "name": "Number of times you moved token",
       "type": "int"
+    },
+    "number_of_steps": {
+      "id": 20,
+      "name": "Total steps your tokens advanced",
+      "type": "int"
     }
   }
 }

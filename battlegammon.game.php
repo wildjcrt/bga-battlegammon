@@ -190,6 +190,7 @@ class Battlegammon extends Table
     self::initStat("player", "number_of_score_tokens", 0);
     self::initStat("player", "number_of_pass", 0);
     self::initStat("player", "number_of_moves", 0);
+    self::initStat("player", "number_of_steps", 0);
 
     /************ End of the game initialization *****/
   }
@@ -300,7 +301,7 @@ class Battlegammon extends Table
       }
     }
 
-    self::updateStatNumberOfMoves();
+    self::updateStatNumberOfMovesAndSteps();
 
     // set active player and update turns_number
     $this->activeNextPlayer();
@@ -398,7 +399,7 @@ class Battlegammon extends Table
       }
     }
 
-    self::updateStatNumberOfMoves();
+    self::updateStatNumberOfMovesAndSteps();
 
     $this->gamestate->nextState();
   }
@@ -584,9 +585,9 @@ class Battlegammon extends Table
   }
 
   /**
-   * Update stat: number_of_moves
+   * Update stat: number_of_moves and number_of_steps
    */
-  function updateStatNumberOfMoves()
+  function updateStatNumberOfMovesAndSteps()
   {
     $sql = "SELECT player_id, player_color FROM player";
     $players = self::getObjectListFromDB($sql);
@@ -601,6 +602,19 @@ class Battlegammon extends Table
 
       $moves_count = self::getUniqueValueFromDb($sql);
       self::setStat($moves_count, 'number_of_moves', $player['player_id']);
+    }
+
+    foreach ($players as $player) {
+      if ($player['player_color'] == 'ffffff') {
+        $sql = "SELECT SUM(dice_number) FROM histories
+                WHERE token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
+      } else {
+        $sql = "SELECT SUM(dice_number) FROM histories
+                WHERE token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20)";
+      }
+
+      $steps_count = self::getUniqueValueFromDb($sql);
+      self::setStat($steps_count, 'number_of_steps', $player['player_id']);
     }
   }
 
