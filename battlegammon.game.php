@@ -456,8 +456,9 @@ class Battlegammon extends Table
   /**
    * Calculate $top_token_id and $bottom_token_id by from_step
    * @param $step_id
+   * @param $token_id
    */
-  function calculate_token_ids_by_from_step($step_id)
+  function calculate_token_ids_by_from_step($step_id, $token_id)
   {
     $step = self::getStepRecord($step_id);
 
@@ -833,7 +834,7 @@ class Battlegammon extends Table
       self::updateTokenRecord($token_id, $to_step, 0);
 
       // update for "from steps"
-      list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_from_step($from_step);
+      list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_from_step($from_step, $token_id);
       self::updateStepRecord($from_step, $top_token_id, $bottom_token_id);
 
       // update for "to steps"
@@ -909,7 +910,7 @@ class Battlegammon extends Table
     self::updateTokenRecord($token_id, $to_step, 1);
 
     // rollback for "from steps"
-    list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_from_step($from_step);
+    list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_from_step($from_step, $token_id);
     self::updateStepRecord($from_step, $top_token_id, $bottom_token_id);
 
     // rollback for "to steps"
