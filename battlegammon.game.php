@@ -905,18 +905,18 @@ class Battlegammon extends Table
     // destroy history
     self::destroyLastHistorysRecord();
 
-    // update token record to be available again
+    // rollback token to be available again
     self::updateTokenRecord($token_id, $to_step, 1);
 
-    // update for "from steps"
+    // rollback for "from steps"
     list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_from_step($from_step);
     self::updateStepRecord($from_step, $top_token_id, $bottom_token_id);
 
-    // update for "to steps"
+    // rollback for "to steps"
     list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_to_step($to_step, $token_id);
     self::updateStepRecord($to_step, $top_token_id, $bottom_token_id);
 
-    // update dice not available
+    // rollback dice to be available again
     self::updateDiceState($dice_number, 1);
 
     $this->gamestate->nextState( 'undo' );
