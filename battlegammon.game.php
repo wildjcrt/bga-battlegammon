@@ -899,23 +899,23 @@ class Battlegammon extends Table
 
     $last_move   = self::getLastHistorysRecord();
     $token_id    = $last_move['token_id'];
-    $to_step     = $last_move['from_step_id'];
-    $from_step   = $last_move['to_step_id'];
+    $from_step   = $last_move['from_step_id'];
+    $to_step     = $last_move['to_step_id'];
     $dice_number = $last_move['dice_number'];
 
     // destroy history
     self::destroyLastHistorysRecord();
 
     // rollback token to be available again
-    self::updateTokenRecord($token_id, $to_step, 1);
-
-    // rollback for "from steps"
-    list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_from_step($from_step, $token_id);
-    self::updateStepRecord($from_step, $top_token_id, $bottom_token_id);
+    self::updateTokenRecord($token_id, $from_step, 1);
 
     // rollback for "to steps"
-    list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_to_step($to_step, $token_id);
+    list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_from_step($to_step, $token_id);
     self::updateStepRecord($to_step, $top_token_id, $bottom_token_id);
+
+    // rollback for "from steps"
+    list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_to_step($from_step, $token_id);
+    self::updateStepRecord($from_step, $top_token_id, $bottom_token_id);
 
     // rollback dice to be available again
     self::updateDiceState($dice_number, 1);
