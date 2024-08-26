@@ -445,7 +445,7 @@ class Battlegammon extends Table
               SET available = 1
               WHERE token_id IN (" . implode(',', $white_token_ids) . ")";
     } else {
-      $black_token_ids = array_intersect($token_ids, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
+      $black_token_ids = array_intersect($token_ids, array_diff([11, 12, 13, 14, 15, 16, 17, 18, 19, 20], [$moved_token_id]));
       $sql = "UPDATE tokens
               SET available = 1
               WHERE token_id IN (" . implode(',', $black_token_ids) . ")";
