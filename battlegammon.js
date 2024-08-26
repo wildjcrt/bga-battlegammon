@@ -496,6 +496,8 @@ function (dojo, declare) {
                   }
                 )
               );
+            } else {
+              dojo.removeClass(`token-${step.step_id}`);
             }
 
             if (parseInt(step.black_tokens) > 0) {
@@ -512,7 +514,10 @@ function (dojo, declare) {
                   }
                 )
               );
+            } else {
+              dojo.removeClass('token-home-white');
             }
+
             break;
           case '24': // black home
             if (parseInt(step.black_tokens) > 0) {
@@ -529,6 +534,8 @@ function (dojo, declare) {
                   }
                 )
               );
+            } else {
+              dojo.removeClass(`token-${step.step_id}`);
             }
 
             if (parseInt(step.white_tokens) > 0) {
@@ -545,7 +552,10 @@ function (dojo, declare) {
                   }
                 )
               );
+            } else {
+              dojo.removeClass('token-home-black');
             }
+
             break;
           default:
             tokenNumber = this.numberMapping[tokens];
