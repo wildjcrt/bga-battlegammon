@@ -889,7 +889,7 @@ class Battlegammon extends Table
       self::createHistoryRecord($turn_number, $dice_number, $token_id, $from_step, $to_step);
 
       // update token record
-      self::updateTokenRecord($token_id, $to_step, 0);
+      self::updateTokenRecord($token_id, $to_step);
 
       // update for "from steps"
       list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_from_step($from_step, $token_id);
