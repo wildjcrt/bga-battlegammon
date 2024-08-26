@@ -445,7 +445,7 @@ class Battlegammon extends Table
               SET available = 1
               WHERE token_id IN (" . implode(',', $white_token_ids) . ")";
     } else {
-      $black_token_ids = array_intersect($token_ids, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
+      $black_token_ids = array_intersect($token_ids, array_diff([11, 12, 13, 14, 15, 16, 17, 18, 19, 20], [$moved_token_id]));
       $sql = "UPDATE tokens
               SET available = 1
               WHERE token_id IN (" . implode(',', $black_token_ids) . ")";
@@ -455,32 +455,73 @@ class Battlegammon extends Table
 
   /**
    * Calculate $top_token_id and $bottom_token_id by from_step
+   * In white home, $top_token_id is 1-5 and only record the top one, which is 1 in the beginning.
+   * Simular in black home, $top_token_id is 11-15 and top one is 11 in the beginning.
+   * In white home, white token always update in $top_token_id and black always update $bottom_token_id.
+   * Simular in black home, black always update $top_token_id and white always update $bottom_token_id.
    * @param $step_id
+   * @param $token_id
    */
-  function calculate_token_ids_by_from_step($step_id)
+  function calculate_token_ids_by_from_step($step_id, $token_id)
   {
     $step = self::getStepRecord($step_id);
 
     switch ($step['step_id']) {
       case 1: // white home
-        if ($step['white_tokens'] > 0) {
-          $bottom_token_id = $step['bottom_token_id'];
+        // move white token
+        if (in_array($token_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) && $step['white_tokens'] > 0) {
           if ($step['white_tokens'] == 1) {
             $top_token_id = 0;
           } else {
             $top_token_id = $step['top_token_id'] + 1;
           }
+
+          $bottom_token_id = $step['bottom_token_id'];
         }
+
+        // undo black token
+        if (in_array($token_id, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20])) {
+          $top_token_id = $step['top_token_id'];
+
+          $sql = "SELECT COALESCE(
+                    (
+                      SELECT token_id FROM histories
+                      WHERE token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20) AND
+                            to_step_id = 1
+                      ORDER BY history_id DESC
+                      LIMIT 1
+                    ), 0) AS token_id;";
+          $bottom_token_id = self::getUniqueValueFromDb($sql);
+        }
+
         break;
       case 24: // black home
-        if ($step['black_tokens'] > 0) {
-          $bottom_token_id = $step['bottom_token_id'];
+        // undo white token
+        if (in_array($token_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) {
+          $top_token_id = $step['top_token_id'];
+
+          $sql = "SELECT COALESCE(
+                    (
+                      SELECT token_id FROM histories
+                      WHERE token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10) AND
+                            to_step_id = 24
+                      ORDER BY history_id DESC
+                      LIMIT 1
+                    ), 0) AS token_id;";
+          $bottom_token_id = self::getUniqueValueFromDb($sql);
+        }
+
+        // move black token
+        if (in_array($token_id, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && $step['black_tokens'] > 0) {
           if ($step['black_tokens'] == 1) {
             $top_token_id = 0;
           } else {
             $top_token_id = $step['top_token_id'] + 1;
           }
+
+          $bottom_token_id = $step['bottom_token_id'];
         }
+
         break;
       default:
         $bottom_token_id = 0;
@@ -503,6 +544,8 @@ class Battlegammon extends Table
 
   /**
    * Calculate $top_token_id and $bottom_token_id by to_step
+   * In white home, white token always update in $top_token_id and black always update $bottom_token_id.
+   * Simular in black home, black always update $top_token_id and white always update $bottom_token_id.
    * @param $step_id
    * @param $token_id
    */
@@ -512,16 +555,32 @@ class Battlegammon extends Table
 
     switch ($step['step_id']) {
       case 1: // white home
-        if ($step['black_tokens'] < 3) {
+        // undo white token
+        if (in_array($token_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) {
+          $top_token_id = $token_id;
+          $bottom_token_id = $step['bottom_token_id'];
+        }
+
+        // move black token
+        if (in_array($token_id, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && $step['black_tokens'] < 3) {
           $top_token_id = $step['top_token_id'];
           $bottom_token_id = $token_id;
         }
+
         break;
       case 24: // black home
-        if ($step['white_tokens'] < 3) {
+        // move white token
+        if (in_array($token_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) && $step['white_tokens'] < 3) {
           $top_token_id = $step['top_token_id'];
           $bottom_token_id = $token_id;
         }
+
+        // undo black token
+        if (in_array($token_id, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20])) {
+          $top_token_id = $token_id;
+          $bottom_token_id = $step['bottom_token_id'];
+        }
+
         break;
       default:
         $top_token_id = $token_id;
@@ -830,10 +889,10 @@ class Battlegammon extends Table
       self::createHistoryRecord($turn_number, $dice_number, $token_id, $from_step, $to_step);
 
       // update token record
-      self::updateTokenRecord($token_id, $to_step, 0);
+      self::updateTokenRecord($token_id, $to_step);
 
       // update for "from steps"
-      list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_from_step($from_step);
+      list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_from_step($from_step, $token_id);
       self::updateStepRecord($from_step, $top_token_id, $bottom_token_id);
 
       // update for "to steps"
@@ -898,25 +957,25 @@ class Battlegammon extends Table
 
     $last_move   = self::getLastHistorysRecord();
     $token_id    = $last_move['token_id'];
-    $to_step     = $last_move['from_step_id'];
-    $from_step   = $last_move['to_step_id'];
+    $from_step   = $last_move['from_step_id'];
+    $to_step     = $last_move['to_step_id'];
     $dice_number = $last_move['dice_number'];
 
     // destroy history
     self::destroyLastHistorysRecord();
 
-    // update token record to be available again
-    self::updateTokenRecord($token_id, $to_step, 1);
+    // rollback token to be available again
+    self::updateTokenRecord($token_id, $from_step, 1);
 
-    // update for "from steps"
-    list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_from_step($from_step);
-    self::updateStepRecord($from_step, $top_token_id, $bottom_token_id);
-
-    // update for "to steps"
-    list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_to_step($to_step, $token_id);
+    // rollback for "to steps"
+    list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_from_step($to_step, $token_id);
     self::updateStepRecord($to_step, $top_token_id, $bottom_token_id);
 
-    // update dice not available
+    // rollback for "from steps"
+    list($top_token_id, $bottom_token_id) = self::calculate_token_ids_by_to_step($from_step, $token_id);
+    self::updateStepRecord($from_step, $top_token_id, $bottom_token_id);
+
+    // rollback dice to be available again
     self::updateDiceState($dice_number, 1);
 
     $this->gamestate->nextState( 'undo' );
