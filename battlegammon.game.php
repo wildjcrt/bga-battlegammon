@@ -504,6 +504,8 @@ class Battlegammon extends Table
 
   /**
    * Calculate $top_token_id and $bottom_token_id by to_step
+   * In white home, white token always update in $top_token_id and black always update $bottom_token_id.
+   * Simular in black home, black always update $top_token_id and white always update $bottom_token_id.
    * @param $step_id
    * @param $token_id
    */
@@ -513,16 +515,32 @@ class Battlegammon extends Table
 
     switch ($step['step_id']) {
       case 1: // white home
-        if ($step['black_tokens'] < 3) {
+        // undo white token
+        if (in_array($token_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) {
+          $top_token_id = $token_id;
+          $bottom_token_id = $step['bottom_token_id'];
+        }
+
+        // move black token
+        if (in_array($token_id, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && $step['black_tokens'] < 3) {
           $top_token_id = $step['top_token_id'];
           $bottom_token_id = $token_id;
         }
+
         break;
       case 24: // black home
-        if ($step['white_tokens'] < 3) {
+        // move white token
+        if (in_array($token_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) && $step['white_tokens'] < 3) {
           $top_token_id = $step['top_token_id'];
           $bottom_token_id = $token_id;
         }
+
+        // undo black token
+        if (in_array($token_id, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20])) {
+          $top_token_id = $token_id;
+          $bottom_token_id = $step['bottom_token_id'];
+        }
+
         break;
       default:
         $top_token_id = $token_id;
