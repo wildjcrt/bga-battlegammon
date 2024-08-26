@@ -455,6 +455,10 @@ class Battlegammon extends Table
 
   /**
    * Calculate $top_token_id and $bottom_token_id by from_step
+   * In white home, $top_token_id is 1-5 and only record the top one, which is 1 in the beginning.
+   * Simular in black home, $top_token_id is 11-15 and top one is 11 in the beginning.
+   * In white home, white token always update in $top_token_id and black always update $bottom_token_id.
+   * Simular in black home, black always update $top_token_id and white always update $bottom_token_id.
    * @param $step_id
    * @param $token_id
    */
@@ -464,24 +468,60 @@ class Battlegammon extends Table
 
     switch ($step['step_id']) {
       case 1: // white home
-        if ($step['white_tokens'] > 0) {
-          $bottom_token_id = $step['bottom_token_id'];
+        // move white token
+        if (in_array($token_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) && $step['white_tokens'] > 0) {
           if ($step['white_tokens'] == 1) {
             $top_token_id = 0;
           } else {
             $top_token_id = $step['top_token_id'] + 1;
           }
+
+          $bottom_token_id = $step['bottom_token_id'];
         }
+
+        // undo black token
+        if (in_array($token_id, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20])) {
+          $top_token_id = $step['top_token_id'];
+
+          $sql = "SELECT COALESCE(
+                    (
+                      SELECT token_id FROM histories
+                      WHERE token_id IN (11, 12, 13, 14, 15, 16, 17, 18, 19, 20) AND
+                            to_step_id = 1
+                      ORDER BY history_id DESC
+                      LIMIT 1
+                    ), 0) AS token_id;";
+          $bottom_token_id = self::getUniqueValueFromDb($sql);
+        }
+
         break;
       case 24: // black home
-        if ($step['black_tokens'] > 0) {
-          $bottom_token_id = $step['bottom_token_id'];
+        // undo white token
+        if (in_array($token_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) {
+          $top_token_id = $step['top_token_id'];
+
+          $sql = "SELECT COALESCE(
+                    (
+                      SELECT token_id FROM histories
+                      WHERE token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10) AND
+                            to_step_id = 24
+                      ORDER BY history_id DESC
+                      LIMIT 1
+                    ), 0) AS token_id;";
+          $bottom_token_id = self::getUniqueValueFromDb($sql);
+        }
+
+        // move black token
+        if (in_array($token_id, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && $step['black_tokens'] > 0) {
           if ($step['black_tokens'] == 1) {
             $top_token_id = 0;
           } else {
             $top_token_id = $step['top_token_id'] + 1;
           }
+
+          $bottom_token_id = $step['bottom_token_id'];
         }
+
         break;
       default:
         $bottom_token_id = 0;
