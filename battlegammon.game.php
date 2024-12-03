@@ -311,11 +311,6 @@ class Battlegammon extends Table
     $active_player_name = self::getActivePlayerName();
     self::incStat(1, "turns_number", $active_player_id);
 
-    $sql = "SELECT player_color FROM player
-            WHERE player_id=$active_player_id";
-    $active_color_code = self::getUniqueValueFromDB($sql);
-    $active_color = ($active_color_code == 'ffffff') ? 'white' : 'black';
-
     // Roll dices
     $dice1_value = bga_rand(1, 6);
     $dice2_value = bga_rand(1, 6);
@@ -344,7 +339,7 @@ class Battlegammon extends Table
       ]
     );
 
-    self::updateAvailableTokens($active_color);
+    self::updateAvailableTokens();
 
     $this->gamestate->nextState();
   }
@@ -424,11 +419,16 @@ class Battlegammon extends Table
 
   /**
    * Update available tokens by color
-   * @param $color
    * @param $moved_token, token is moved in this turn.
    */
-  function updateAvailableTokens($color, $moved_token_id = 0)
+  function updateAvailableTokens($moved_token_id = 0)
   {
+    $active_player_id = $this->getActivePlayerId();
+    $sql = "SELECT player_color FROM player
+            WHERE player_id=$active_player_id";
+    $active_color_code = self::getUniqueValueFromDB($sql);
+    $active_color = ($active_color_code == 'ffffff') ? 'white' : 'black';
+
     // reset all tokens to available = 0
     $sql = "UPDATE tokens
             SET available = 0";
@@ -436,10 +436,10 @@ class Battlegammon extends Table
 
     // set available tokens
     $sql = "SELECT top_token_id FROM steps
-            WHERE " . $color . "_tokens > 0";
+            WHERE " . $active_color . "_tokens > 0";
     $available_steps = self::getCollectionFromDB($sql);
     $token_ids = array_column($available_steps, 'top_token_id');
-    if ($color == 'white') {
+    if ($active_color == 'white') {
       $white_token_ids = array_intersect($token_ids, array_diff([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], [$moved_token_id]));
       $sql = "UPDATE tokens
               SET available = 1
@@ -928,7 +928,7 @@ class Battlegammon extends Table
     $state = $this->gamestate->state();
     switch ($state['name']) {
       case 'selectTokenByDice1':
-        self::updateAvailableTokens($active_color, intval($token_id));
+        self::updateAvailableTokens(intval($token_id));
         $this->gamestate->nextState( 'selectDice2' );
         break;
       case 'selectTokenByDice2':
@@ -982,11 +982,7 @@ class Battlegammon extends Table
     self::updateDiceState($dice_number, 1);
 
     // Update available tokens
-    $sql = "SELECT player_color FROM player
-            WHERE player_id=$active_player_id";
-    $active_color_code = self::getUniqueValueFromDB($sql);
-    $active_color = ($active_color_code == 'ffffff') ? 'white' : 'black';
-    self::updateAvailableTokens($active_color);
+    self::updateAvailableTokens();
 
     $this->gamestate->nextState( 'undo' );
   }
