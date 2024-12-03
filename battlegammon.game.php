@@ -981,6 +981,13 @@ class Battlegammon extends Table
     // rollback dice to be available again
     self::updateDiceState($dice_number, 1);
 
+    // Update available tokens
+    $sql = "SELECT player_color FROM player
+            WHERE player_id=$active_player_id";
+    $active_color_code = self::getUniqueValueFromDB($sql);
+    $active_color = ($active_color_code == 'ffffff') ? 'white' : 'black';
+    self::updateAvailableTokens($active_color);
+
     $this->gamestate->nextState( 'undo' );
   }
 
