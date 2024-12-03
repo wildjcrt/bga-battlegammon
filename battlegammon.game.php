@@ -450,7 +450,10 @@ class Battlegammon extends Table
               SET available = 1
               WHERE token_id IN (" . implode(',', $black_token_ids) . ")";
     }
-    self::DbQuery($sql);
+
+    if (strpos($sql, "WHERE token_id IN ()") == false) {
+      self::DbQuery($sql);
+    }
   }
 
   /**
