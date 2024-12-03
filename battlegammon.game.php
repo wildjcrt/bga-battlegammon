@@ -1056,6 +1056,7 @@ class Battlegammon extends Table
     sort($result['availableSteps'], SORT_NUMERIC);
 
     // List all available tokens
+    $result['availableTokens'] = array();
     if ($active_color_code == 'ffffff') {
       $sql = "SELECT token_id, step_id FROM tokens
               WHERE available = 1 AND token_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
