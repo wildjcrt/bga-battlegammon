@@ -83,8 +83,8 @@ class Battlegammon extends Table
     $values = array();
     foreach( $players as $player_id => $player )
     {
-      $color = array_shift( $default_colors ); // black first
-      $values[] = "('".$player_id."','$color','".$player['player_canal']."','".addslashes( $player['player_name'] )."','".addslashes( $player['player_avatar'] )."')";
+      // black always first
+      $values[] = "('".$player_id."','333333','".$player['player_canal']."','".addslashes( $player['player_name'] )."','".addslashes( $player['player_avatar'] )."')";
     }
     $sql .= implode( ',', $values );
     self::DbQuery( $sql );
