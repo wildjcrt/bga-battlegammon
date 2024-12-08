@@ -984,6 +984,20 @@ class Battlegammon extends Table
     // Update available tokens
     self::updateAvailableTokens();
 
+    $active_player_id = $this->getActivePlayerId();
+    self::notifyPlayer(
+      $active_player_id,
+      "undoMove",
+      clienttranslate( '[UNDO] ${player_name} undo dice ${dice_number}. Move token back from ${from_step_id} to ${to_step_id}.' ),
+      [
+        'i18n' => array( 'additional' ),
+        'player_name' => self::getActivePlayerName(),
+        'dice_number' => $dice_number,
+        'from_step_id' => $to_step,
+        'to_step_id' => $from_step
+      ]
+    );
+
     $this->gamestate->nextState( 'undo' );
   }
 
