@@ -203,7 +203,7 @@ class Battlegammon extends Table
   _ when the game starts
   _ when a player refreshes the game page (F5)
   */
-  protected function getAllDatas()
+  protected function getAllDatas(): array
   {
     $result = array();
 
@@ -1133,7 +1133,7 @@ class Battlegammon extends Table
   you must _never_ use getCurrentPlayerId() or getCurrentPlayerName(), otherwise it will fail with a "Not logged" error message.
   */
 
-  function zombieTurn( $state, $active_player )
+  function zombieTurn( $state, $active_player ): void
   {
     $statename = $state['name'];
 
